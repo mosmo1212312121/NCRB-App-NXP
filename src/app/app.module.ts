@@ -25,7 +25,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { NxpLoaderModule } from 'nxp-loader';
+import { NxpLoaderModule } from './components/nxp-loader/nxp-loader.module';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 // Import routing module

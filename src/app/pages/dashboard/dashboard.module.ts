@@ -6,7 +6,7 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { NxpLoaderModule } from 'nxp-loader';
+import { NxpLoaderModule } from '../../components/nxp-loader/nxp-loader.module';
 import { NxpFilterRequestModule } from '../../components';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';

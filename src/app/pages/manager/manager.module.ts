@@ -7,7 +7,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { NxpLoaderModule } from 'nxp-loader';
+import { NxpLoaderModule } from '../../components/nxp-loader/nxp-loader.module';
 import {
   NxpAutocompleteModule,
   NxpInputModule,

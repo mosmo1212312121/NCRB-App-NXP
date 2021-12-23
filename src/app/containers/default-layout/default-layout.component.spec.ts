@@ -19,7 +19,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { NxpLoaderModule } from 'nxp-loader';
+import { NxpLoaderModule } from './components/nxp-loader/nxp-loader.module';
 import { environment } from '../../../environments/environment';
 import { NxpAutocompleteModule, NxpInputModule, NxpScoreModule } from '../../components';
 import { initialState, metaReducers, reducers, REDUCER_TOKEN } from '../../store/store';
