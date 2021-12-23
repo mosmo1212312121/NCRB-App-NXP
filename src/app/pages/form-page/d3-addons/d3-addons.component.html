@@ -1,0 +1,204 @@
+<div class="animated fadeIn" [ngClass]="{ hidden: loading }" #D3_3>
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>{{ title }}
+        <span
+          class="badge badge-info ml-2 text-white"
+          *ngIf="!isAllStart"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Available</span
+        >
+        <span
+          class="badge badge-success ml-2 text-white"
+          *ngIf="isAllStart && IAs.length > 0"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        >
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mt-2" [collapse]="collapse">
+      <button
+        type="button"
+        (click)="onAddAction()"
+        id="btnIaAction"
+        *ngIf="!isSubmit && isUserLogin && user && user.empId !== 'empId' && !request.isMerged"
+        class="btn btn-sm btn-light"
+      >
+        <i class="fa fa-plus-circle mr-1"></i> Add IA Action
+      </button>
+      <div class="table-responsive table-responsive-xl mt-2 mb-0">
+        <table class="table table-sm table-hover table-bordered">
+          <thead>
+            <tr class="text-center">
+              <th width="48px">#</th>
+              <th>No.</th>
+              <th>Status</th>
+              <th>Owner</th>
+              <th>Driver</th>
+              <th>Target</th>
+              <th style="color: red">Priority*</th>
+              <th>Detail</th>
+              <th width="120px">Start follow up</th>
+              <th *ngIf="isUserLogin && !isAllStart"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" *ngFor="let IA of IAs; let i = index">
+              <td class="text-center">
+                <a routerLink="/containment/action/{{ IA.actionId }}" target="_blank" class="btn btn-sm btn-light">
+                  <i class="fa fa-eye"></i>
+                </a>
+              </td>
+              <td>
+                <a routerLink="/containment/action/{{ IA.actionId }}" target="_blank">{{ IA.actionNo }}</a>
+              </td>
+              <td>
+                <div class="d-flex align-items-center pt-1 pl-1 pr-1" style="justify-content: center;">
+                  <span
+                    class="badge badge-info text-white"
+                    *ngIf="isNew(IA.status)"
+                    style="font-weight: 500;padding: 0.32rem .5rem;background: #f0aebe;"
+                  >
+                    {{ IA.status }}
+                  </span>
+                  <span
+                    class="badge badge-warning text-white"
+                    *ngIf="isPending(IA.status)"
+                    style="font-weight: 500;padding: 0.32rem .5rem;"
+                  >
+                    {{ IA.status }}
+                  </span>
+                  <span
+                    class="badge badge-warning text-white"
+                    *ngIf="isPostpone(IA.status)"
+                    style="font-weight: 500;padding: 0.32rem .5rem;"
+                  >
+                    {{ IA.status }}
+                  </span>
+                  <span
+                    class="badge badge-success text-white"
+                    *ngIf="isAcknowledge(IA.status)"
+                    style="font-weight: 500;padding: 0.32rem .5rem;"
+                  >
+                    {{ IA.status }}
+                  </span>
+                  <span
+                    class="badge badge-info text-white"
+                    *ngIf="isComplete(IA.status)"
+                    style="font-weight: 500;padding: 0.32rem .5rem;"
+                  >
+                    {{ IA.status }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-link btn-sm"
+                  (click)="isCollapsedOwners[i] = !isCollapsedOwners[i]"
+                  [attr.aria-expanded]="!isCollapsedOwners[i]"
+                  attr.aria-controls="collapseOwners{{ i }}"
+                >
+                  <i class="fa fa-{{ isCollapsedOwners[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                  >{{ isCollapsedOwners[i] ? 'Show' : 'Hide' }}
+                </button>
+                <div id="collapseOwners{{ i }}" [collapse]="isCollapsedOwners[i]">
+                  <div class="row" *ngFor="let actionOwner of IA.actionOwners; let j = index">
+                    <div class="col-12 text-left">
+                      <span class="badge badge-secondary">{{ actionOwner.actionOwner }}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-link btn-sm"
+                  (click)="isCollapsedDrivers[i] = !isCollapsedDrivers[i]"
+                  [attr.aria-expanded]="!isCollapsedDrivers[i]"
+                  attr.aria-controls="collapseDrivers{{ i }}"
+                >
+                  <i class="fa fa-{{ isCollapsedDrivers[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                  >{{ isCollapsedDrivers[i] ? 'Show' : 'Hide' }}
+                </button>
+                <div id="collapseDrivers{{ i }}" [collapse]="isCollapsedDrivers[i]">
+                  <div class="row" *ngFor="let actionDriver of IA.actionDrivers; let j = index">
+                    <div class="col-12 text-left">
+                      <span class="badge badge-secondary">{{ actionDriver.actionDriver }}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>{{ IA.targetDate }}</td>
+              <td>
+                <i class="fa fa-check p-1" *ngIf="IA.priority" style="color: green"></i>
+              </td>
+              <td>{{ IA.actionDetail }}</td>
+              <td class="text-center">
+                <button
+                  (click)="onSubmit(IA.actionId)"
+                  *ngIf="isNew(IA.status) && isNCRBOwner"
+                  type="button"
+                  class="btn btn-sm btn-light"
+                >
+                  <i class="fa fa-check mr-1"></i> Submit
+                </button>
+                <button *ngIf="isNew(IA.status) && !isNCRBOwner" type="button" class="btn btn-sm btn-light" disabled>
+                  <i class="fa fa-check mr-1"></i> Submit
+                </button>
+                <button *ngIf="isAcknowledge(IA.status)" type="button" class="btn btn-sm btn-light" disabled>
+                  <i class="fa fa-check mr-1"></i> Submit
+                </button>
+                <button *ngIf="isPending(IA.status)" type="button" class="btn btn-sm btn-light" disabled>
+                  <i class="fa fa-check mr-1"></i> Submit
+                </button>
+                <button *ngIf="isComplete(IA.status)" type="button" class="btn btn-sm btn-primary" disabled>
+                  <i class="fa fa-check mr-1"></i> Complete
+                </button>
+              </td>
+              <td class="text-center" *ngIf="request.isMerged">
+                <button class="btn btn-sm btn-light"><i class="fa fa-stop mr-1"></i>No Action</button>
+              </td>
+              <td *ngIf="isUserLogin && !isAllStart && !request.isMerged">
+                <button
+                  type="button"
+                  (click)="onRemove(IA.actionId)"
+                  *ngIf="isNew(IA.status) && (isOwner(IA.createBy) || isNCRBOwner) && user && user.empId !== 'empId'"
+                  class="btn btn-sm btn-danger"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+                <button
+                  type="button"
+                  *ngIf="isNew(IA.status) && !(isOwner(IA.createBy) && isNCRBOwner) && user && user.empId === 'empId'"
+                  class="btn btn-sm btn-danger"
+                  disabled
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="IAs.length === 0">
+              <td colspan="11" class="text-center">
+                No data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

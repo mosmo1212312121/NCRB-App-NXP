@@ -1,0 +1,376 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          Approvers & Owners Management
+          <button *ngIf="uploadedFile" class="btn btn-sm btn-success float-right ml-1" (click)="onDownloadSQL()">
+            <i class="fa fa-file-o mr-1"></i>
+            Download SQL
+          </button>
+          <button
+            [disabled]="uploadTotal > 0"
+            *ngIf="isDev"
+            class="btn btn-sm btn-primary float-right ml-1"
+            (click)="file.click()"
+          >
+            <i class="fa fa-file-o mr-1"></i>
+            Upload
+          </button>
+          <input type="file" id="file" class="d-none" (change)="onUploadOwner($event)" #file />
+          <button class="btn btn-sm btn-secondary float-right ml-1" (click)="onToggleFact()">
+            <i *ngIf="fact" class="fa fa-eye mr-1"></i>
+            <i *ngIf="!fact" class="fa fa-eye-slash mr-1"></i>
+            {{ fact ? 'Show all' : 'Hide all' }}
+          </button>
+
+          <div class="progress mt-3" style="width: 100%; background-color: #c8ced3;" *ngIf="uploadTotal > 0">
+            <div
+              [style.width]="uploadPercentage"
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              [attr.aria-valuenow]="uploadProgress"
+              [attr.aria-valuemin]="0"
+              [attr.aria-valuemax]="uploadTotal"
+            >
+              {{ uploadPercentage }}
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row" [formGroup]="form">
+            <div class="col-md-4">
+              <nxp-input
+                title="MFG"
+                type="number"
+                typeInput="selection"
+                [items]="mfgs"
+                [parentForm]="form"
+                control="mfg"
+                [submit]="submit"
+                (change)="onMfgChange($event)"
+              ></nxp-input>
+            </div>
+            <div class="col-md-4">
+              <nxp-input
+                title="Sub-MFG"
+                type="number"
+                typeInput="selection"
+                [items]="subMfgs"
+                [parentForm]="form"
+                control="subMfg"
+                [submit]="submit"
+                (change)="onSubMfgChange($event)"
+              ></nxp-input>
+            </div>
+            <div class="col-md-4">
+              <nxp-input
+                title="Problem Process"
+                type="number"
+                typeInput="selection"
+                [items]="problemProcesses"
+                [parentForm]="form"
+                control="problemProcess"
+                [submit]="submit"
+              ></nxp-input>
+            </div>
+            <div class="col-md-12 text-center">
+              <button id="search" type="button" (click)="onSearching()" class="btn btn-sm btn-primary">
+                <i class="fa fa-search mr-1"></i>Search
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="col-12 mx-auto">
+              <div class="table-responsive">
+                <table class="table table-hover table-striped table-align-middle mb-0">
+                  <thead>
+                    <tr class="text-center">
+                      <th>Action</th>
+                      <th>#</th>
+                      <th>MFG</th>
+                      <th>Sub-MFG</th>
+                      <th>ProblemProcess</th>
+                      <th>D3-Owner</th>
+                      <th>D4D8-Owner</th>
+                      <th>FUQA Member</th>
+                      <th>PEMQA Member</th>
+                      <th>Team Member</th>
+                      <th>Directors</th>
+                      <th>Finances</th>
+                      <th>Material Owner</th>
+                      <th>FAB Member</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let configOwner of configOwners; let i = index">
+                      <td>
+                        <div class="btn-group" dropdown>
+                          <button
+                            id="button-split-{{ i }}"
+                            type="button"
+                            dropdownToggle
+                            class="btn btn-sm btn-primary dropdown-toggle"
+                            aria-controls="dropdown-split"
+                          >
+                            Action
+                            <span class="caret"></span>
+                            <span class="sr-only">Split button!</span>
+                          </button>
+                          <ul id="dropdown-split-{{ i }}" *dropdownMenu class="dropdown-menu" role="menu">
+                            <li role="menuitem" id="dropdown-menu-1-split-{{ i }}">
+                              <a
+                                class="dropdown-item"
+                                style="color: #20a8d8; font-weight: 600;"
+                                href="javascript:void(0)"
+                                (click)="onCopyOwners(i)"
+                                ><i style="color: #20a8d8" class="fa fa-files-o mr-1"></i>Copy</a
+                              >
+                            </li>
+                            <li role="menuitem" id="dropdown-menu-2-split-{{ i }}">
+                              <a
+                                class="dropdown-item"
+                                style="color: goldenrod; font-weight: 600;"
+                                href="javascript:void(0)"
+                                (click)="onEditOwners(i)"
+                                ><i style="color: goldenrod" class="fa fa-edit mr-1"></i>Edit</a
+                              >
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                      <td>{{ (pagination.page - 1) * pagination.pageLength + i + 1 }}</td>
+                      <td class="hi-li" [innerHTML]="configOwner.mfg"></td>
+                      <td class="hi-li" [innerHTML]="configOwner.subMfg"></td>
+                      <td class="hi-li" [innerHTML]="configOwner.problemProcess"></td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isD3Owner[i] = !isD3Owner[i]"
+                          [attr.aria-expanded]="!isD3Owner[i]"
+                          attr.aria-controls="isD3Owner{{ i }}"
+                        >
+                          <i class="fa fa-{{ isD3Owner[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isD3Owner[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isD3Owner{{ i }}" [collapse]="isD3Owner[i]">
+                          <div class="row" *ngFor="let d3Owner of configOwner.d3Owner; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ d3Owner.name }} <{{ d3Owner.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isD4D8Owner[i] = !isD4D8Owner[i]"
+                          [attr.aria-expanded]="!isD4D8Owner[i]"
+                          attr.aria-controls="isD4D8Owner{{ i }}"
+                        >
+                          <i class="fa fa-{{ isD4D8Owner[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isD4D8Owner[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isD4D8Owner{{ i }}" [collapse]="isD4D8Owner[i]">
+                          <div class="row" *ngFor="let d4d8Owner of configOwner.d4d8Owner; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ d4d8Owner.name }} <{{ d4d8Owner.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isFuqa[i] = !isFuqa[i]"
+                          [attr.aria-expanded]="!isFuqa[i]"
+                          attr.aria-controls="isFuqa{{ i }}"
+                        >
+                          <i class="fa fa-{{ isFuqa[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isFuqa[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isFuqa{{ i }}" [collapse]="isFuqa[i]">
+                          <div class="row" *ngFor="let _fuqa of configOwner.fuqa; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ _fuqa.name }} <{{ _fuqa.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isPEMQA[i] = !isPEMQA[i]"
+                          [attr.aria-expanded]="!isPEMQA[i]"
+                          attr.aria-controls="isPEMQA{{ i }}"
+                        >
+                          <i class="fa fa-{{ isPEMQA[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isPEMQA[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isPEMQA{{ i }}" [collapse]="isPEMQA[i]">
+                          <div class="row" *ngFor="let _pemqa of configOwner.pemqa; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ _pemqa.name }} <{{ _pemqa.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isTeamMember[i] = !isTeamMember[i]"
+                          [attr.aria-expanded]="!isTeamMember[i]"
+                          attr.aria-controls="isTeamMember{{ i }}"
+                        >
+                          <i class="fa fa-{{ isTeamMember[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isTeamMember[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isTeamMember{{ i }}" [collapse]="isTeamMember[i]">
+                          <div class="row" *ngFor="let teamMember of configOwner.teamMember; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ teamMember.name }} <{{ teamMember.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isDirectors[i] = !isDirectors[i]"
+                          [attr.aria-expanded]="!isDirectors[i]"
+                          attr.aria-controls="isDirectors{{ i }}"
+                        >
+                          <i class="fa fa-{{ isDirectors[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isDirectors[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isDirectors{{ i }}" [collapse]="isDirectors[i]">
+                          <div class="row" *ngFor="let directors of configOwner.directors; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ directors.name }} <{{ directors.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isFinances[i] = !isFinances[i]"
+                          [attr.aria-expanded]="!isFinances[i]"
+                          attr.aria-controls="isFinances{{ i }}"
+                        >
+                          <i class="fa fa-{{ isFinances[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isFinances[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isFinances{{ i }}" [collapse]="isFinances[i]">
+                          <div class="row" *ngFor="let finances of configOwner.finances; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ finances.name }} <{{ finances.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isMaterials[i] = !isMaterials[i]"
+                          [attr.aria-expanded]="!isMaterials[i]"
+                          attr.aria-controls="isMaterials{{ i }}"
+                        >
+                          <i class="fa fa-{{ isMaterials[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isMaterials[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isMaterials{{ i }}" [collapse]="isMaterials[i]">
+                          <div class="row" *ngFor="let materials of configOwner.materialOwners; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ materials.name }} <{{ materials.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isFABMember[i] = !isFABMember[i]"
+                          [attr.aria-expanded]="!isFABMember[i]"
+                          attr.aria-controls="isFABMember{{ i }}"
+                        >
+                          <i class="fa fa-{{ isFABMember[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isFABMember[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="isFABMember{{ i }}" [collapse]="isFABMember[i]">
+                          <div class="row" *ngFor="let fabMember of configOwner.fabMember; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ fabMember.name }} <{{ fabMember.email }}></span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <!-- <td>
+                        <button (click)="onCopyOwners(i)" class="btn btn-sm btn-light mx-1">
+                          <i class="fa fa-files-o"></i>
+                        </button>
+                        <button (click)="onEditOwners(i)" class="btn btn-sm btn-warning mx-1">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                      </td> -->
+                    </tr>
+                    <tr class="text-center" *ngIf="configOwners.length === 0">
+                      <td colspan="13">No Data</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer mb-0">
+            <p class="mr-2 my-0 py-1">
+              Showing
+              <b>{{
+                (pagination.page - 1) * pagination.pageLength + 1 > pagination.total
+                  ? pagination.total
+                  : (pagination.page - 1) * pagination.pageLength + 1
+              }}</b>
+              to
+              <b>{{
+                pagination.page * pagination.pageLength > pagination.total
+                  ? pagination.total
+                  : pagination.page * pagination.pageLength
+              }}</b>
+              of <b>{{ pagination.total }}</b> rows
+            </p>
+            <pagination
+              [maxSize]="10"
+              [boundaryLinks]="true"
+              [totalItems]="pagination.total"
+              [(ngModel)]="pagination.page"
+              [itemsPerPage]="pagination.pageLength"
+              (pageChanged)="onPageChanged($event)"
+              previousText="&lsaquo;"
+              nextText="&rsaquo;"
+              firstText="&laquo;"
+              lastText="&raquo;"
+            >
+            </pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nxp-loader *ngIf="loading"></nxp-loader>
+  <style>
+    .pagination {
+      margin-bottom: 0 !important;
+    }
+  </style>
+</div>

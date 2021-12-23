@@ -1,0 +1,110 @@
+<div class="row">
+  <div class="col-10 mx-auto">
+    <p class="h6">Risk assessment score</p>
+    <div class="table-responsive-xl">
+      <table class="table table-sm table-bordered m-0">
+        <thead class="text-center">
+          <tr>
+            <td>Requirement</td>
+            <td>MDR Level</td>
+            <td>Total Risk Score</td>
+            <td></td>
+            <td>A</td>
+            <td></td>
+            <td>B</td>
+            <td></td>
+            <td>C</td>
+            <td *ngIf="isNewScore && (request.isAcknowledge || request.isRequest)">#</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="min-width: 150px; width: 22.5%">
+              <nxp-input
+                class="m-0"
+                classInput="select-center"
+                typeInput="selection"
+                [items]="requirements"
+                [parentForm]="form"
+                control="requirement"
+              ></nxp-input>
+            </td>
+            <td style="min-width: 150px; width: 22.5%">
+              <nxp-input
+                class="m-0"
+                classInput="select-center"
+                typeInput="selection"
+                [items]="mdrLevels"
+                [parentForm]="form"
+                control="mdrLevel"
+              ></nxp-input>
+            </td>
+            <td style="min-width: 100px; width: 12.5%">
+              <nxp-input
+                class="m-0"
+                classInput="text-center"
+                type="text"
+                typeInput="input"
+                [parentForm]="form"
+                control="scoreTotal"
+              ></nxp-input>
+            </td>
+            <td class="text-center" style="line-height: 2.25;width: 40px">=</td>
+            <td style="min-width: 100px; width: 12.5%">
+              <nxp-input
+                class="m-0"
+                type="number"
+                [min]="scoreOld.scoreA"
+                classInput="text-center"
+                typeInput="input"
+                (change)="scoreChange($event)"
+                [parentForm]="form"
+                control="scoreA"
+              ></nxp-input>
+            </td>
+            <td class="text-center" style="line-height: 2.25;width: 40px">x</td>
+            <td style="min-width: 100px; width: 12.5%">
+              <nxp-input
+                class="m-0"
+                classInput="select-center"
+                type="number"
+                typeInput="selection"
+                [items]="scoreBs"
+                [parentForm]="form"
+                control="scoreB"
+                (change)="scoreChange($event)"
+              ></nxp-input>
+            </td>
+            <td class="text-center" style="line-height: 2.25;width: 40px">x</td>
+            <td style="min-width: 100px; width: 12.5%">
+              <nxp-input
+                class="m-0"
+                classInput="select-center"
+                type="number"
+                typeInput="selection"
+                [items]="scoreCs"
+                [parentForm]="form"
+                control="scoreC"
+                (change)="scoreChange($event)"
+              ></nxp-input>
+            </td>
+            <td class="text-center p-2" *ngIf="isNewScore && (request.isAcknowledge || request.isRequest)">
+              <button (click)="onRefresh()" class="btn btn-sm btn-light">
+                <i class="fa fa-refresh"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p *ngIf="request && request.has3HistLots" class="h6 mt-3" style="color: #bc001d">
+      *** Risk assessment score A was adjusted by QA FU reject more than 3 times.
+    </p>
+  </div>
+  <div class="col-10 mx-auto text-center mt-3" *ngIf="isChange">
+    <button (click)="updateScore()" class="btn btn-sm btn-primary"><i class="fa fa-save mr-1"></i>Save score</button>
+  </div>
+  <div class="col-12" *ngIf="isChange">
+    <hr />
+  </div>
+</div>

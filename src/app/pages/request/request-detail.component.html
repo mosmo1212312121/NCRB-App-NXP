@@ -1,0 +1,707 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-header">
+      <strong class="h5"
+        >Request Detail
+        <span
+          class="badge badge-info float-right mx-1 text-white"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          [ngStyle]="{ 'background-color': request.statusColor ? request.statusColor : 'grey' }"
+          *ngIf="request"
+        >
+          {{ request.statusTxt }}
+        </span>
+        <span
+          *ngIf="
+            request.editingBy &&
+            request.editingBy !== 'null' &&
+            (request.isDraft || request.isRequest || request.isAcknowledge)
+          "
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          class="float-right badge badge-danger mx-1"
+        >
+          Editing: {{ request.editingBy }}
+        </span>
+      </strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-xl-11 col-12 mx-auto">
+          <div id="HISTORY" class="row">
+            <div class="col-12">
+              <app-history [ncrbno]="request.ncnumber"></app-history>
+            </div>
+          </div>
+          <!-- .row -->
+          <div class="row">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div id="D1" class="row">
+            <div class="col-12">
+              <app-d1></app-d1>
+            </div>
+          </div>
+          <!-- .row -->
+          <div class="row">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div class="row" *ngIf="request.isSelectProblemTypeAndMfg">
+            <div id="D2" class="col-12">
+              <app-d2 (toggleCollapse)="onD2ToggleCollapse($event)"></app-d2>
+            </div>
+            <div class="col-12 mb-3" *ngIf="request.editingBy && request.editingBy !== 'null' && isAcknowledge">
+              <span style="font-weight: 500;padding: 0.36rem .6rem;" class="float-right badge badge-danger mx-1">
+                Editing: {{ request.editingBy }}
+              </span>
+            </div>
+            <div class="col-12" [collapse]="d2Collapse" *ngIf="!request.isMaterial && !isWaferFAB">
+              <app-d2-lot></app-d2-lot>
+            </div>
+            <div class="col-12" [collapse]="d2Collapse" *ngIf="request.isMaterial || isWaferFAB">
+              <app-d2-material></app-d2-material>
+            </div>
+          </div>
+          <div id="MOM" class="row" *ngIf="request.isSelectProblemTypeAndMfg">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12">
+              <app-d3-minutes
+                [ncrbid]="request.id"
+                [ncrbno]="request.ncnumber"
+                [status]="request.status"
+                (submit)="onD3SubmitMom($event)"
+              ></app-d3-minutes>
+            </div>
+          </div>
+          <div
+            id="D3_1"
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12">
+              <app-d3
+                [ncrbid]="request.id"
+                [ncrbno]="request.ncnumber"
+                [status]="request.status"
+                (submit)="onD3SubmitRc($event)"
+              ></app-d3>
+            </div>
+          </div>
+          <div
+            id="D3_2"
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12">
+              <app-d3-qa
+                [ncrbid]="request.id"
+                [ncrbno]="request.ncnumber"
+                [status]="request.status"
+                (submit)="onD3SubmitQa($event)"
+              ></app-d3-qa>
+            </div>
+          </div>
+          <div
+            id="D3_3"
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12">
+              <app-d3-addons
+                [ncrbid]="request.id"
+                [ackDate]="request.ackDate"
+                [status]="request.status"
+                [userFullname]="user ? user.name : ''"
+                [isNCRBOwner]="request.isOwner"
+                (submit)="onD3SubmitCa($event)"
+                (canDisposition)="onD3CaCd($event)"
+              ></app-d3-addons>
+              <!-- [userFullname]="user.name" -->
+            </div>
+          </div>
+          <div
+            id="D3_4"
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12">
+              <app-d3-instruction [ncrbno]="request.ncnumber"></app-d3-instruction>
+            </div>
+          </div>
+          <div
+            id="D3_5"
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12">
+              <app-d3-lot [ncrbid]="request.id" [ncrbno]="request.ncnumber"></app-d3-lot>
+            </div>
+          </div>
+          <div
+            [id]="
+              (request.isMaterial || isWaferFAB) &&
+              (((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+                isMergeAndD3)
+                ? 'D3_6'
+                : 'D4'
+            "
+            class="row"
+            *ngIf="
+              ((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+              isMergeAndD3
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              (request.isMaterial || isWaferFAB) &&
+              (((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+                isMergeAndD3)
+            "
+          >
+            <div class="col-12">
+              <app-d3-material [ncrbid]="request.id" [ncrbno]="request.ncnumber"></app-d3-material>
+            </div>
+          </div>
+          <div
+            id="D4"
+            class="row"
+            *ngIf="
+              (request.isMaterial || isWaferFAB) &&
+              (((request.isAcknowledge || request.isSubmit || request.isCompleted) &&
+                (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)) ||
+                isMergeAndD3)
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            id="D5"
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12">
+              <app-d4 [ncrbid]="request.id" [ncrbno]="request.ncnumber" (d4)="onD4($event)"></app-d4>
+            </div>
+          </div>
+          <div
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12">
+              <app-d5-addons
+                [ncrbid]="request.id"
+                [ackDate]="request.ackDate"
+                [status]="request.status"
+                [userFullname]="user ? user.name : ''"
+                [isNCRBOwner]="request.isOwner"
+                (submit)="onD5SubmitPCa($event)"
+                (canDisposition)="onD5PCaCd($event)"
+              ></app-d5-addons>
+            </div>
+          </div>
+          <div
+            id="D6"
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12">
+              <app-d6
+                (d6)="onD6($event)"
+                [ncrbid]="request.id"
+                [ackDate]="request.ackDate"
+                [status]="request.status"
+                [userFullname]="user ? user.name : ''"
+                [isNCRBOwner]="request.isOwner"
+              ></app-d6>
+            </div>
+          </div>
+          <div
+            id="D7"
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12">
+              <app-d7-addons
+                [ncrbid]="request.id"
+                [ackDate]="request.ackDate"
+                [status]="request.status"
+                [userFullname]="user ? user.name : ''"
+                [isNCRBOwner]="request.isOwner"
+                (submit)="onD7SubmitPr($event)"
+                (canDisposition)="onD7PrCd($event)"
+              ></app-d7-addons>
+            </div>
+          </div>
+          <div
+            id="D8"
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12">
+              <app-d8 (d8)="onD8($event)"></app-d8>
+            </div>
+          </div>
+          <div
+            class="row"
+            *ngIf="
+              request.isSubmit && (request.isSw2 || request.isCompleted) && (_status.isD12D8 || _status.isD12D83x5Why)
+            "
+          >
+            <div class="col-12 pt-3">
+              <hr />
+            </div>
+          </div>
+          <!-- .row -->
+          <div class="row" [ngClass]="{ hidden: !(request.isSubmit || request.isAcknowledge) }">
+            <div class="col-xl-10 col-12 mx-auto">
+              <nxp-score></nxp-score>
+            </div>
+          </div>
+          <!-- .row -->
+          <div
+            class="row"
+            *ngIf="request.isAcknowledge || request.isSubmit || request.isSubmitAll || request.isCompleted"
+          >
+            <div class="col-xl-10 col-12 mx-auto mt-4">
+              <div class="row">
+                <div class="col-10 mx-auto">
+                  <h3>Actions</h3>
+                  <p
+                    (click)="onGoTo('MOM')"
+                    class="go-to"
+                    [ngStyle]="{
+                      color: (_status.isD12D8 || _status.isD12D83x5Why ? d3Moms.length > 0 : true) ? 'green' : 'red'
+                    }"
+                  >
+                    <span
+                      [innerHTML]="
+                        iconTaskComplete(_status.isD12D8 || _status.isD12D83x5Why ? d3Moms.length > 0 : true)
+                      "
+                    ></span
+                    >{{ MOM_TITLE }}
+                  </p>
+                  <p (click)="onGoTo('D3_1')" class="go-to" [ngStyle]="{ color: d3Rc.length > 0 ? 'green' : 'red' }">
+                    <span [innerHTML]="iconTaskComplete(d3Rc.length > 0)"></span>{{ D3_1_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D3_2')"
+                    class="go-to"
+                    [ngStyle]="{ color: d3Qa.length > 0 && !d3Qa[d3Qa.length - 1].reason ? 'green' : 'red' }"
+                  >
+                    <span [innerHTML]="iconTaskComplete(d3Qa.length > 0 && !d3Qa[d3Qa.length - 1].reason)"></span
+                    >{{ D3_2_TITLE }}
+                  </p>
+                  <p (click)="onGoTo('D3_3')" class="go-to" [ngStyle]="{ color: d3Ca ? 'green' : 'red' }">
+                    <span [innerHTML]="iconTaskComplete(d3Ca)"></span>{{ D3_3_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D3_4')"
+                    class="go-to"
+                    [ngStyle]="{ color: isWaferFAB || request.isInstruction ? 'green' : 'red' }"
+                  >
+                    <span [innerHTML]="iconTaskComplete(isWaferFAB || request.isInstruction)"></span>{{ D3_4_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D3_5')"
+                    class="go-to"
+                    [ngStyle]="{ color: isWaferFAB || request.isApproveAll ? 'green' : 'red' }"
+                  >
+                    <span [innerHTML]="iconTaskComplete(isWaferFAB || request.isApproveAll)"></span>{{ D3_5_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D3_6')"
+                    class="go-to"
+                    [ngStyle]="{ color: request.isApproveAllMat ? 'green' : 'red' }"
+                    *ngIf="request.isMaterial || isWaferFAB"
+                  >
+                    <span [innerHTML]="iconTaskComplete(request.isApproveAllMat)"></span>{{ D3_6_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D4')"
+                    class="go-to"
+                    [ngStyle]="{ color: d4 ? 'green' : 'red' }"
+                    *ngIf="(_status.isD12D8 || _status.isD12D83x5Why) && (request.isSw2 || request.isCompleted)"
+                  >
+                    <span [innerHTML]="iconTaskComplete(d4)"></span>{{ D4_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D5')"
+                    class="go-to"
+                    [ngStyle]="{ color: d5PCa ? 'green' : 'red' }"
+                    *ngIf="(_status.isD12D8 || _status.isD12D83x5Why) && (request.isSw2 || request.isCompleted)"
+                  >
+                    <span [innerHTML]="iconTaskComplete(d5PCa)"></span>{{ D5_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D6')"
+                    class="go-to"
+                    [ngStyle]="{ color: d6 ? 'green' : 'red' }"
+                    *ngIf="(_status.isD12D8 || _status.isD12D83x5Why) && (request.isSw2 || request.isCompleted)"
+                  >
+                    <span [innerHTML]="iconTaskComplete(d6)"></span>{{ D6_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D7')"
+                    class="go-to"
+                    [ngStyle]="{ color: d7Pr ? 'green' : 'red' }"
+                    *ngIf="(_status.isD12D8 || _status.isD12D83x5Why) && (request.isSw2 || request.isCompleted)"
+                  >
+                    <span [innerHTML]="iconTaskComplete(d7Pr)"></span>{{ D7_TITLE }}
+                  </p>
+                  <p
+                    (click)="onGoTo('D8')"
+                    class="go-to"
+                    [ngStyle]="{ color: d8 ? 'green' : 'red' }"
+                    *ngIf="(_status.isD12D8 || _status.isD12D83x5Why) && (request.isSw2 || request.isCompleted)"
+                  >
+                    <span [innerHTML]="iconTaskComplete(d8)"></span>{{ D8_TITLE }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="row"
+            *ngIf="
+              (request.isSubmit && _status.isD12D3) ||
+              (request.isSw2Submit && (_status.isD12D8 || _status.isD12D83x5Why)) ||
+              request.isCompleted
+            "
+          >
+            <div class="col-12 text-left p-2 mt-2">
+              <table class="table table-sm table-bordered table-striped table-hover">
+                <thead>
+                  <tr style="font-size: 1.1rem;" class="text-center">
+                    <th colspan="3">Board Approval for NCRB Closure</th>
+                  </tr>
+                  <tr style="font-size: 1.05rem;" class="text-center">
+                    <th>Group Name</th>
+                    <th width="300px">Approver</th>
+                    <th width="200px">Approval status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let boardGroupReq of getBoardGroupReqs()">
+                    <th style="font-size: 1.05rem;">{{ boardGroupReq.groupName }}</th>
+                    <td class="text-center" width="320px">{{ boardGroupReq.approver || '-' }}</td>
+                    <td class="text-center" width="200px">
+                      <i *ngIf="boardGroupReq.flag === 'Y'" style="color: green" class="fa fa-check-circle"></i>
+                      <i
+                        *ngIf="boardGroupReq.flag === 'N' && !approvable(boardGroupReq.groupReqId)"
+                        style="color: grey"
+                        class="fa fa-times-circle"
+                      ></i>
+                      <button
+                        (click)="onBoardApprove(boardGroupReq.groupReqId)"
+                        type="button"
+                        *ngIf="boardGroupReq.flag === 'N' && approvable(boardGroupReq.groupReqId)"
+                        class="btn btn-sm btn-primary mx-1"
+                      >
+                        <i class="fa fa-check mr-1"></i>Approve
+                      </button>
+                      <button
+                        (click)="onBoardReject(boardGroupReq.groupReqId)"
+                        type="button"
+                        *ngIf="boardGroupReq.flag === 'N' && approvable(boardGroupReq.groupReqId)"
+                        class="btn btn-sm btn-danger mx-1"
+                      >
+                        <i class="fa fa-times mr-1"></i>Reject
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- .row -->
+          <div class="row" *ngIf="(request.isSelectProblemTypeAndMfg || request.isDraft) && !request.isMerged">
+            <div class="col-12 text-center p-2 mt-2">
+              <button
+                title="Save by REQUESTOR"
+                [disabled]="!request.isEditingBy"
+                type="button"
+                id="btnSave"
+                *ngIf="(request.isMember && request.isDraft) || (request.isRequestor && request.isDraft)"
+                (click)="onSaveDraft()"
+                class="btn btn-sm btn-primary mx-1"
+              >
+                <i class="fa fa-save mr-1"></i>Save Draft
+              </button>
+              <button
+                title="Submit by REQUESTOR"
+                [disabled]="!request.isEditingBy"
+                *ngIf="request.isRequestor && request.isDraft"
+                type="button"
+                id="btnSubmit"
+                (click)="onSubmitRequest()"
+                class="btn btn-sm btn-success mx-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>
+                Submit
+              </button>
+              <button
+                title="Acknowledge by OWNER"
+                [disabled]="!request.isEditingBy"
+                *ngIf="request.isRequest && request.isOwner"
+                type="button"
+                id="btnAcknowledge"
+                (click)="onAcknowledge()"
+                class="btn btn-sm btn-success mx-1"
+              >
+                <i class="fa fa-info-circle mr-1"></i>
+                Acknowledge
+              </button>
+              <button
+                title="Complete by PEMQA"
+                *ngIf="request.isAcknowledge && request.isPemQa"
+                type="button"
+                (click)="onSubmitToManager()"
+                [disabled]="!isSubmitAll || !request.isEditingBy"
+                class="btn btn-sm btn-success mx-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>
+                Submit
+              </button>
+              <button
+                [disabled]="!isAllComplete"
+                title="Complete by OWNERD4D8"
+                *ngIf="request.isSubmit && request.isOwnerD4D8 && request.isSw2 && !request.isSw2Submit"
+                type="button"
+                (click)="onSubmitToBoard()"
+                class="btn btn-sm btn-success mx-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>
+                Submit
+              </button>
+              <button
+                title="Merge by Owner or D3 Approver"
+                *ngIf="(request.isOwner || request.isD3Approver) && !request.isDraft && !request.isSubmit"
+                type="button"
+                (click)="onMerge()"
+                [disabled]="!request.isEditingBy"
+                class="btn btn-sm btn-primary mx-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>
+                Merge
+              </button>
+              <button
+                [disabled]="!request.isEditingBy"
+                type="button"
+                (click)="onChangeOwnerClick()"
+                *ngIf="
+                  ((request.isOwner && !request.isSubmit) || (request.isPemQa && request.isSubmit)) && !request.isDraft
+                "
+                class="btn btn-sm btn-light mx-1"
+              >
+                <i class="fa fa-refresh mr-1"></i>Change Owner
+              </button>
+              <button
+                [disabled]="!request.isEditingBy"
+                type="button"
+                id="btnRemove"
+                *ngIf="request.isRequestor && request.isDraft"
+                (click)="onRemoveDraft()"
+                class="btn btn-sm btn-danger mx-1"
+              >
+                <i class="fa fa-trash mr-1"></i> Delete
+              </button>
+              <button *ngIf="id && request" type="button" (click)="onBack()" class="btn btn-sm btn-light mx-1">
+                <i class="fa fa-chevron-left mr-1"></i>
+                Back
+              </button>
+            </div>
+          </div>
+          <div class="row" *ngIf="id && request.isMerged">
+            <div class="col-12 text-center p-2 mt-2">
+              <button
+                title="Merge Case View"
+                type="button"
+                id="btnMergCaseView"
+                (click)="onMergeView()"
+                class="btn btn-sm btn-primary mx-1"
+              >
+                <i class="fa fa-eye mr-1"></i>View
+              </button>
+              <button type="button" (click)="onBack()" class="btn btn-sm btn-light mx-1">
+                <i class="fa fa-chevron-left mr-1"></i>
+                Back
+              </button>
+            </div>
+          </div>
+          <!-- .row -->
+          <!-- .card -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- .card -->
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

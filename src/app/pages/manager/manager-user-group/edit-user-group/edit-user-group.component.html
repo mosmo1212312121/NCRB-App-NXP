@@ -1,0 +1,61 @@
+<div class="modal-header">
+  <h5 class="modal-title pull-left">Add User Group</h5>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <div class="row" [formGroup]="form">
+        <div class="col-md-6">
+          <nxp-input title="Employee ID" type="text" [parentForm]="form" control="empId" [submit]="submit"></nxp-input>
+        </div>
+        <div class="col-md-6">
+          <nxp-input title="Email" type="email" [parentForm]="form" control="email" [submit]="submit"></nxp-input>
+        </div>
+        <div class="col-md-6">
+          <nxp-input
+            title="Firstname"
+            type="text"
+            [parentForm]="form"
+            control="firstname"
+            [submit]="submit"
+          ></nxp-input>
+        </div>
+        <div class="col-md-6">
+          <nxp-input title="Lastname" type="text" [parentForm]="form" control="lastname" [submit]="submit"></nxp-input>
+        </div>
+        <div class="col-md-6">
+          <nxp-input title="Username" type="text" [parentForm]="form" control="username" [submit]="submit"></nxp-input>
+        </div>
+        <div class="col-md-6">
+          <nxp-input
+            title="Department"
+            type="text"
+            [parentForm]="form"
+            control="department"
+            [submit]="submit"
+          ></nxp-input>
+        </div>
+        <div class="col-md-6">
+          <nxp-input
+            title="Supervisor ID"
+            type="text"
+            [parentForm]="form"
+            control="supervisorId"
+            [submit]="submit"
+          ></nxp-input>
+        </div>
+        <div class="col-md-6">
+          <nxp-input title="Telephone NO." type="text" [parentForm]="form" control="tel" [submit]="submit"></nxp-input>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer" style="justify-content: center">
+  <button type="button" class="btn btn-sm btn-primary mx-1" (click)="onSubmit()">
+    <i class="fa fa-save mr-1"></i> Submit
+  </button>
+  <button type="button" class="btn btn-sm btn-light mx-1" (click)="onCancel()">
+    <i class="fa fa-times mr-1"></i> Cancel
+  </button>
+</div>

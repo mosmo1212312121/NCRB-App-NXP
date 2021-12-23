@@ -1,0 +1,268 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-12" [formGroup]="form">
+      <div class="card">
+        <div class="card-header"><i class="fa fa-plus mr-2"></i>Create reject name</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-10 mx-auto">
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="Code"
+                    type="text"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    control="code"
+                    maxlength="100"
+                    (change)="onChange($event)"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="Name"
+                    type="text"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    control="name"
+                    maxlength="100"
+                    (change)="onChange($event)"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="FA Code"
+                    type="number"
+                    typeInput="selection"
+                    placeholder="Please select fa code"
+                    [items]="faCodes"
+                    [parentForm]="form"
+                    control="faCode"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="Category"
+                    type="number"
+                    typeInput="selection"
+                    placeholder="Please select category"
+                    [items]="categories"
+                    [parentForm]="form"
+                    control="category"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="Spec"
+                    type="text"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    control="spec"
+                    maxlength="100"
+                    (change)="onChange($event)"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="Level"
+                    type="number"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    control="levelVal"
+                    (change)="onChange($event)"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="MFG"
+                    type="text"
+                    typeInput="selection"
+                    placeholder="Please select mfg"
+                    [items]="mfgs"
+                    [parentForm]="form"
+                    control="mfg"
+                    (change)="onMfgChange($event)"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="Sub MFG"
+                    type="text"
+                    typeInput="selection"
+                    placeholder="Please select sub mfg"
+                    [items]="subMfgs"
+                    [parentForm]="form"
+                    control="subMfg"
+                    (change)="onChange($event)"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="Hold Code"
+                    type="text"
+                    typeInput="selection"
+                    placeholder="Please select hold code"
+                    [items]="holdCodes"
+                    [parentForm]="form"
+                    control="holdCode"
+                    (change)="onChange($event)"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6 d-none">
+                  <nxp-input
+                    title="Hold Comment"
+                    type="text"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    control="holdComment"
+                    maxlength="100"
+                    (change)="onChange($event)"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <button (click)="onSubmit()" class="btn btn-sm btn-primary mx-1">
+                    <i class="fa fa-save mr-1"></i>Submit
+                  </button>
+                  <button (click)="onReset()" class="btn btn-sm btn-danger mx-1">
+                    <i class="fa fa-refresh mr-1"></i>Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><i class="fa fa-list mr-2"></i>Reject Names</div>
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="col-xl-4 col-md-6 mx-auto mx-auto">
+              <div class="form-group">
+                <div class="input-group mt-3 mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="input-searching"
+                    placeholder="Code, Name, Spec"
+                    name="input_searching"
+                    [(ngModel)]="searching"
+                    (enter)="onSearching()"
+                  />
+                  <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button" id="button-searching" (click)="onSearching()">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mx-auto">
+              <div class="table-responsive">
+                <table class="table table-hover table-striped table-align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Code</th>
+                      <th>Name</th>
+                      <th>Category</th>
+                      <th>Spec</th>
+                      <th>Level</th>
+                      <th style="width: 75px">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let reject of rejectNames; let i = index">
+                      <td class="text-left">{{ (pagination.page - 1) * pagination.pageLength + 1 + i }}</td>
+                      <td class="text-left">{{ reject.code }}</td>
+                      <td class="text-left">{{ reject.name }}</td>
+                      <td class="text-left">{{ category(reject.category) }}</td>
+                      <td class="text-left">{{ reject.spec }}</td>
+                      <td class="text-left">{{ reject.levelVal }}</td>
+                      <td style="width: 75px">
+                        <button type="button" (click)="onEdit(i)" class="btn btn-sm btn-warning">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button
+                          type="button"
+                          *ngIf="reject.deletable"
+                          (click)="onDelete(reject.id)"
+                          class="btn btn-sm btn-danger"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr *ngIf="rejectNames.length === 0">
+                      <td colspan="7" class="text-center">No Data</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-end">
+              <p class="mr-2 my-0 py-1">
+                Showing
+                <b>{{
+                  (pagination.page - 1) * pagination.pageLength + 1 > pagination.total
+                    ? pagination.total
+                    : (pagination.page - 1) * pagination.pageLength + 1
+                }}</b>
+                to
+                <b>{{
+                  pagination.page * pagination.pageLength > pagination.total
+                    ? pagination.total
+                    : pagination.page * pagination.pageLength
+                }}</b>
+                of <b>{{ pagination.total }}</b> rows
+              </p>
+              <pagination
+                [maxSize]="10"
+                [boundaryLinks]="true"
+                [totalItems]="pagination.total"
+                [(ngModel)]="pagination.page"
+                (pageChanged)="onPageChanged($event)"
+                previousText="&lsaquo;"
+                nextText="&rsaquo;"
+                firstText="&laquo;"
+                lastText="&raquo;"
+              >
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

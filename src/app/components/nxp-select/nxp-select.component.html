@@ -1,0 +1,88 @@
+<div [formGroup]="parentForm" class="form-group row {{ class }}">
+  <!-- <div class="form-group row {{ class }}"> -->
+  <div class="col-md-4">
+    <label class="col-form-label mb-0" [for]="control" i18n [ngStyle]="{ color: labelColor.en }"
+      >{{ titleText }}
+    </label>
+    <small
+      *ngIf="helpText"
+      id="{{ control }}-help"
+      class="form-text"
+      [ngStyle]="{
+        color: labelColor.th,
+        'font-size': '90%',
+        'margin-top': '-0.5rem'
+      }"
+    >
+      {{ helpText }}
+    </small>
+  </div>
+  <div class="col-md-8">
+    <div class="input-group">
+      <input type="hidden" [formControlName]="control" />
+      <input
+        *ngIf="!parentForm.get(control)?.disabled"
+        #searchTxt
+        type="text"
+        class="form-control"
+        (keyup)="onKeyup($event)"
+        (focus)="selected !== '' ? true : onFocus()"
+        (blur)="selected !== '' ? true : onBlur()"
+        [ngClass]="{ 'ng-invalid': submit && parentForm.get(control).invalid }"
+        [readonly]="selected !== ''"
+        [attr.aria-label]="titleText"
+        placeholder="{{ placeholder }}"
+        autocomplete="off"
+      />
+      <input
+        *ngIf="parentForm.get(control)?.disabled"
+        #searchTxt
+        type="text"
+        class="form-control"
+        [readonly]="parentForm.get(control)?.disabled"
+        [disabled]="parentForm.get(control)?.disabled"
+        [attr.aria-label]="titleText"
+        placeholder="{{ placeholder }}"
+        autocomplete="off"
+      />
+      <div
+        #clearBtn
+        *ngIf="selected !== '' && !parentForm.get(control)?.disabled"
+        class="input-group-append"
+        style="cursor: pointer"
+        (click)="onClear()"
+      >
+        <span class="input-group-text">
+          <i class="fa fa-times"></i>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="focus" class="list-searching">
+      <ul class="list-group">
+        <ng-container *ngFor="let item of items; let i = index">
+          <li *ngIf="isMatch(i)" (click)="onSelect(i)" class="list-group-item">{{ item.label }}</li>
+        </ng-container>
+      </ul>
+    </div>
+    <!-- <ng-select
+      appendTo="body"
+      [multiple]="false"
+      [searchable]="true"
+      placeholder="{{ placeholder }}"
+      (change)="onChange()"
+      [ngClass]="{ 'ng-invalid': submit && parentForm.get(control).invalid }"
+      [ngStyle]="{ 'font-weight': '500' }"
+      [(ngModel)]="selected"
+      [readonly]="parentForm.get(control)?.disabled"
+    >
+      <ng-option
+        [value]="item.value"
+        [ngStyle]="{ 'font-weight': '500' }"
+        [disabled]="item.disabled"
+        *ngFor="let item of items"
+      >
+        {{ item.label }}
+      </ng-option>
+    </ng-select> -->
+  </div>
+</div>

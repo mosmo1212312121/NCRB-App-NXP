@@ -1,0 +1,39 @@
+[
+  {
+    "id": 1,
+    "ncnumber": 1571629134743,
+    "date": "2019-10-21",
+    "type": 1,
+    "issueByName": "5115 - Arthit Kanjai",
+    "mfg": 1,
+    "issueByGroup": 1,
+    "subMfg": 2,
+    "shift": 1,
+    "problemProcess": 2,
+    "special": 3,
+    "stopAndFix": 2,
+    "rejectName": 1,
+    "spec": 1,
+    "category": 1,
+    "owner": "5115 - Arthit Kanjai",
+    "rejectDetail": "",
+    "operatorId": "56046",
+    "lots": [
+      {
+        "seq": 1,
+        "product12nc": "",
+        "assyCg": "",
+        "blName": "",
+        "currentOpt": "",
+        "dateCode": "",
+        "lotId": 1,
+        "machine": "",
+        "productDesc": "Description....",
+        "quantity": 1234,
+        "rejectQty": 99,
+        "type": 0,
+        "waferBatch": ""
+      }
+    ]
+  }
+]

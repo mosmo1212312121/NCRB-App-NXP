@@ -1,0 +1,221 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-12" [formGroup]="form">
+      <div class="card">
+        <div class="card-header"><i class="fa fa-plus mr-2"></i>Create board group</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mx-auto">
+              <div class="row">
+                <div class="col-md-12">
+                  <nxp-input
+                    title="Group Name"
+                    type="text"
+                    [parentForm]="form"
+                    [submit]="submit"
+                    control="groupName"
+                    maxlength="100"
+                    (change)="onGroupNameChange($event)"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="table table-bordered text-center">
+                    <thead>
+                      <tr>
+                        <th>MDR Level</th>
+                        <th>#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Device</td>
+                        <td>
+                          <div class="custom-control custom-checkbox ml-1">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="needDevice"
+                              name="needDevice"
+                              formControlName="needDevice"
+                            />
+                            <label class="custom-control-label" for="needDevice"></label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>QRB</td>
+                        <td>
+                          <div class="custom-control custom-checkbox ml-1">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="needQrb"
+                              name="needQrb"
+                              formControlName="needQrb"
+                            />
+                            <label class="custom-control-label" for="needQrb"></label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>MRB</td>
+                        <td>
+                          <div class="custom-control custom-checkbox ml-1">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="needMrb"
+                              name="needMrb"
+                              formControlName="needMrb"
+                            />
+                            <label class="custom-control-label" for="needMrb"></label>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <button
+                    *ngIf="form.get('groupMasterId').value == 0"
+                    [disabled]="!canCreate"
+                    (click)="onSubmit()"
+                    class="btn btn-sm btn-primary mx-1"
+                  >
+                    <i class="fa fa-save mr-1"></i>Submit
+                  </button>
+                  <button
+                    *ngIf="form.get('groupMasterId').value > 0"
+                    [disabled]="!canCreate"
+                    (click)="onSave()"
+                    class="btn btn-sm btn-primary mx-1"
+                  >
+                    <i class="fa fa-save mr-1"></i>Submit
+                  </button>
+                  <button
+                    *ngIf="form.get('groupMasterId').value > 0"
+                    [disabled]="!canCreate"
+                    (click)="onCancel()"
+                    class="btn btn-sm btn-danger mx-1"
+                  >
+                    <i class="fa fa-ban mr-1"></i>Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><i class="fa fa-list mr-2"></i>Role & Action</div>
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="col-xl-4 col-md-6 mx-auto mx-auto">
+              <div class="form-group">
+                <div class="input-group mt-3 mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="input-searching"
+                    placeholder="GroupName"
+                    name="input_searching"
+                    [(ngModel)]="searching"
+                    (enter)="onSearching()"
+                  />
+                  <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button" id="button-searching" (click)="onSearching()">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mx-auto">
+              <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th>Group Name</th>
+                      <th>Device</th>
+                      <th>QRB</th>
+                      <th>MRB</th>
+                      <th style="width: 75px">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let boardGroupMaster of boardGroupMasters; let i = index">
+                      <td>{{ boardGroupMaster.groupName }}</td>
+                      <td>
+                        <i *ngIf="boardGroupMaster.needDevice" style="color: green" class="fa fa-check-circle"></i>
+                        <i *ngIf="!boardGroupMaster.needDevice" style="color: red" class="fa fa-times-circle"></i>
+                      </td>
+                      <td>
+                        <i *ngIf="boardGroupMaster.needQrb" style="color: green" class="fa fa-check-circle"></i>
+                        <i *ngIf="!boardGroupMaster.needQrb" style="color: red" class="fa fa-times-circle"></i>
+                      </td>
+                      <td>
+                        <i *ngIf="boardGroupMaster.needMrb" style="color: green" class="fa fa-check-circle"></i>
+                        <i *ngIf="!boardGroupMaster.needMrb" style="color: red" class="fa fa-times-circle"></i>
+                      </td>
+                      <td>
+                        <button (click)="onEdit(i)" class="btn btn-sm btn-warning mx-1">
+                          <i class="fa fa-edit mr-1"></i>Edit
+                        </button>
+                        <button (click)="onDelete(boardGroupMaster.groupMasterId)" class="btn btn-sm btn-danger mx-1">
+                          <i class="fa fa-trash mr-1"></i>Delete
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="text-center" *ngIf="boardGroupMasters.length === 0">
+                      <td colspan="5">No Data</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-end">
+              <p class="mr-2 my-0 py-1">
+                Showing
+                <b>{{
+                  (pagination.page - 1) * pagination.pageLength + 1 > pagination.total
+                    ? pagination.total
+                    : (pagination.page - 1) * pagination.pageLength + 1
+                }}</b>
+                to
+                <b>{{
+                  pagination.page * pagination.pageLength > pagination.total
+                    ? pagination.total
+                    : pagination.page * pagination.pageLength
+                }}</b>
+                of <b>{{ pagination.total }}</b> rows
+              </p>
+              <pagination
+                [maxSize]="10"
+                [boundaryLinks]="true"
+                [totalItems]="pagination.total"
+                [(ngModel)]="pagination.page"
+                (pageChanged)="onPageChanged($event)"
+                previousText="&lsaquo;"
+                nextText="&rsaquo;"
+                firstText="&laquo;"
+                lastText="&raquo;"
+              >
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

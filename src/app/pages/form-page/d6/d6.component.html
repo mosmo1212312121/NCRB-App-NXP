@@ -1,0 +1,112 @@
+<div class="animated fadeIn" [ngClass]="{ hidden: loading }">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>
+        {{ title }}
+        <span
+          class="badge badge-info ml-2 text-white"
+          *ngIf="!isAllStart"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Available</span
+        >
+        <span
+          class="badge badge-success ml-2 text-white"
+          *ngIf="isAllStart"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        >
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" [collapse]="collapse">
+      <div class="table-responsive table-responsive-xl mt-2 mb-0">
+        <table class="table table-sm table-hover table-bordered">
+          <thead>
+            <tr class="text-center">
+              <th width="48px">#</th>
+              <th>No.</th>
+              <th>Owner</th>
+              <th>Driver</th>
+              <th>Implement date​</th>
+              <th>EP</th>
+              <th>
+                Realized Effectiveness (%)
+              </th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" *ngFor="let IA of IAs; let i = index">
+              <td class="text-center">
+                <a routerLink="/corrective/action/{{ IA.actionId }}" target="_blank" class="btn btn-sm btn-light">
+                  <i class="fa fa-eye"></i>
+                </a>
+              </td>
+              <td>
+                <a routerLink="/corrective/action/{{ IA.actionId }}" target="_blank">
+                  {{ IA.actionNo }}
+                </a>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-link btn-sm"
+                  (click)="isCollapsedOwners[i] = !isCollapsedOwners[i]"
+                  [attr.aria-expanded]="!isCollapsedOwners[i]"
+                  attr.aria-controls="collapseOwners{{ i }}"
+                >
+                  <i class="fa fa-eye mr-1"></i>{{ isCollapsedOwners[i] ? 'Show' : 'Hide' }}
+                </button>
+                <div id="collapseOwners{{ i }}" [collapse]="isCollapsedOwners[i]">
+                  <div class="row" *ngFor="let actionOwner of IA.actionOwners; let j = index">
+                    <div class="col-12 text-left">
+                      <span class="badge badge-secondary">{{ actionOwner.actionOwner }}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-link btn-sm"
+                  (click)="isCollapsedDrivers[i] = !isCollapsedDrivers[i]"
+                  [attr.aria-expanded]="!isCollapsedDrivers[i]"
+                  attr.aria-controls="collapseDrivers{{ i }}"
+                >
+                  <i class="fa fa-eye mr-1"></i>{{ isCollapsedDrivers[i] ? 'Show' : 'Hide' }}
+                </button>
+                <div id="collapseDrivers{{ i }}" [collapse]="isCollapsedDrivers[i]">
+                  <div class="row" *ngFor="let actionDriver of IA.actionDrivers; let j = index">
+                    <div class="col-12 text-left">
+                      <span class="badge badge-secondary">{{ actionDriver.actionDriver }}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>{{ IA.targetDate | date: dateConstant.format }}</td>
+              <td>{{ IA.ep }}</td>
+              <td>{{ IA.effectiveness }}</td>
+              <td>{{ IA.note || '-' }}</td>
+            </tr>
+            <tr *ngIf="IAs.length === 0">
+              <td colspan="8" class="text-center">
+                No data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

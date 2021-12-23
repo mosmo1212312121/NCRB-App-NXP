@@ -1,0 +1,295 @@
+<div class="row" [formGroup]="form">
+  <div class="col-12 mx-auto">
+    <div class="row">
+      <div class="col-12 mb-3">
+        <a
+          class="h5 text-decoration-none"
+          (click)="collapse = !collapse; toggleCollapse.emit(collapse)"
+          [attr.aria-expanded]="!collapse"
+          attr.aria-controls="collapse"
+          href="javascript:void(0)"
+        >
+          <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>{{ title }}
+          <span
+            class="badge badge-info ml-2 text-white"
+            *ngIf="!(isAcknowledge || isSubmit)"
+            style="font-weight: 500;padding: 0.36rem .6rem;"
+            >Available</span
+          >
+          <span
+            class="badge badge-success ml-2 text-white"
+            *ngIf="isAcknowledge || isSubmit"
+            style="font-weight: 500;padding: 0.36rem .6rem;"
+            >Completed</span
+          >
+        </a>
+      </div>
+    </div>
+    <!-- .row -->
+    <div class="row">
+      <div class="col-12" [collapse]="collapse">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h6>ระบุ Reject name หรือ FA Code</h6>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <!-- reject name -->
+                <nxp-select
+                  *ngIf="!isMaterial"
+                  title="{{ !request.id || isRequest || isDraft ? 'Reject Name*' : 'Reject Name' }}"
+                  [parentForm]="form"
+                  control="rejectName"
+                  [items]="rejectNamesFiltered"
+                  [submit]="submit"
+                  placeholder="Please select reject name"
+                  (change)="onRejectNameChange($event)"
+                ></nxp-select>
+                <!-- material type -->
+                <nxp-select
+                  *ngIf="isMaterial"
+                  title="{{ !request.id || isRequest || isDraft ? 'Material type*' : 'Material type' }}"
+                  [parentForm]="form"
+                  control="materialType"
+                  [items]="materialTypes"
+                  helpText="ชนิด Material"
+                  [submit]="submit"
+                  placeholder="Please select material type"
+                  (change)="onMaterialTypeChange($event)"
+                ></nxp-select>
+              </div>
+              <div class="col-md-6">
+                <!-- reject name -->
+                <nxp-select
+                  *ngIf="!isMaterial"
+                  title="FA Code"
+                  [parentForm]="form"
+                  control="faCode"
+                  [items]="faCodes"
+                  [submit]="submit"
+                  placeholder="Please select fa code"
+                  (change)="onFaCodeChange($event)"
+                ></nxp-select>
+                <!-- owner material -->
+                <nxp-users
+                  *ngIf="isMaterial"
+                  title="Owner Material problem"
+                  type="text"
+                  [parentForm]="form"
+                  control="ownerMaterial"
+                  color="{{ !request.id || isRequest || isDraft ? 'bg-success' : '' }}"
+                  [submit]="submit"
+                  (change)="onChange($event)"
+                ></nxp-users>
+              </div>
+            </div>
+            <!-- .row -->
+            <div class="row" *ngIf="isMaterial">
+              <div class="col-md-6">
+                <!-- reject detail for Mat -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'Reject Detail*' : 'Reject Detail' }}"
+                  type="text"
+                  [parentForm]="form"
+                  [submit]="submit"
+                  typeInput="inlinetext"
+                  [parentForm]="form"
+                  [submit]="submit"
+                  control="rejectDetail"
+                  maxlength="500"
+                  helpText="รายละเอียด reject"
+                  (change)="onChange($event)"
+                ></nxp-input>
+              </div>
+              <div class="col-md-6">
+                <!-- category -->
+                <nxp-input
+                  title="Category"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select category"
+                  [items]="categories"
+                  [parentForm]="form"
+                  color="{{ !request.id || isRequest || isDraft ? 'bg-success' : '' }}"
+                  control="category"
+                  [submit]="submit"
+                  (change)="onCategoryChange($event)"
+                ></nxp-input>
+              </div>
+            </div>
+            <!-- .row -->
+            <div class="row" *ngIf="isInProcess || isPreviousProcess">
+              <div class="col-md-6">
+                <!-- spec# -->
+                <nxp-input
+                  *ngIf="!isMaterial"
+                  title="Spec#"
+                  type="text"
+                  [parentForm]="form"
+                  color="{{ !request.id || isRequest || isDraft ? 'bg-success' : '' }}"
+                  control="spec"
+                  [submit]="submit"
+                  (change)="onChange($event)"
+                ></nxp-input>
+              </div>
+
+              <div class="col-md-6">
+                <!-- category -->
+                <nxp-input
+                  title="Category"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select category"
+                  [items]="categories"
+                  [parentForm]="form"
+                  color="{{ !request.id || isRequest || isDraft ? 'bg-success' : '' }}"
+                  control="category"
+                  [submit]="submit"
+                  (change)="onCategoryChange($event)"
+                ></nxp-input>
+              </div>
+            </div>
+            <!-- .row -->
+            <div class="row" *ngIf="!isMaterial">
+              <div class="col-md-6">
+                <!-- reject detail for In and Pre -->
+                <nxp-input
+                  title="Reject Detail"
+                  type="text"
+                  typeInput="inlinetext"
+                  [parentForm]="form"
+                  [submit]="submit"
+                  control="rejectDetail"
+                  maxlength="500"
+                  helpText="รายละเอียด reject"
+                  (change)="onChange($event)"
+                ></nxp-input>
+              </div>
+
+              <div
+                class="col-md-6"
+                *ngIf="form && form.get('category').value == 1 && (isInProcess || isPreviousProcess)"
+              >
+                <!-- operator id -->
+                <nxp-users
+                  title="{{ !request.id || isRequest || isDraft ? 'Operator ID*' : 'Operator ID' }}"
+                  type="text"
+                  [parentForm]="form"
+                  control="operatorId"
+                  helpText="รหัสพนักงาน"
+                  [submit]="submit"
+                  (change)="onChange($event)"
+                ></nxp-users>
+              </div>
+              <div
+                class="col-md-6"
+                *ngIf="form && form.get('category').value != 1 && (isInProcess || isPreviousProcess)"
+              >
+                <!-- operator id -->
+                <nxp-users
+                  title="Operator ID"
+                  type="text"
+                  [parentForm]="form"
+                  control="operatorId"
+                  helpText="รหัสพนักงาน"
+                  [submit]="submit"
+                  (change)="onChange($event)"
+                ></nxp-users>
+              </div>
+            </div>
+            <!-- .row -->
+            <div class="row" *ngIf="isPreviousProcess && request.mfg.toString() === '10'">
+              <div class="col-md-6">
+                <!-- owner material -->
+                <nxp-users
+                  *ngIf="isPreviousProcess && request.mfg.toString() === '10'"
+                  title="Owner Material problem"
+                  type="text"
+                  [parentForm]="form"
+                  control="ownerMaterial"
+                  color="{{ !request.id || isRequest || isDraft ? 'bg-success' : '' }}"
+                  [submit]="submit"
+                  (change)="onChange($event)"
+                ></nxp-users>
+              </div>
+            </div>
+            <!-- .row -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group row">
+                  <label class="col-md-4 col-label">Attach file</label>
+                  <div class="col-md-8" *ngIf="!id || isDraft || isRequest">
+                    <input type="file" id="file" class="d-none" multiple (change)="selectFile($event)" #file />
+                    <button
+                      [disabled]="
+                        (isDraft && !(isMember || isRequestor)) || (isRequest && !isOwner) || (id && !isEditingBy)
+                      "
+                      type="button"
+                      (click)="file.click()"
+                      *ngIf="form"
+                      class="btn btn-sm btn-light mr-1"
+                    >
+                      Attach file
+                    </button>
+                  </div>
+                  <div class="col-md-8" *ngIf="id && !isDraft && !isRequest">
+                    <input type="file" id="file" class="d-none" (change)="selectFile($event)" #file />
+                    <button
+                      type="button"
+                      *ngIf="(form && request && !request.id) || (isRequest && isOwner)"
+                      (click)="file.click()"
+                      class="btn btn-sm btn-light mr-1"
+                    >
+                      Attach file
+                    </button>
+                    <button
+                      type="button"
+                      *ngIf="(form && request && !request.id) || (isRequest && !isOwner)"
+                      class="btn btn-sm btn-light mr-1"
+                    >
+                      Attach file
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-10 ml-auto">
+                    <div
+                      class="btn-group mr-2 mt-2"
+                      *ngFor="let attachFile of form.get('attachFiles')['controls']; let i = index"
+                    >
+                      <button
+                        id="attachFileDownload{{ i }}"
+                        (click)="downloadFile(i)"
+                        type="button"
+                        class="btn btn-sm btn-light"
+                      >
+                        <i class="fa fa-download mr-1"></i
+                        >{{ attachFile.get(attachFile.get('id').value ? 'fileName' : 'fileNameTemp').value }}
+                      </button>
+                      <button
+                        id="attachFileDelete{{ i }}"
+                        [disabled]="attachFile.get('fileName').disabled"
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        (click)="removeFile(i)"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- .row -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

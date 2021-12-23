@@ -1,0 +1,68 @@
+<div class="animated fadeIn" [ngClass]="{ hidden: loading }">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>
+        {{ title }}
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" [collapse]="collapse">
+      <div class="card mb-0">
+        <div class="card-body pb-0">
+          <div class="row">
+            <div class="col-12">
+              <p class="mb-3">Thank you all for your effort on this NCRB.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-8">
+              <table class="table table-sm table-borderless">
+                <tbody>
+                  <tr>
+                    <td>Reported by...</td>
+                    <td>
+                      <b>{{ firstOwner.toLowerCase() }}</b>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let owner of owners">
+                    <td></td>
+                    <td>
+                      <b>{{ owner.toLowerCase() }}</b>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <hr />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Approved by...</td>
+                    <td>
+                      <b>{{ firstApprover.toLowerCase() }}</b>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let approver of approvers">
+                    <td></td>
+                    <td>
+                      <b>{{ approver.toLowerCase() }}</b>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>

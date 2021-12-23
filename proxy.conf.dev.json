@@ -1,0 +1,11 @@
+{
+  "/ncrb/*": {
+    "target": "http://localhost:9999",
+    "secure": false,
+    "logLevel": "error",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/ncrb": ""
+    }
+  }
+}

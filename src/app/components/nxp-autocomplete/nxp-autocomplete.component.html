@@ -1,0 +1,93 @@
+<div class="form-group row {{ class }}" [formGroup]="parentForm" *ngIf="inline">
+  <div class="col-md-4">
+    <label
+      id="title-{{ control }}"
+      class="col-form-label mb-0"
+      [for]="control"
+      i18n
+      [ngStyle]="{ color: labelColor.en }"
+      >{{ titleText }}
+    </label>
+    <small
+      *ngIf="helpText"
+      id="{{ control }}-help"
+      class="form-text"
+      [ngStyle]="{
+        color: labelColor.th,
+        'font-size': '90%',
+        'margin-top': '-0.5rem'
+      }"
+    >
+      {{ helpText }}
+    </small>
+  </div>
+  <div class="col-md-8">
+    <input
+      autocomplete="off"
+      [value]="parentForm.get(control).value"
+      [typeahead]="dataSource"
+      (typeaheadLoading)="changeTypeaheadLoading($event)"
+      (typeaheadOnSelect)="typeaheadOnSelect($event)"
+      [typeaheadOptionsLimit]="10"
+      typeaheadOptionField="name"
+      [typeaheadMinLength]="2"
+      typeaheadWaitMs="320"
+      [typeaheadAsync]="true"
+      [typeaheadScrollable]="true"
+      [typeaheadOptionsInScrollableView]="5"
+      [type]="type"
+      [id]="control + group"
+      [name]="control + group"
+      class="{{ colored ? color : '' }} form-control"
+      [formControlName]="control"
+      [placeholder]="placeholder"
+      [ngClass]="{
+        'is-invalid': parentForm.get(control).invalid && submit,
+        'text-white': colored
+      }"
+      [ngStyle]="{ 'font-weight': '500' }"
+      (change)="onChange($event)"
+      [typeaheadItemTemplate]="customItemTemplate"
+      [typeaheadHideResultsOnBlur]="typeaheadHideResultsOnBlur"
+      [typeaheadSingleWords]="false"
+      (blur)="onBlur($event)"
+    />
+  </div>
+</div>
+
+<div class="form-group {{ class }}" [formGroup]="parentForm" *ngIf="input">
+  <input
+    autocomplete="off"
+    [value]="parentForm.get(control).value"
+    [typeahead]="dataSource"
+    (typeaheadLoading)="changeTypeaheadLoading($event)"
+    (typeaheadOnSelect)="typeaheadOnSelect($event)"
+    [typeaheadOptionsLimit]="10"
+    typeaheadOptionField="name"
+    [typeaheadMinLength]="2"
+    typeaheadWaitMs="320"
+    [typeaheadAsync]="true"
+    [typeaheadScrollable]="true"
+    [typeaheadOptionsInScrollableView]="5"
+    [type]="type"
+    [id]="control + group"
+    [name]="control + group"
+    class="{{ colored ? color : '' }} form-control"
+    [formControlName]="control"
+    [placeholder]="placeholder"
+    [ngClass]="{
+      'is-invalid': parentForm.get(control).invalid && submit,
+      'text-white': colored
+    }"
+    [ngStyle]="{ 'font-weight': '500' }"
+    (change)="onChange($event)"
+    [typeaheadItemTemplate]="customItemTemplate"
+    [typeaheadHideResultsOnBlur]="typeaheadHideResultsOnBlur"
+    [typeaheadSingleWords]="false"
+    (blur)="onBlur($event)"
+  />
+</div>
+
+<ng-template #customItemTemplate let-model="item" let-index="index">
+  <p class="mb-0">{{ model.name }} <{{ model.email }}></p>
+</ng-template>

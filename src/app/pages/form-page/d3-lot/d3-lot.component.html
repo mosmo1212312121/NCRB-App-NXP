@@ -1,0 +1,912 @@
+<div class="animated fadeIn" [formGroup]="formIn" [ngClass]="{ hidden: loading }" id="D3-5">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>{{ title }}
+        <span
+          class="badge badge-info ml-2 text-white"
+          *ngIf="!isApproveAll && !isWaferFAB"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Available</span
+        >
+        <span
+          class="badge badge-success ml-2 text-white"
+          *ngIf="isApproveAll || isWaferFAB"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        >
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <!-- Not Material -->
+    <div class="col-12 mt-2" [collapse]="collapse" *ngIf="lots">
+      <!-- problem lot table -->
+      <div class="table-responsive table-responsive-xl">
+        <table class="table table-sm table-bordered" style="white-space: nowrap;">
+          <thead class="text-center">
+            <tr>
+              <th width="48px">
+                <div class="custom-control custom-checkbox ml-1">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectedCheckLot"
+                    name="selectedCheckLot"
+                    formControlName="selectedCheck"
+                    (change)="onToggleChk()"
+                  />
+                  <label class="custom-control-label" for="selectedCheckLot"></label>
+                </div>
+              </th>
+              <td>Status</td>
+              <td>Disposition</td>
+              <td>Types</td>
+              <td>Lot ID</td>
+              <td>Product 12 NC</td>
+              <td>Product Description</td>
+              <td>Assy CG / Pre Assy CG</td>
+              <td>1st Re-Screen</td>
+              <td>1st Result</td>
+              <td>1st FU by QA</td>
+              <td>2nd Re-Screen</td>
+              <td>2nd Result</td>
+              <td>2nd FU by QA</td>
+              <td>3rd Re-Screen</td>
+              <td>3rd Result</td>
+              <td>3rd FU by QA</td>
+              <td>#</td>
+            </tr>
+          </thead>
+          <tbody formArrayName="lots">
+            <ng-container *ngFor="let lot of formIn.get('lots').controls; let i = index" [formGroupName]="i">
+              <tr *ngIf="lot.get('id').value === -1">
+                <td colspan="18" class="text-left p-2">
+                  <h5 *ngIf="lot.getRawValue().groupName !== 99">
+                    Group {{ lot.get('groupName').value }}
+                    <span class="mx-3 rescreen" *ngIf="lot.getRawValue().rescreen1"
+                      >1: {{ rescreen(lot.getRawValue().rescreen1) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen2"
+                      >2: {{ rescreen(lot.getRawValue().rescreen2) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen3"
+                      >3: {{ rescreen(lot.getRawValue().rescreen3) }}</span
+                    >
+                  </h5>
+                  <h5 *ngIf="lot.getRawValue().groupName === 99">
+                    Group Scrap
+                  </h5>
+                  <p *ngIf="lot.getRawValue().groupName !== 99">
+                    attach file:
+                    <a href="javascript:void(0)" (click)="downloadFile(i)">{{
+                      lot.getRawValue().attach.fileName || '-'
+                    }}</a>
+                  </p>
+                  <nxp-input
+                    type="text"
+                    typeInput="textarea"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    [parentForm]="lot"
+                    [submit]="submit"
+                    control="otherDetail"
+                    [group]="'Added' + i"
+                    maxlength="250"
+                  ></nxp-input>
+                </td>
+              </tr>
+              <tr class="text-center" *ngIf="lot.get('id').value === -1">
+                <th width="48px">
+                  <div class="custom-control custom-checkbox ml-1">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="selectedGroup{{ lot.get('groupName').value }}"
+                      name="selectedGroup{{ lot.get('groupName').value }}"
+                      formControlName="selected"
+                      (change)="onToggleGroup(i, $event)"
+                    />
+                    <label class="custom-control-label" for="selectedGroup{{ lot.get('groupName').value }}"></label>
+                  </div>
+                </th>
+                <td>Status</td>
+                <td>Disposition</td>
+                <td>Types</td>
+                <td>Lot ID</td>
+                <td>Product 12 NC</td>
+                <td>Product Description</td>
+                <td>Assy CG / Pre Assy CG</td>
+                <td>1st Re-Screen</td>
+                <td>1st Result</td>
+                <td>1st FU by QA</td>
+                <td>2nd Re-Screen</td>
+                <td>2nd Result</td>
+                <td>2nd FU by QA</td>
+                <td>3rd Re-Screen</td>
+                <td>3rd Result</td>
+                <td>3rd FU by QA</td>
+                <td>#</td>
+              </tr>
+              <tr *ngIf="lot.get('id').value > -1">
+                <td>
+                  <div class="custom-control custom-checkbox ml-1">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="selectedCheckLot{{ i }}"
+                      formControlName="selected"
+                      name="selectedCheckLot{{ i }}"
+                      (change)="onChk(i)"
+                    />
+                    <label class="custom-control-label" for="selectedCheckLot{{ i }}"></label>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center pt-1 pl-1 pr-1" style="justify-content: center;">
+                    <span
+                      class="badge badge-info text-white"
+                      *ngIf="lot.get('disposition').value === 'I'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;background: #f0aebe;"
+                    >
+                      <!-- new -->
+                      {{ getStatus(lot.get('disposition').value) }}
+                    </span>
+                    <span
+                      class="badge badge-warning text-white"
+                      *ngIf="lot.get('disposition').value === 'E'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- pending -->
+                      {{ getStatus(lot.get('disposition').value, lot.get('problemType').value) }}
+                    </span>
+                    <span
+                      class="badge badge-warning text-white"
+                      *ngIf="lot.get('disposition').value === 'P'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- pending -->
+                      {{ getStatus(lot.get('disposition').value, lot.get('problemType').value) }}
+                    </span>
+                    <span
+                      class="badge badge-danger text-white"
+                      *ngIf="lot.get('disposition').value === 'R'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- rejected -->
+                      {{ getStatus(lot.get('disposition').value) }}
+                    </span>
+                    <span
+                      class="badge badge-warning text-white"
+                      *ngIf="lot.get('disposition').value === 'Y'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- approve for pete -->
+                      {{ getStatus(lot.get('disposition').value, lot.get('problemType').value) }}
+                    </span>
+                    <span
+                      class="badge badge-info text-white"
+                      *ngIf="lot.get('disposition').value === 'Z'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- approved -->
+                      {{ getStatus(lot.get('disposition').value) }}
+                    </span>
+                    <span
+                      class="badge badge-danger text-white"
+                      *ngIf="lot.get('disposition').value === 'S'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- scrap -->
+                      {{ getStatus(lot.get('disposition').value) }}
+                    </span>
+                    <span
+                      class="badge badge-warning text-white"
+                      *ngIf="lot.get('disposition').value === 'H'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- hold -->
+                      {{ getStatus(lot.get('disposition').value) }}
+                    </span>
+                  </div>
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    *ngIf="lot.get('disposition').value !== 'H'"
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    [ngClass]="{
+                      'is-invalid': lot.get('dispositionType').invalid && lot.get('submit').value
+                    }"
+                    formControlName="dispositionType"
+                  >
+                    <option value="">None</option>
+                    <option
+                      [value]="dispositionType.value"
+                      *ngFor="let dispositionType of dispositionTypes; let i = index"
+                      >{{ dispositionType.label }}</option
+                    >
+                  </select>
+                  <select
+                    *ngIf="lot.get('disposition').value === 'H'"
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    [ngClass]="{
+                      'is-invalid': lot.get('dispositionType').invalid && lot.get('submit').value
+                    }"
+                    formControlName="dispositionType"
+                  >
+                    <option value="0">Hold</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    formControlName="problemType"
+                  >
+                    <option value="0">Problem</option>
+                    <option value="1">Scope Before</option>
+                    <option value="2">Scope After</option>
+                    <option value="3">Out of Scope</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('lotId').invalid
+                    }"
+                    formControlName="lotId"
+                    style="min-width: 110px"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('product12nc').invalid
+                    }"
+                    formControlName="product12nc"
+                    style="min-width: 110px"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('productDesc').invalid
+                    }"
+                    formControlName="productDesc"
+                    style="min-width: 110px"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('assyCg').invalid && lot.get('submit').value
+                    }"
+                    formControlName="assyCg"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    [ngClass]="{
+                      'is-invalid': lot.get('rescreen1').invalid && lot.get('submit1').value
+                    }"
+                    (change)="onReScreenChange(i, 'rescreen1')"
+                    formControlName="rescreen1"
+                  >
+                    <option value="0">None</option>
+                    <option [value]="reScreen.value" *ngFor="let reScreen of reScreens; let i = index">{{
+                      reScreen.label
+                    }}</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('result1').invalid && lot.get('submit1').value,
+                      hidden:
+                        !lot.get('result1').value &&
+                        (lot.get('disposition').value === 'I' || lot.get('disposition').value === 'P')
+                    }"
+                    (change)="onReScreenChange(i, 'result1')"
+                    formControlName="result1"
+                  />
+                  <button
+                    [disabled]="lot.get('result1').value"
+                    (click)="onUpdateResult(i, 1)"
+                    *ngIf="
+                      !lot.get('result1').value &&
+                      (lot.get('disposition').value === 'I' || lot.get('disposition').value === 'P')
+                    "
+                    type="button"
+                    class="btn btn-sm btn-block"
+                    [ngClass]="{ 'btn-primary': lot.get('rescreen1').value, 'btn-light': !lot.get('rescreen1').value }"
+                  >
+                    {{ lot.get('rescreen1').value ? 'Submit Result 1' : '~' }}
+                  </button>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('fuByQa1').invalid && lot.get('submit1').value,
+                      hidden:
+                        !lot.get('fuByQa1').value &&
+                        (lot.get('disposition').value === 'I' ||
+                          (lot.get('disposition').value === 'P' && lot.get('problemType').value === 0))
+                    }"
+                    formControlName="fuByQa1"
+                  />
+                  <button
+                    [disabled]="!lot.get('result1').value"
+                    (click)="onSubmitFuByQa(i, 1)"
+                    *ngIf="
+                      !lot.get('fuByQa1').value &&
+                      (lot.get('disposition').value === 'I' ||
+                        (lot.get('disposition').value === 'P' && lot.get('problemType').value === 0))
+                    "
+                    type="button"
+                    class="btn btn-sm btn-block"
+                    [ngClass]="{ 'btn-warning': lot.get('result1').value, 'btn-light': !lot.get('result1').value }"
+                  >
+                    {{ lot.get('result1').value ? 'Submit FU by QA' : '~' }}
+                  </button>
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    [ngClass]="{
+                      'is-invalid': lot.get('rescreen2').invalid && lot.get('submit2').value
+                    }"
+                    (change)="onReScreenChange(i, 'rescreen2')"
+                    formControlName="rescreen2"
+                  >
+                    <option value="0">None</option>
+                    <option [value]="reScreen.value" *ngFor="let reScreen of reScreens; let i = index">{{
+                      reScreen.label
+                    }}</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('result2').invalid && lot.get('submit2').value,
+                      hidden:
+                        !lot.get('result2').value &&
+                        (lot.get('disposition').value === 'I' || lot.get('disposition').value === 'P')
+                    }"
+                    (change)="onReScreenChange(i, 'result2')"
+                    formControlName="result2"
+                  />
+                  <button
+                    [disabled]="!lot.get('result1').value"
+                    (click)="onUpdateResult(i, 2)"
+                    *ngIf="
+                      !lot.get('result2').value &&
+                      (lot.get('disposition').value === 'I' || lot.get('disposition').value === 'P')
+                    "
+                    type="button"
+                    class="btn btn-sm btn-block"
+                    [ngClass]="{ 'btn-primary': lot.get('rescreen2').value, 'btn-light': !lot.get('rescreen2').value }"
+                  >
+                    {{ lot.get('rescreen2').value ? 'Submit Result 2' : '~' }}
+                  </button>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('fuByQa2').invalid && lot.get('submit2').value,
+                      hidden:
+                        !lot.get('fuByQa2').value &&
+                        (lot.get('disposition').value === 'I' ||
+                          (lot.get('disposition').value === 'P' && lot.get('problemType').value === 0))
+                    }"
+                    formControlName="fuByQa2"
+                  />
+                  <button
+                    [disabled]="!lot.get('result2').value"
+                    (click)="onSubmitFuByQa(i, 2)"
+                    *ngIf="
+                      !lot.get('fuByQa2').value &&
+                      (lot.get('disposition').value === 'I' ||
+                        (lot.get('disposition').value === 'P' && lot.get('problemType').value === 0))
+                    "
+                    type="button"
+                    class="btn btn-sm btn-block"
+                    [ngClass]="{ 'btn-warning': lot.get('result2').value, 'btn-light': !lot.get('result2').value }"
+                  >
+                    {{ lot.get('result2').value ? 'Submit FU by QA' : '~' }}
+                  </button>
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    [ngClass]="{
+                      'is-invalid': lot.get('rescreen3').invalid && lot.get('submit3').value
+                    }"
+                    (change)="onReScreenChange(i, 'rescreen3')"
+                    formControlName="rescreen3"
+                  >
+                    <option value="0">None</option>
+                    <option [value]="reScreen.value" *ngFor="let reScreen of reScreens; let i = index">{{
+                      reScreen.label
+                    }}</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('result3').invalid && lot.get('submit3').value,
+                      hidden:
+                        !lot.get('result3').value &&
+                        (lot.get('disposition').value === 'I' || lot.get('disposition').value === 'P')
+                    }"
+                    (change)="onReScreenChange(i, 'result3')"
+                    formControlName="result3"
+                  />
+                  <button
+                    [disabled]="!lot.get('result2').value"
+                    (click)="onUpdateResult(i, 3)"
+                    *ngIf="
+                      !lot.get('result3').value &&
+                      (lot.get('disposition').value === 'I' || lot.get('disposition').value === 'P')
+                    "
+                    type="button"
+                    class="btn btn-sm btn-block"
+                    [ngClass]="{ 'btn-primary': lot.get('rescreen3').value, 'btn-light': !lot.get('rescreen3').value }"
+                  >
+                    {{ lot.get('rescreen3').value ? 'Submit Result 3' : '~' }}
+                  </button>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': lot.get('fuByQa3').invalid && lot.get('submit3').value,
+                      hidden:
+                        !lot.get('fuByQa3').value &&
+                        (lot.get('disposition').value === 'I' ||
+                          (lot.get('disposition').value === 'P' && lot.get('problemType').value === 0))
+                    }"
+                    formControlName="fuByQa3"
+                  />
+                  <button
+                    [disabled]="!lot.get('result3').value"
+                    (click)="onSubmitFuByQa(i, 3)"
+                    *ngIf="
+                      !lot.get('fuByQa3').value &&
+                      (lot.get('disposition').value === 'I' ||
+                        (lot.get('disposition').value === 'P' && lot.get('problemType').value === 0))
+                    "
+                    type="button"
+                    class="btn btn-sm btn-block"
+                    [ngClass]="{ 'btn-warning': lot.get('result3').value, 'btn-light': !lot.get('result3').value }"
+                  >
+                    {{ lot.get('result3').value ? 'Submit FU by QA' : '~' }}
+                  </button>
+                </td>
+                <td>
+                  <!-- owner group -->
+                  <button
+                    disabled
+                    *ngIf="
+                      (!(request.isPemQa && lot.get('problemType').value !== 0) &&
+                        !(request.isFuQa && lot.get('problemType').value === 0) &&
+                        !request.isOwner) ||
+                      (user && user.empId === 'empId')
+                    "
+                    type="button"
+                    class="btn btn-sm btn-light"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i>
+                    No Action
+                  </button>
+                  <!-- owner group -->
+                  <!-- <button
+                    (click)="onPemQaApproval(i)"
+                    *ngIf="
+                      request.isAcknowledge &&
+                      lot.get('id').value !== 0 &&
+                      lot.get('disposition').value === 'P' &&
+                      request &&
+                      request.isPemQa &&
+                      lot.get('problemType').value !== 0
+                    "
+                    type="button"
+                    class="btn btn-sm btn-success"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i> Approve
+                  </button> -->
+                  <button
+                    *ngIf="lot.get('disposition').value === 'E' && request.isEngineer"
+                    (click)="onApprove(i)"
+                    class="btn btn-sm btn-success mx-1"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i> Release
+                  </button>
+                  <button
+                    *ngIf="lot.get('disposition').value === 'E' && request.isEngineer"
+                    (click)="onScrap(i)"
+                    class="btn btn-sm btn-danger mx-1"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i> Scrap
+                  </button>
+                  <button
+                    *ngIf="lot.get('disposition').value === 'Y' && request.isMte"
+                    (click)="onMteApproval(i)"
+                    class="btn btn-sm btn-success mx-1"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i> Release
+                  </button>
+                  <button
+                    *ngIf="lot.get('disposition').value === 'Y' && request.isMte"
+                    (click)="onScrap(i)"
+                    class="btn btn-sm btn-danger mx-1"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i> Scrap
+                  </button>
+                  <!-- <button
+                    *ngIf="
+                      (request.isAcknowledge &&
+                        lot.get('id').value !== 0 &&
+                        lot.get('disposition').value === 'P' &&
+                        request &&
+                        request.isPemQa &&
+                        lot.get('problemType').value !== 0) ||
+                      (request.isAcknowledge &&
+                        lot.get('id').value !== 0 &&
+                        lot.get('disposition').value === 'P' &&
+                        request &&
+                        !request.isFuQa &&
+                        lot.get('problemType').value === 0)
+                    "
+                    (click)="onReject(i)"
+                    class="btn btn-sm btn-danger"
+                  >
+                    <i class="fa fa-times-circle mr-1"></i> Reject
+                  </button> -->
+                  <!-- <button
+                    *ngIf="
+                      (request.isAcknowledge &&
+                        lot.get('id').value !== 0 &&
+                        lot.get('disposition').value === 'P' &&
+                        request &&
+                        request.isPemQa &&
+                        lot.get('problemType').value !== 0) ||
+                      (request.isAcknowledge &&
+                        lot.get('id').value !== 0 &&
+                        lot.get('disposition').value === 'P' &&
+                        request &&
+                        request.isFuQa &&
+                        lot.get('problemType').value === 0)
+                    "
+                    (click)="onReject(i)"
+                    class="btn btn-sm btn-danger"
+                  >
+                    <i class="fa fa-times-circle mr-1"></i> Reject
+                  </button> -->
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="lots.length === 0">
+              <td colspan="18" class="text-center">No data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- <button
+        (click)="onPemQaApprovalAll()"
+        *ngIf="request.isAcknowledge && request.isPemQa && hasPemqaLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-success mt-2 mx-1"
+        [disabled]="countPemQaSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Approve (PEMQA)
+      </button>
+      <button
+        (click)="onPemQaRejectAll()"
+        *ngIf="request.isAcknowledge && request.isPemQa && hasPemqaLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-danger mt-2 mx-1"
+        [disabled]="countPemQaSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Reject (PEMQA)
+      </button> -->
+      <button
+        (click)="onEngineerApprovalAll()"
+        *ngIf="request.isAcknowledge && request.isEngineer && hasEngineerLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-success mt-2 mx-1"
+        [disabled]="countEngineerSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Release (ENGINEER)
+      </button>
+      <button
+        (click)="onEngineerScrapAll()"
+        *ngIf="request.isAcknowledge && request.isEngineer && hasEngineerLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-warning mt-2 mx-1"
+        [disabled]="countEngineerSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Scrap (ENGINEER)
+      </button>
+      <button
+        (click)="onMteApprovalAll()"
+        *ngIf="request.isAcknowledge && request.isMte && hasMteLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-success mt-2 mx-1"
+        [disabled]="countMteSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Release (MTE)
+      </button>
+      <button
+        (click)="onMteScrapAll()"
+        *ngIf="request.isAcknowledge && request.isMte && hasMteLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-danger mt-2 mx-1"
+        [disabled]="countMteSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Scrap (MTE)
+      </button>
+      <button
+        (click)="onMteApprovalAll()"
+        *ngIf="request.isAcknowledge && request.isMte && hasMteLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-success mt-2 mx-1"
+        [disabled]="countMteSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Release (PEM QA)
+      </button>
+      <button
+        (click)="onMteScrapAll()"
+        *ngIf="request.isAcknowledge && request.isMte && hasMteLot && request && !request.isMerged"
+        type="button"
+        class="btn btn-sm btn-danger mt-2 mx-1"
+        [disabled]="countMteSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Scrap (PEM QA)
+      </button>
+    </div>
+    <!-- Not Material -->
+    <div class="col-12 pt-3" [collapse]="collapse" *ngIf="lots">
+      <h6 class="mt-3">
+        <a
+          href="javascript:void(0)"
+          (click)="rescreenHistory = !rescreenHistory"
+          [attr.aria-expanded]="!rescreenHistory"
+          attr.aria-controls="rescreenHistory"
+          >Lot disposition rescreen histories<span
+            class="badge badge-pill badge-primary ml-1"
+            *ngIf="countRescreenHistory > 0"
+            style="padding: 5px 6px;"
+            >{{ countRescreenHistory }}</span
+          >
+          <i *ngIf="!rescreenHistory" class="fa fa-chevron-down ml-1"></i>
+          <i *ngIf="rescreenHistory" class="fa fa-chevron-left ml-1"></i>
+        </a>
+      </h6>
+      <div [collapse]="rescreenHistory" class="table-responsive table-responsive-xl">
+        <table class="table table-sm table-hover table-bordered" style="white-space: nowrap;">
+          <thead class="text-center">
+            <tr>
+              <td>Status</td>
+              <td>Reject Detail</td>
+              <td>Disposition</td>
+              <td>Types</td>
+              <td>Lot ID</td>
+              <td>Product 12 NC</td>
+              <td>Product Description</td>
+              <td>Assy CG / Pre Assy CG</td>
+              <td>1st Re-Screen</td>
+              <td>1st Result</td>
+              <td>1st FU by QA</td>
+              <td>2nd Re-Screen</td>
+              <td>2nd Result</td>
+              <td>2nd FU by QA</td>
+              <td>3rd Re-Screen</td>
+              <td>3rd Result</td>
+              <td>3rd FU by QA</td>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let histLot of histLots; let i = index">
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center pt-1 pl-1 pr-1" style="justify-content: center;">
+                    <span
+                      class="badge badge-light"
+                      *ngIf="histLot.disposition === 'E'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- pending -->
+                      {{ getStatusHist(histLot.disposition, histLot.problemType) }}
+                    </span>
+                    <span
+                      class="badge badge-light"
+                      *ngIf="histLot.disposition === 'P'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- pending -->
+                      {{ getStatusHist(histLot.disposition, histLot.problemType) }}
+                    </span>
+                  </div>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="{{ histLot.rejectDetail }}"
+                    disabled
+                    style="min-width: 110px"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    [value]="histLot.dispositionType"
+                    disabled
+                  >
+                    <option value="">None</option>
+                    <option
+                      [value]="dispositionType.value"
+                      *ngFor="let dispositionType of dispositionTypes; let i = index"
+                      >{{ dispositionType.label }}</option
+                    >
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    value="{{ histLot.problemType }}"
+                    disabled
+                  >
+                    <option value="0">Problem</option>
+                    <option value="1">Scope Before</option>
+                    <option value="2">Scope After</option>
+                    <option value="3">Out of Scope</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="{{ histLot.lotId }}"
+                    disabled
+                    style="min-width: 110px"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="{{ histLot.product12nc }}"
+                    disabled
+                    style="min-width: 110px"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="{{ histLot.productDesc }}"
+                    disabled
+                    style="min-width: 110px"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input type="text" class="form-control form-control-sm" value="{{ histLot.assyCg }}" disabled />
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    value="{{ histLot.rescreen1 }}"
+                    disabled
+                  >
+                    <option value="">None</option>
+                    <option [value]="reScreen.value" *ngFor="let reScreen of reScreens; let i = index">{{
+                      reScreen.label
+                    }}</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input type="text" class="form-control form-control-sm" value="{{ histLot.result1 }}" disabled />
+                </td>
+                <td class="lot form-group m-0">
+                  <input type="text" class="form-control form-control-sm" value="{{ histLot.fuByQa1 }}" disabled />
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    value="{{ histLot.rescreen2 }}"
+                    disabled
+                  >
+                    <option value="">None</option>
+                    <option [value]="reScreen.value" *ngFor="let reScreen of reScreens; let i = index">{{
+                      reScreen.label
+                    }}</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input type="text" class="form-control form-control-sm" value="{{ histLot.result2 }}" disabled />
+                </td>
+                <td class="lot form-group m-0">
+                  <input type="text" class="form-control form-control-sm" value="{{ histLot.fuByQa2 }}" disabled />
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    value="{{ histLot.rescreen3 }}"
+                    disabled
+                  >
+                    <option value="">None</option>
+                    <option [value]="reScreen.value" *ngFor="let reScreen of reScreens; let i = index">{{
+                      reScreen.label
+                    }}</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <input type="text" class="form-control form-control-sm" value="{{ histLot.result3 }}" disabled />
+                </td>
+                <td class="lot form-group m-0">
+                  <input type="text" class="form-control form-control-sm" value="{{ histLot.fuByQa3 }}" disabled />
+                </td>
+              </tr>
+              <!-- <tr *ngIf="histLot.rejectDetail">
+                <td colspan="16">
+                  <div class="form-group row">
+                    <div class="col-lg-1 col-md-2">
+                      <label for="">Reject Detail</label>
+                    </div>
+                    <div class="col-lg-11 col-md-10">
+                      <textarea disabled class="form-control" [value]="histLot.rejectDetail"></textarea>
+                    </div>
+                  </div>
+                </td>
+              </tr> -->
+            </ng-container>
+
+            <tr *ngIf="histLots.length === 0">
+              <td colspan="17" class="text-center">No data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

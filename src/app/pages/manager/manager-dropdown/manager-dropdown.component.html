@@ -1,0 +1,460 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          Dropdowns Management
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  Problem Type
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let problemType of problemTypes; let i = index">
+                        <td style="width: 60px">{{ problemType.seq }}</td>
+                        <td class="text-left">{{ problemType.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(problemType.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="problemType.createBy === 'USER'"
+                            (click)="onRemove(mfg.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  Mfg
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let mfg of mfgs; let i = index">
+                        <td style="width: 60px">{{ mfg.seq }}</td>
+                        <td class="text-left">{{ mfg.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(mfg.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="mfg.createBy === 'USER'"
+                            (click)="onRemove(mfg.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  Issue By Group
+                  <button (click)="onAddIssueByGroup()" class="btn btn-sm btn-success float-right">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let issueByGroup of issueByGroups; let i = index">
+                        <td style="width: 60px">{{ issueByGroup.seq }}</td>
+                        <td class="text-left">{{ issueByGroup.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(issueByGroup.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="issueByGroup.createBy === 'USER'"
+                            (click)="onRemove(issueByGroup.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  Shift
+                  <button (click)="onAddShift()" class="btn btn-sm btn-success float-right">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let shift of shifts; let i = index">
+                        <td style="width: 60px">{{ shift.seq }}</td>
+                        <td class="text-left">{{ shift.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(shift.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="shift.createBy === 'USER'"
+                            (click)="onRemove(shift.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  Special
+                  <button (click)="onAddSpecial()" class="btn btn-sm btn-success float-right">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let special of specials; let i = index">
+                        <td style="width: 60px">{{ special.seq }}</td>
+                        <td class="text-left">{{ special.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(special.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="special.createBy === 'USER'"
+                            (click)="onRemove(special.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  Stop&Fix
+                  <button (click)="onAddStopNFix()" class="btn btn-sm btn-success float-right">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let stopAndFix of stopAndFixes; let i = index">
+                        <td style="width: 60px">{{ stopAndFix.seq }}</td>
+                        <td class="text-left">{{ stopAndFix.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(stopAndFix.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="stopAndFix.createBy === 'USER'"
+                            (click)="onRemove(stopAndFix.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  Category
+                  <button (click)="onAddCategory()" class="btn btn-sm btn-success float-right">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let category of categories; let i = index">
+                        <td style="width: 60px">{{ category.seq }}</td>
+                        <td class="text-left">{{ category.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(category.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="category.createBy === 'USER'"
+                            (click)="onRemove(category.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  Sub Mfg
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6 mx-auto">
+                      <nxp-input
+                        title="Parent (Mfg)"
+                        type="number"
+                        typeInput="selection"
+                        [items]="mfgs"
+                        [parentForm]="form"
+                        control="mfg"
+                        [submit]="submit"
+                        (change)="onMfgChange($event)"
+                      ></nxp-input>
+                    </div>
+                    <div class="col-12">
+                      <div class="table-responsive">
+                        <table class="table table-hover table-striped table-align-middle mb-0">
+                          <thead>
+                            <tr class="text-center">
+                              <th style="width: 60px">#</th>
+                              <th>Label</th>
+                              <th>Parent</th>
+                              <th style="width: 75px">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="text-center" *ngFor="let subMfg of subMfgs; let i = index">
+                              <td style="width: 60px">{{ subMfg.seq }}</td>
+                              <td class="text-left">{{ subMfg.label }}</td>
+                              <td class="text-left">{{ subMfg.parentLabel }}</td>
+                              <td style="width: 75px">
+                                <button type="button" (click)="onEdit(subMfg.id)" class="btn btn-sm btn-warning mx-1">
+                                  <i class="fa fa-edit"></i>
+                                </button>
+                                <button
+                                  type="button"
+                                  *ngIf="subMfg.createBy === 'USER'"
+                                  (click)="onRemove(subMfg.id)"
+                                  class="btn btn-sm btn-danger mx-1"
+                                >
+                                  <i class="fa fa-trash"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  Problem Process
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <nxp-input
+                        title="Parent (Mfg)"
+                        type="number"
+                        typeInput="selection"
+                        [items]="mfgs"
+                        [parentForm]="form"
+                        control="mfg"
+                        [submit]="submit"
+                        (change)="onMfgChange($event)"
+                      ></nxp-input>
+                    </div>
+                    <div class="col-6">
+                      <nxp-input
+                        title="Parent (SubMfg)"
+                        type="number"
+                        typeInput="selection"
+                        [items]="subMfgs"
+                        [parentForm]="form"
+                        control="subMfg"
+                        [submit]="submit"
+                        (change)="onSubMfgChange($event)"
+                      ></nxp-input>
+                    </div>
+                    <div class="col-12">
+                      <div class="table-responsive">
+                        <table class="table table-hover table-striped table-align-middle mb-0">
+                          <thead>
+                            <tr class="text-center">
+                              <th style="width: 60px">#</th>
+                              <th>Label</th>
+                              <th>Parent</th>
+                              <th style="width: 75px">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="text-center" *ngFor="let problemProcess of problemProcesses; let i = index">
+                              <td style="width: 60px">{{ problemProcess.seq }}</td>
+                              <td class="text-left">{{ problemProcess.label }}</td>
+                              <td class="text-left">{{ problemProcess.parentLabel }}</td>
+                              <td style="width: 75px">
+                                <button
+                                  type="button"
+                                  (click)="onEdit(problemProcess.id)"
+                                  class="btn btn-sm btn-warning"
+                                >
+                                  <i class="fa fa-edit"></i>
+                                </button>
+                                <button
+                                  type="button"
+                                  *ngIf="problemProcess.createBy === 'USER'"
+                                  (click)="onRemove(problemProcess.id)"
+                                  class="btn btn-sm btn-danger"
+                                >
+                                  <i class="fa fa-trash"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header">
+                  FA Code
+                  <button (click)="onAddFaCode()" class="btn btn-sm btn-success float-right">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover table-striped table-align-middle mb-0">
+                    <thead>
+                      <tr class="text-center">
+                        <th style="width: 60px">#</th>
+                        <th>Label</th>
+                        <th style="width: 75px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngFor="let faCode of faCodes; let i = index">
+                        <td style="width: 60px">{{ faCode.seq }}</td>
+                        <td class="text-left">{{ faCode.label }}</td>
+                        <td style="width: 75px">
+                          <button type="button" (click)="onEdit(faCode.id)" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="faCode.createBy === 'USER'"
+                            (click)="onRemove(faCode.id)"
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

@@ -1,0 +1,255 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-header">
+      Containment Action (Approval)
+      <span
+        *ngIf="isEsTime"
+        class="badge badge-danger float-right ml-2 text-white"
+        style="font-weight: 500;padding: 0.36rem .6rem;"
+      >
+        Escalated
+      </span>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="row">
+            <div class="col-12">
+              <p class="lead">Approval</p>
+              <hr />
+            </div>
+            <div class="col-12" [formGroup]="form">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <div class="col-md-4">
+                      <label class="col-form-label mb-0">
+                        Priority
+                      </label>
+                    </div>
+                    <div class="col-md-8 d-flex align-items-center">
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id="customCheck"
+                          formControlName="priority"
+                          name="example1"
+                        />
+                        <label class="custom-control-label" for="customCheck"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <nxp-input
+                    title="Action Type"
+                    type="text"
+                    [parentForm]="form"
+                    control="actionType"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <nxp-input
+                    title="Target Date"
+                    type="date"
+                    [minDate]="minDate"
+                    [maxDate]="maxDate"
+                    [parentForm]="form"
+                    control="targetDate"
+                    [submit]="submit"
+                  ></nxp-input>
+                  <button
+                    (click)="onResetTargetDate()"
+                    *ngIf="isTargetDateChange"
+                    class="btn btn-sm btn-light"
+                    style="top: 0;margin-top: 0.2rem;margin-right: -1.2rem;position: absolute;right: 0;"
+                  >
+                    <i class="fa fa-refresh"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="row pb-3" *ngIf="isPostpone">
+                <div class="col-md-4 text-center"></div>
+                <div class="col-md-8 text-center"><i class="fa fa-chevron-down"></i></div>
+              </div>
+              <div class="row" *ngIf="isPostpone">
+                <div class="col-md-12">
+                  <nxp-input
+                    title="Postpone Date"
+                    type="date"
+                    [minDate]="minDate"
+                    [maxDate]="maxDate"
+                    [parentForm]="form"
+                    control="postponeDate"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  [ngClass]="{'col-md-12': i === 0, 'col-md-8 ml-auto': i >0}"
+                  *ngFor="let actionOwner of actionOwners.getRawValue();let i=index"
+                >
+                  <div class="form-group row" *ngIf="i === 0">
+                    <div class="col-md-4">
+                      <label for="">Action Owners</label>
+                    </div>
+                    <div class="col-md-8">
+                      <input disabled type="text" class="form-control" value="{{ actionOwner.actionOwner }}" />
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="i > 0">
+                    <input disabled type="text" class="form-control" value="{{ actionOwner.actionOwner }}" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  [ngClass]="{'col-md-12': i === 0, 'col-md-8 ml-auto': i >0}"
+                  *ngFor="let actionDriver of actionDrivers.getRawValue();let i=index"
+                >
+                  <div class="form-group row" *ngIf="i === 0">
+                    <div class="col-md-4">
+                      <label for="">Action Drivers</label>
+                    </div>
+                    <div class="col-md-8">
+                      <input disabled type="text" class="form-control" value="{{ actionDriver.actionDriver }}" />
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="i > 0">
+                    <input disabled type="text" class="form-control" value="{{ actionDriver.actionDriver }}" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form row">
+                    <div class="col-md-12">
+                      <label class="col-form-label mb-0">Assign Detail</label>
+                    </div>
+                    <div class="col-md-12">
+                      <textarea
+                        formControlName="actionDetail"
+                        class="form-control"
+                        [ngClass]="{
+                              'is-invalid': form.get('actionDetail').invalid && submit
+                            }"
+                        rows="3"
+                        [ngStyle]="{ 'font-weight': '500' }"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form row">
+                    <div class="col-md-12">
+                      <label class="col-form-label mb-0">Action Detail</label>
+                    </div>
+                    <div class="col-md-12">
+                      <textarea
+                        formControlName="actionDetailOwner"
+                        class="form-control"
+                        [ngClass]="{
+                              'is-invalid': form.get('actionDetailOwner').invalid && submit
+                            }"
+                        rows="3"
+                        [ngStyle]="{ 'font-weight': '500' }"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form row">
+                    <div class="col-md-12">
+                      <label class="col-form-label mb-0">Attach file</label>
+                    </div>
+                    <div class="col-md-12" *ngIf="form.getRawValue().status !== 'COMPLETE'">
+                      <input type="file" id="file" class="d-none" (change)="selectFile($event)" #file />
+                      <button type="button" (click)="file.click()" class="btn btn-sm btn-light mr-1">
+                        Attach file
+                      </button>
+                    </div>
+                    <div class="col-md-12">
+                      <div
+                        class="btn-group mr-2 mt-2"
+                        *ngFor="let attachFile of form.get('attachFiles')['controls']; let i = index"
+                      >
+                        <button
+                          id="attachFileDownload{{ i }}"
+                          (click)="downloadFile(i)"
+                          type="button"
+                          class="btn btn-sm btn-light"
+                        >
+                          <i class="fa fa-download mr-1"></i>{{ attachFile.get(attachFile.get('id').value ? 'fileName' :
+                          'fileNameTemp').value }}
+                        </button>
+                        <button
+                          *ngIf="(isOwner && form.getRawValue().status !== 'COMPLETE') || isNCRBOwner"
+                          id="attachFileDelete{{ i }}"
+                          type="button"
+                          class="btn btn-sm btn-danger"
+                          (click)="removeFile(i)"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 text-center">
+              <hr />
+              <button (click)="onNcrbDetail(form.getRawValue().ncrbid)" class="btn btn-sm btn-light mx-1">
+                <i class="fa fa-eye mr-1"></i>NCRB Detail
+              </button>
+              <button
+                type="button"
+                *ngIf="((form.getRawValue().status === 'PENDING' || isPostpone) && isOwner) || (isEsTime && (isDriver || isNCRBOwner))"
+                (click)="isTargetDateChange ? onPostpone() : onComplete()"
+                class="btn btn-sm btn-success mx-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>{{ isTargetDateChange ? 'Postpone' : 'Submit' }}
+              </button>
+              <button
+                (click)="onPostponeApprove()"
+                type="button"
+                *ngIf="isPostpone && isDriver"
+                class="btn btn-sm btn-success mx-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>Approve
+              </button>
+              <button
+                (click)="onPostponeReject()"
+                type="button"
+                *ngIf="isPostpone && isDriver"
+                class="btn btn-sm btn-danger mx-1"
+              >
+                <i class="fa fa-times mr-1"></i>Reject
+              </button>
+              <button
+                type="button"
+                *ngIf="form.getRawValue().status === 'COMPLETE'"
+                class="btn btn-sm btn-success mx-1"
+                disabled
+              >
+                <i class="fa fa-check-circle mr-1"></i>Completed
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

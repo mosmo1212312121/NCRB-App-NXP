@@ -1,0 +1,232 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-header pb-0">
+      <div class="row">
+        <div class="col-md-8">
+          <p class="h5 mb-0 mt-2">{{ title }}</p>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <select
+              [(ngModel)]="sortBy"
+              (change)="onSortByChange($event)"
+              name="sortBy"
+              id="sortBy"
+              class="form-control mb-0"
+            >
+              <option value="NCRBNO_DESC">NCRB Number (high to low)</option>
+              <option value="NCRBNO_ASC">NCRB Number (low to high)</option>
+              <option value="NCRBID_DESC">NCRB ID (high to low)</option>
+              <option value="NCRBID_ASC">NCRB ID (low to high)</option>
+              <option value="STATUS_DESC">Status (Z - A)</option>
+              <option value="STATUS_ASC">Status (A - Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="row">
+        <div class="col-12 mx-auto">
+          <div class="row">
+            <div class="col-md-10 mx-auto">
+              <nxp-filter-request
+                [(filter)]="filter"
+                (search)="onSearching($event)"
+                [ignore]="{ productDescription: true }"
+              >
+              </nxp-filter-request>
+            </div>
+            <div class="col-12">
+              <div class="table-responsive">
+                <table class="table table-hover table-striped table-align-middle mb-0">
+                  <thead>
+                    <tr class="text-center">
+                      <th *ngIf="isDev" style="width: 50px"># <b style="color:red"> - Dev</b></th>
+                      <th>NC Number</th>
+                      <th *ngIf="isDev">Problem Type <b style="color:red"> - Dev</b></th>
+                      <th>Assembly CG</th>
+                      <th>MFG</th>
+                      <th>Sub MFG</th>
+                      <th>Failure Code</th>
+                      <!-- <th>Problem Type</th>
+                      <th>Date</th>
+                      <th>Requester</th>
+                      <th>Owner</th>
+                      <th>Editable</th> -->
+                      <th style="width: 150px">Status</th>
+                      <th *ngIf="isDev" style="width: 50px"># <b style="color:red"> - Dev</b></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let item of items; let i = index">
+                      <td *ngIf="isDev">
+                        <a href="javascript:void(0)" (click)="opening(item.info.id)">{{ item.info.id }}</a>
+                      </td>
+                      <td>
+                        <a href="javascript:void(0)" (click)="opening(item.info.id)">{{ item.info.ncnumber }}</a>
+                      </td>
+                      <td *ngIf="isDev">
+                        {{ getProblem(item.info.problemType) }}
+                      </td>
+                      <td>{{ getMfg(item.info.mfg) || '-' }}</td>
+                      <td>{{ subMfg(item.info.mfg, item.info.subMfg) }}</td>
+                      <td>{{ item.info.assyCg || '-' }}</td>
+                      <td>
+                        {{
+                          item.info.rejectName ? rejectName(item.info.rejectName) : materialType(item.info.materialType)
+                        }}
+                      </td>
+                      <!-- <td>
+                        {{ getProblem(item.info.problemType) }}
+                      </td>
+                      <td>
+                        {{ item.info.date | date: dateConstant.format }}
+                      </td>
+                      <td>
+                        {{ item.info.issueByName }}
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isCollapsedOwners[i] = !isCollapsedOwners[i]"
+                          [attr.aria-expanded]="!isCollapsedOwners[i]"
+                          attr.aria-controls="collapseOwners{{ i }}"
+                        >
+                          <i class="fa fa-{{ isCollapsedOwners[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isCollapsedOwners[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="collapseOwners{{ i }}" [collapse]="isCollapsedOwners[i]">
+                          <div class="row" *ngFor="let owner of item.info.owners; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ owner.name }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span *ngIf="item.info.editingBy && item.info.editingBy !== 'null'" class="badge badge-warning">
+                          {{ item.info.editingBy }}
+                        </span>
+                        <span
+                          *ngIf="!(item.info.editingBy && item.info.editingBy !== 'null')"
+                          class="badge badge-success"
+                        >
+                          Available
+                        </span>
+                      </td> -->
+                      <!-- <td [ngStyle]="{ 'font-weight': i === 0 ? '500' : 'normal' }">
+                        <a href="javascript:void(0)" (click)="opening(item.info.id)">{{
+                          item.info.status === 'DRAFT'
+                            ? (date | date: dateConstant.format)
+                            : (item.info.date | date: dateConstant.format)
+                        }}</a>
+                      </td> -->
+                      <!-- <td [ngStyle]="{ 'font-weight': i === 0 ? '500' : 'normal' }">
+                        <a href="javascript:void(0)" (click)="opening(item.info.id)">{{ item.info.issueByName }}</a>
+                      </td>
+                      <td [ngStyle]="{ 'font-weight': i === 0 ? '500' : 'normal' }">
+                        <button
+                          type="button"
+                          class="btn btn-link btn-sm"
+                          (click)="isCollapsedOwners[i] = !isCollapsedOwners[i]"
+                          [attr.aria-expanded]="!isCollapsedOwners[i]"
+                          attr.aria-controls="collapseOwners{{ i }}"
+                        >
+                          <i class="fa fa-{{ isCollapsedOwners[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                          >{{ isCollapsedOwners[i] ? 'Show' : 'Hide' }}
+                        </button>
+                        <div id="collapseOwners{{ i }}" [collapse]="isCollapsedOwners[i]">
+                          <div class="row" *ngFor="let owner of item.info.owners; let j = index">
+                            <div class="col-12 text-left">
+                              <span class="badge badge-secondary">{{ owner.name }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span *ngIf="item.info.editingBy && item.info.editingBy !== 'null'" class="badge badge-warning">
+                          {{ item.info.editingBy }}
+                        </span>
+                        <span
+                          *ngIf="!(item.info.editingBy && item.info.editingBy !== 'null')"
+                          class="badge badge-success"
+                        >
+                          Available
+                        </span>
+                      </td> -->
+                      <td [ngStyle]="{ 'font-weight': i === 0 ? '500' : 'normal' }">
+                        {{ item.info.statusTxt }}
+                      </td>
+                      <!-- <td [ngStyle]="{ 'font-weight': i === 0 ? '500' : 'normal', width: '50px' }">
+                        <button
+                          type="button"
+                          (click)="detail(item.info.id)"
+                          class="btn btn-sm btn-light"
+                          [ngStyle]="{ 'font-weight': i === 0 ? '500' : 'normal' }"
+                        >
+                          Detail
+                        </button>
+                      </td> -->
+                      <td *ngIf="isDev" style="width: 50px">
+                        <!-- <td *ngIf="isDev" style="width: calc(50px + 50px + 1rem)"> -->
+                        <!-- <button type="button" (click)="detail(item.info.id)" class="btn btn-sm btn-light mx-1">
+                          Detail
+                        </button> -->
+                        <button
+                          type="button"
+                          (click)="delete(item.info.id, item.info.ncnumber)"
+                          class="btn btn-sm btn-danger mx-1"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="text-center" *ngIf="items.length === 0">
+                      <td [attr.colspan]="isDev ? 9 : 8">No data</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col-12 d-flex justify-content-end">
+          <p class="mr-2 my-0 py-1">
+            Showing
+            <b>{{
+              (pagination.page - 1) * pagination.pageLength + 1 > pagination.total
+                ? pagination.total
+                : (pagination.page - 1) * pagination.pageLength + 1
+            }}</b>
+            to
+            <b>{{
+              pagination.page * pagination.pageLength > pagination.total
+                ? pagination.total
+                : pagination.page * pagination.pageLength
+            }}</b>
+            of <b>{{ pagination.total }}</b> rows
+          </p>
+          <pagination
+            [maxSize]="10"
+            [boundaryLinks]="true"
+            [totalItems]="pagination.total"
+            [(ngModel)]="pagination.page"
+            (pageChanged)="onPageChanged($event)"
+            previousText="&lsaquo;"
+            nextText="&rsaquo;"
+            firstText="&laquo;"
+            lastText="&raquo;"
+          >
+          </pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

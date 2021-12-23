@@ -1,0 +1,123 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-xl-6 col-lg-12 col-12">
+      <div class="card">
+        <div class="card-header">
+          {{ titleGraph }}
+        </div>
+        <div class="card-body">
+          <div class="chart-wrapper">
+            <canvas
+              baseChart
+              class="chart"
+              [colors]="doughnutChartColors"
+              [data]="doughnutChartData"
+              [labels]="doughnutChartLabels"
+              [chartType]="doughnutChartType"
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 col-lg-12 col-12">
+      <div class="card">
+        <div class="card-header">
+          {{ titleList }}
+          <span
+            [ngStyle]="{ 'background-color': color, 'font-weight': '500', padding: '0.36rem .6rem' }"
+            class="badge badge-info float-right ml-2 text-white"
+            *ngIf="status"
+            >{{ status }}</span
+          >
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover table-striped table-align-middle mb-0">
+              <thead>
+                <tr>
+                  <th colspan="5">
+                    <div class="row">
+                      <div class="col-12 mx-auto pb-0">
+                        <nxp-filter-request
+                          [filter]="filter"
+                          [ignore]="{ failureCode: true, faCode: true, status: true, ncrbNumber: true, lotId: true }"
+                          (search)="onSearching($event)"
+                        >
+                        </nxp-filter-request>
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+                <tr class="text-center">
+                  <th style="width: 32px">#</th>
+                  <th>NC Number</th>
+                  <th>Assembly CG</th>
+                  <th>Failure Code</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let request of requests; let i = index">
+                  <td>
+                    <a [routerLink]="['/requests/detail/' + request.info.id]">{{ request.info.id }}</a>
+                  </td>
+                  <td>
+                    <a [routerLink]="['/requests/detail/' + request.info.id]">{{ request.info.ncnumber }}</a>
+                  </td>
+                  <td>{{ request.info.assyCg || '-' }}</td>
+                  <td>
+                    {{
+                      request.info.rejectName
+                        ? rejectName(request.info.rejectName)
+                        : materialType(request.info.materialType)
+                    }}
+                  </td>
+                  <td>{{ request.info.statusTxt }}</td>
+                </tr>
+                <tr class="text-center" *ngIf="requests.length === 0">
+                  <td colspan="5">No data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-end">
+              <p class="mr-2 my-0 py-1">
+                Showing
+                <b>{{
+                  (pagination.page - 1) * pagination.pageLength + 1 > pagination.total
+                    ? pagination.total
+                    : (pagination.page - 1) * pagination.pageLength + 1
+                }}</b>
+                to
+                <b>{{
+                  pagination.page * pagination.pageLength > pagination.total
+                    ? pagination.total
+                    : pagination.page * pagination.pageLength
+                }}</b>
+                of <b>{{ pagination.total }}</b> rows
+              </p>
+              <pagination
+                [maxSize]="5"
+                [boundaryLinks]="true"
+                [totalItems]="pagination.total"
+                [(ngModel)]="pagination.page"
+                (pageChanged)="onPageChanged($event)"
+                previousText="&lsaquo;"
+                nextText="&rsaquo;"
+                firstText="&laquo;"
+                lastText="&raquo;"
+              >
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

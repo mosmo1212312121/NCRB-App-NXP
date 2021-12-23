@@ -1,0 +1,11 @@
+{
+  "/ncrb/*": {
+    "target": "http://thbnk01ncrbtw1v.wbi.nxp.com/ncrb",
+    "secure": false,
+    "logLevel": "error",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/ncrb": ""
+    }
+  }
+}

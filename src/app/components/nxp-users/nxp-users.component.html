@@ -1,0 +1,83 @@
+<div class="form-group row {{ class }}" [formGroup]="parentForm">
+  <div class="col-md-4" *ngIf="titleText !== 'Text'">
+    <label class="col-form-label mb-0" [for]="control" i18n [ngStyle]="{ color: labelColor.en }"
+      >{{ titleText }}
+    </label>
+    <small
+      *ngIf="helpText"
+      id="{{ control }}-help"
+      class="form-text"
+      [ngStyle]="{
+        color: labelColor.th,
+        'font-size': '90%',
+        'margin-top': '-0.5rem'
+      }"
+    >
+      {{ helpText }}
+    </small>
+  </div>
+  <div class="col-md-8" *ngIf="titleText !== 'Text'">
+    <ng-select
+      [id]="control + group"
+      [name]="control + group"
+      appendTo="body"
+      [multiple]="false"
+      [searchable]="true"
+      placeholder="{{ placeholder }}"
+      (change)="onChange()"
+      class="{{
+        submit && parentForm.get(control).invalid
+          ? 'ng-select ng-select-single ng-select-searchable ng-pristine ng-invalid ng-select-bottom ng-touched'
+          : 'ng-select ng-select-single ng-select-searchable ng-untouched ng-pristine ng-invalid'
+      }}"
+      [ngClass]="{ 'ng-invalid': submit && parentForm.get(control).invalid }"
+      [ngStyle]="{ 'font-weight': '500' }"
+      formControlName="{{ control }}"
+      [readonly]="parentForm.get(control)?.disabled"
+      (search)="onSearch($event)"
+      [clearable]="false"
+      [minTermLength]="minTermLength"
+    >
+      <ng-option
+        [value]="item.value"
+        [ngStyle]="{ 'font-weight': '500' }"
+        [disabled]="item.disabled"
+        *ngFor="let item of itemsSelected"
+      >
+        {{ item.label }}
+      </ng-option>
+    </ng-select>
+  </div>
+  <div class="col-md-12" *ngIf="titleText === 'Text'">
+    <ng-select
+      [id]="control + group"
+      [name]="control + group"
+      appendTo="body"
+      [multiple]="false"
+      [searchable]="true"
+      placeholder="{{ placeholder }}"
+      (change)="onChange()"
+      class="{{
+        submit && parentForm.get(control).invalid
+          ? 'ng-select ng-select-single ng-select-searchable ng-pristine ng-invalid ng-select-bottom ng-touched'
+          : 'ng-select ng-select-single ng-select-searchable ng-untouched ng-pristine ng-invalid'
+      }}"
+      [ngClass]="{ 'ng-invalid': submit && parentForm.get(control).invalid }"
+      [ngStyle]="{ 'font-weight': '500' }"
+      formControlName="{{ control }}"
+      [readonly]="parentForm.get(control)?.disabled"
+      (search)="onSearch($event)"
+      [clearable]="false"
+      [minTermLength]="minTermLength"
+    >
+      <ng-option
+        [value]="item.value"
+        [ngStyle]="{ 'font-weight': '500' }"
+        [disabled]="item.disabled"
+        *ngFor="let item of itemsSelected"
+      >
+        {{ item.label }}
+      </ng-option>
+    </ng-select>
+  </div>
+</div>

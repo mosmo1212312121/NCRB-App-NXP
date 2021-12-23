@@ -1,0 +1,278 @@
+<div class="animated fadeIn" [formGroup]="formIn" [ngClass]="{ hidden: loading }">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>
+        {{ title }}
+        <span
+          class="badge badge-info ml-2 text-white"
+          *ngIf="!isApproveAll"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Available</span
+        >
+        <span
+          class="badge badge-success ml-2 text-white"
+          *ngIf="isApproveAll"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        >
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mt-2" [collapse]="collapse" *ngIf="materials">
+      <!-- materials table -->
+      <div class="table-responsive table-responsive-xl">
+        <table class="table table-sm table-bordered" style="white-space: nowrap;">
+          <thead>
+            <tr class="text-center">
+              <th width="48px">
+                <div class="custom-control custom-checkbox ml-2">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectedMatDis"
+                    name="selectedMatDis"
+                    formControlName="selectedMat"
+                    (change)="onToggleChkMat()"
+                  />
+                  <label class="custom-control-label" for="selectedMatDis"></label>
+                </div>
+              </th>
+              <th>Status</th>
+              <th>{{ isWaferFAB ? 'Wafer Batch' : 'Material type*' }}</th>
+              <th>{{ isWaferFAB ? 'Material 12NC' : '12NC Material*' }}</th>
+              <th>{{ isWaferFAB ? 'Product Description' : 'Material Description*' }}</th>
+              <th>{{ isWaferFAB ? 'BL-Name' : 'Supplier lot ID*' }}</th>
+              <th>{{ isWaferFAB ? 'Wafer Slice Quantity' : 'Lot ID' }}</th>
+              <th width="50px">Action</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="materials">
+            <ng-container *ngFor="let material of formIn.controls.materials.controls; let i = index">
+              <tr class="text-center" [formGroupName]="i">
+                <td>
+                  <div class="custom-control custom-checkbox ml-2">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      formControlName="selectedMat"
+                      id="selectedMatDis{{ i }}"
+                      name="selectedMatDis{{ i }}"
+                      [disabled]="material.get('id').value === 0"
+                      (click)="isOwnerMaterial ? material.get('collapse').patchValue(false) : void(0)"
+                      (change)="onTriggerChk()"
+                    />
+                    <label class="custom-control-label" for="selectedMatDis{{ i }}"> </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center pt-1 pl-1 pr-1" style="justify-content: center;">
+                    <span
+                      class="badge badge-danger text-white"
+                      *ngIf="material.get('disposition').value === 'R'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- rejected -->
+                      {{ getStatus(material.get('disposition').value) }}
+                    </span>
+                    <span
+                      class="badge badge-info text-white"
+                      *ngIf="material.get('disposition').value === 'N'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;background: #f0aebe;"
+                    >
+                      <!-- new -->
+                      {{ getStatus(material.get('disposition').value) }}
+                    </span>
+                    <span
+                      class="badge badge-info text-white"
+                      *ngIf="material.get('disposition').value === 'Y'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- approved -->
+                      {{ getStatus(material.get('disposition').value) }}
+                    </span>
+                    <span
+                      class="badge badge-warning text-white"
+                      *ngIf="material.get('disposition').value === 'P'"
+                      style="font-weight: 500;padding: 0.32rem .5rem;"
+                    >
+                      <!-- pending -->
+                      {{ getStatus(material.get('disposition').value) }}
+                    </span>
+                  </div>
+                </td>
+                <td style="min-width: 110px;">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    value="{{ material.get('materialType').value }}"
+                    disabled
+                  />
+                </td>
+                <td style="min-width: 110px;">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    value="{{ material.get('material12nc').value }}"
+                    disabled
+                  />
+                </td>
+                <td style="min-width: 110px;">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    value="{{ material.get('materialDescription').value }}"
+                    disabled
+                  />
+                </td>
+                <td style="min-width: 110px;">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    value="{{ material.get('supplierLotId').value }}"
+                    disabled
+                  />
+                </td>
+                <td style="min-width: 110px;">
+                  <input
+                    *ngIf="!isWaferFAB"
+                    class="form-control form-control-sm"
+                    type="text"
+                    value="{{ material.get('lotId').value }}"
+                    disabled
+                  />
+                  <input
+                    *ngIf="isWaferFAB"
+                    class="form-control form-control-sm"
+                    type="text"
+                    value="{{ material.get('lotId').value }}"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <button
+                    [disabled]="material.get('selectedMat').value"
+                    [attr.aria-expanded]="material.get('collapse').value"
+                    [attr.aria-controls]="'collapseBasic' + i"
+                    (click)="material.get('collapse').patchValue(!material.get('collapse').value)"
+                    *ngIf="!material.get('collapse').value && isOwnerMaterial"
+                    class="btn btn-sm btn-light"
+                  >
+                    <i class="fa fa-chevron-down mr-1"></i>Submit
+                  </button>
+                  <button
+                    [disabled]="material.get('selectedMat').value"
+                    [attr.aria-expanded]="material.get('collapse').value"
+                    [attr.aria-controls]="'collapseBasic' + i"
+                    (click)="material.get('collapse').patchValue(!material.get('collapse').value)"
+                    *ngIf="material.get('collapse').value && isOwnerMaterial"
+                    class="btn btn-sm btn-light"
+                  >
+                    <i class="fa fa-times mr-1"></i>Cancel
+                  </button>
+                  <button *ngIf="!isOwnerMaterial" class="btn btn-sm btn-light" disabled>
+                    <i class="fa fa-ban mr-1"></i>No Action
+                  </button>
+                </td>
+              </tr>
+              <tr [formGroupName]="i" id="collapseBasic{{ i }}" [collapse]="!material.get('collapse').value">
+                <td></td>
+                <td colspan="7" class="p-3">
+                  <div class="form-group mb-0">
+                    <textarea
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': material.get('submit').value && material.get('note').invalid }"
+                      formControlName="note"
+                      name="note{{ i }}"
+                      id="note{{ i }}"
+                      rows="3"
+                    ></textarea>
+                  </div>
+                  <button
+                    *ngIf="
+                      isOwnerMaterial &&
+                      (material.get('disposition').value === 'N' || material.get('disposition').value === 'R')
+                    "
+                    (click)="onSubmitMat(i)"
+                    [disabled]="
+                      material.get('selectedMat').value ||
+                      material.get('disposition').value === 'P' ||
+                      material.get('disposition').value === 'Y' ||
+                      !isOwnerMaterial
+                    "
+                    class="btn btn-sm btn-light float-right mt-2"
+                  >
+                    <i class="fa fa-save mr-1"></i>Submit
+                  </button>
+                  <button
+                    *ngIf="request.isEngineer && material.get('disposition').value === 'P'"
+                    (click)="onReject(i)"
+                    [disabled]="material.get('selectedMat').value"
+                    class="btn btn-sm btn-danger float-right mt-2"
+                  >
+                    <i class="fa fa-times mr-1"></i>Reject
+                  </button>
+                  <button
+                    *ngIf="request.isEngineer && material.get('disposition').value === 'P'"
+                    (click)="onApprove(i)"
+                    [disabled]="material.get('selectedMat').value"
+                    class="btn btn-sm btn-success float-right mt-2 mr-2"
+                  >
+                    <i class="fa fa-check mr-1"></i>Approve
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12" [collapse]="collapse" *ngIf="isSelectedMat">
+      <div class="row">
+        <div class="col-12 mt-3">
+          <div class="form-group" *ngIf="isOwnerMaterial">
+            <textarea
+              class="form-control"
+              [ngClass]="{ 'is-invalid': formIn.get('submit').value && formIn.get('note').invalid }"
+              formControlName="note"
+              name="noteMat"
+              id="noteMat"
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+        <div class="col-12 text-right">
+          <button (click)="onApprove()" *ngIf="request.isEngineer" class="btn btn-sm btn-success mr-1">
+            <i class="fa fa-check mr-1"></i>Approve
+          </button>
+          <button
+            (click)="onReject()"
+            *ngIf="request.isEngineer"
+            [ngClass]="{ 'mr-2': isOwnerMaterial }"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times mr-1"></i>Reject
+          </button>
+          <button
+            *ngIf="isOwnerMaterial"
+            [disabled]="!isOwnerMaterial"
+            (click)="onSubmitMatSelected()"
+            class="btn btn-sm btn-primary"
+          >
+            <i class="fa fa-save mr-1"></i> Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

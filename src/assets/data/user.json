@@ -1,0 +1,37 @@
+[
+  {
+    "empId": 5115,
+    "username": "nxf56046",
+    "firstname": "Arthit",
+    "lastname": "Kanjai",
+    "email": "arthit.kanjai@nxp.com"
+  },
+  {
+    "empId": 1212,
+    "username": "nxf42352",
+    "firstname": "Adisorn",
+    "lastname": "SornJai",
+    "email": "adisorn.sornJai@nxp.com"
+  },
+  {
+    "empId": 2333,
+    "username": "nxf12352",
+    "firstname": "Kittiphong",
+    "lastname": "Nuanma",
+    "email": "kittiphong.nuanma@nxp.com"
+  },
+  {
+    "empId": 6664,
+    "wbi": "nxf98427",
+    "firstname": "Gonlawat",
+    "lastname": "Jaiwong",
+    "email": "gonlawat.jaiwong@nxp.com"
+  },
+  {
+    "empId": 3631,
+    "username": "nxf56340",
+    "firstname": "Anusawaree",
+    "lastname": "Seeracha",
+    "email": "anusawaree.seeracha@nxp.com"
+  }
+]

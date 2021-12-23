@@ -1,0 +1,419 @@
+<div class="modal-header">
+  <h5 class="modal-title pull-left">NCRB Detail</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="onCancel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body p-0">
+  <div class="row">
+    <div class="col-12">
+      <div class="animated fadeIn">
+        <div class="card mb-0">
+          <div class="card-header">
+            <strong class="h5"
+              >Request Detail
+              <span
+                class="badge badge-info float-right mx-1 text-white"
+                style="font-weight: 500;padding: 0.36rem .6rem;"
+                *ngIf="request"
+                >{{ status.getStatusTxt(request.status) }}</span
+              >
+              <span
+                *ngIf="
+                  request.editingBy &&
+                  request.editingBy !== 'null' &&
+                  (request.isDraft || request.isRequest || request.isAcknowledge)
+                "
+                style="font-weight: 500;padding: 0.36rem .6rem;"
+                class="float-right badge badge-danger mx-1"
+              >
+                Editing: {{ request.editingBy }}
+              </span>
+            </strong>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-xl-11 col-12 mx-auto">
+                <div class="row">
+                  <div class="col-12">
+                    <app-history [ncrbno]="request.ncnumber"></app-history>
+                  </div>
+                </div>
+                <!-- .row -->
+                <div class="row">
+                  <div class="col-12">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div class="row">
+                  <div class="col-12">
+                    <app-d1 [ncrbId]="id"></app-d1>
+                  </div>
+                </div>
+                <!-- .row -->
+                <div class="row">
+                  <div class="col-12">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div class="row" *ngIf="request.isSelectProblemTypeAndMfg">
+                  <div class="col-12">
+                    <app-d2 (toggleCollapse)="onD2ToggleCollapse($event)"></app-d2>
+                  </div>
+                  <div class="col-12 mb-3" *ngIf="request.editingBy && request.editingBy !== 'null' && isAcknowledge">
+                    <span style="font-weight: 500;padding: 0.36rem .6rem;" class="float-right badge badge-danger mx-1">
+                      Editing: {{ request.editingBy }}
+                    </span>
+                  </div>
+                  <div class="col-12" [collapse]="d2Collapse" *ngIf="!request.isMaterial">
+                    <app-d2-lot></app-d2-lot>
+                  </div>
+                  <div class="col-12" [collapse]="d2Collapse" *ngIf="request.isMaterial">
+                    <app-d2-material></app-d2-material>
+                  </div>
+                </div>
+                <div class="row" *ngIf="request.isSelectProblemTypeAndMfg">
+                  <div class="col-12">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12">
+                    <app-d3-minutes
+                      [ncrbid]="request.id"
+                      [ncrbno]="request.ncnumber"
+                      [status]="request.status"
+                      (submit)="onD3SubmitMom($event)"
+                    ></app-d3-minutes>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12">
+                    <app-d3
+                      [ncrbid]="request.id"
+                      [ncrbno]="request.ncnumber"
+                      [status]="request.status"
+                      (submit)="onD3SubmitRc($event)"
+                    ></app-d3>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12">
+                    <app-d3-qa
+                      [ncrbid]="request.id"
+                      [ncrbno]="request.ncnumber"
+                      [status]="request.status"
+                      (submit)="onD3SubmitQa($event)"
+                    ></app-d3-qa>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12">
+                    <app-d3-addons
+                      [ncrbid]="request.id"
+                      [ackDate]="request.ackDate"
+                      [status]="request.status"
+                      [userFullname]="user ? user.name : ''"
+                      [isNCRBOwner]="request.isOwner"
+                      (submit)="onD3SubmitCa($event)"
+                      (canDisposition)="onD3CaCd($event)"
+                    ></app-d3-addons>
+                    <!-- [userFullname]="user.name" -->
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12">
+                    <app-d3-instruction [ncrbno]="request.ncnumber"></app-d3-instruction>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12">
+                    <app-d3-lot [ncrbid]="request.id" [ncrbno]="request.ncnumber"></app-d3-lot>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="
+                    request.isMaterial &&
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12">
+                    <app-d3-material [ncrbid]="request.id" [ncrbno]="request.ncnumber"></app-d3-material>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="
+                    request.isMaterial &&
+                    (request.isAcknowledge || request.isSubmit) &&
+                    (_status.isD12D3 || _status.isD12D8 || _status.isD12D83x5Why)
+                  "
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12">
+                    <app-d4 [ncrbid]="request.id" [ncrbno]="request.ncnumber" (d4)="onD4($event)"></app-d4>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12">
+                    <app-d5-addons
+                      [ncrbid]="request.id"
+                      [ackDate]="request.ackDate"
+                      [status]="request.status"
+                      [userFullname]="user ? user.name : ''"
+                      [isNCRBOwner]="request.isOwner"
+                      (submit)="onD5SubmitPCa($event)"
+                      (canDisposition)="onD5PCaCd($event)"
+                    ></app-d5-addons>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12">
+                    <app-d6
+                      (d6)="onD6($event)"
+                      [ncrbid]="request.id"
+                      [ackDate]="request.ackDate"
+                      [status]="request.status"
+                      [userFullname]="user ? user.name : ''"
+                      [isNCRBOwner]="request.isOwner"
+                    ></app-d6>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12">
+                    <app-d7-addons
+                      [ncrbid]="request.id"
+                      [ackDate]="request.ackDate"
+                      [status]="request.status"
+                      [userFullname]="user ? user.name : ''"
+                      [isNCRBOwner]="request.isOwner"
+                      (submit)="onD7SubmitPr($event)"
+                      (canDisposition)="onD7PrCd($event)"
+                    ></app-d7-addons>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12">
+                    <app-d8 (d8)="onD8($event)"></app-d8>
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  *ngIf="request.isSubmit && request.isSw2 && (_status.isD12D8 || _status.isD12D83x5Why)"
+                >
+                  <div class="col-12 pt-3">
+                    <hr />
+                  </div>
+                </div>
+                <!-- .row -->
+                <div class="row" [ngClass]="{ hidden: !(request.isSubmit || request.isAcknowledge) }">
+                  <div class="col-xl-10 col-12 mx-auto">
+                    <nxp-score></nxp-score>
+                  </div>
+                </div>
+                <!-- .row -->
+                <!-- <div class="row">
+                  <div class="col-12 text-center p-2 mt-2">
+                    <button
+                      title="Merge by Owner or D3 Approver"
+                      *ngIf="(request.isOwner || request.isD3Approver) && !request.isDraft && !request.isSubmit"
+                      type="button"
+                      (click)="onMerge()"
+                      [disabled]="!request.isEditingBy"
+                      class="btn btn-sm btn-primary mx-1"
+                    >
+                      <i class="fa fa-check-circle mr-1"></i>
+                      Merge
+                    </button>
+                    <button title="Close" type="button" (click)="onCancel()" class="btn btn-sm btn-danger mx-1">
+                      <i class="fa fa-times mr-1"></i>
+                      Cancel
+                    </button>
+                  </div>
+                </div> -->
+                <!-- .row -->
+                <!-- .card -->
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-center">
+            <button (click)="onFullMode()" class="btn btn-sm btn-primary">
+              <i class="fa fa-eye mr-1"></i>Full page
+            </button>
+          </div>
+        </div>
+        <!-- .card -->
+      </div>
+      <nxp-loader-box *ngIf="loading"></nxp-loader-box>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          Users Group Management
+          <button (click)="addUserGroup()" class="btn btn-sm btn-success float-right">
+            <i class="fa fa-plus mr-1"></i>Add
+          </button>
+        </div>
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="col-12 mx-auto">
+              <div class="table-responsive">
+                <table class="table table-hover table-striped table-align-middle mb-0">
+                  <thead>
+                    <tr class="text-center">
+                      <th>Action</th>
+                      <th>EmpID</th>
+                      <th>Email</th>
+                      <th>Firstname</th>
+                      <th>Lastname</th>
+                      <th>Username</th>
+                      <th>Department</th>
+                      <th>SupervisorID</th>
+                      <th>Tel</th>
+                      <!-- <th>Action</th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let usersGroup of usersGroups; let i = index">
+                      <td>
+                        <div class="btn-group" dropdown>
+                          <button
+                            id="button-split-{{ i }}"
+                            type="button"
+                            dropdownToggle
+                            class="btn btn-sm btn-primary dropdown-toggle"
+                            aria-controls="dropdown-split"
+                          >
+                            Action
+                            <span class="caret"></span>
+                            <span class="sr-only">Split button!</span>
+                          </button>
+                          <ul id="dropdown-split-{{ i }}" *dropdownMenu class="dropdown-menu" role="menu">
+                            <li role="menuitem" id="dropdown-menu-1-split-{{ i }}">
+                              <a
+                                class="dropdown-item"
+                                style="color: goldenrod; font-weight: 600;"
+                                href="javascript:void(0)"
+                                (click)="editUserGroup(i)"
+                                ><i style="color: goldenrod" class="fa fa-edit mr-1"></i>Edit</a
+                              >
+                            </li>
+                            <li role="menuitem" id="dropdown-menu-2-split-{{ i }}">
+                              <a
+                                class="dropdown-item"
+                                style="color: red; font-weight: 600;"
+                                href="javascript:void(0)"
+                                (click)="deleteUserGroup(i)"
+                                ><i style="color: red" class="fa fa-trash mr-1"></i>Delete</a
+                              >
+                            </li>
+                            <!-- <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li class="divider dropdown-divider"></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a></li> -->
+                          </ul>
+                        </div>
+                      </td>
+                      <td>{{ usersGroup.empId }}</td>
+                      <td>{{ usersGroup.email }}</td>
+                      <td>{{ usersGroup.firstname }}</td>
+                      <td>{{ usersGroup.lastname }}</td>
+                      <td>{{ usersGroup.username }}</td>
+                      <td>{{ usersGroup.department }}</td>
+                      <td>{{ usersGroup.supervisorId }}</td>
+                      <td>{{ usersGroup.tel }}</td>
+                      <!-- <td>
+                        <button (click)="editUserGroup(i)" class="btn btn-sm mx-1 btn-warning">
+                          <i class="fa fa-edit mr-1"></i>Edit
+                        </button>
+                        <button (click)="deleteUserGroup(i)" class="btn btn-sm mx-1 btn-danger">
+                          <i class="fa fa-trash mr-1"></i>Delete
+                        </button>
+                      </td> -->
+                    </tr>
+                    <tr *ngIf="usersGroups.length === 0" class="text-center">
+                      <td colspan="9">No Data</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nxp-loader *ngIf="loading"></nxp-loader>
+</div>

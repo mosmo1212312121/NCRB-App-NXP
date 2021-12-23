@@ -1,0 +1,224 @@
+<div [formGroup]="formContain" class="animated fadeIn" [ngClass]="{ hidden: loading }">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>{{ title }}
+        <span
+          class="badge badge-info ml-2 text-white"
+          *ngIf="d3RCs.length === 0"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Available</span
+        >
+        <span
+          class="badge badge-success ml-2 text-white"
+          *ngIf="d3RCs.length > 0"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        >
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mt-2" [collapse]="collapse">
+      <div class="table-responsive table-responsive-xl mt-2 mb-2">
+        <table class="table table-sm table-hover table-bordered">
+          <thead>
+            <tr class="text-center">
+              <th>#</th>
+              <th>Root Cause</th>
+              <th>Root Cause Attach</th>
+              <th>Correction</th>
+              <th>Correction Attach</th>
+              <th>Additional Note</th>
+              <th>Creator</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" *ngFor="let d3RC of d3RCs; let i = index">
+              <td>{{ d3RC.id }}</td>
+              <td class="td-w-200">{{ d3RC.rootCause }}</td>
+              <td class="td-w-100">
+                <a href="javascript:void(0)" (click)="downloadFile(i, 'rootCause')">{{
+                  d3RC.rootCauseAttach?.fileName
+                }}</a>
+              </td>
+              <td class="td-w-200">{{ d3RC.correction }}</td>
+              <td class="td-w-100">
+                <a href="javascript:void(0)" (click)="downloadFile(i, 'correction')">{{
+                  d3RC.correctionAttach?.fileName
+                }}</a>
+              </td>
+              <td class="td-w-100">{{ d3RC.addonsNote }}</td>
+              <td>{{ d3RC.responsePerson }}</td>
+              <td>{{ d3RC.actionDate }}</td>
+            </tr>
+            <tr *ngIf="d3RCs.length === 0">
+              <td colspan="8" class="text-center">
+                No data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6" [collapse]="collapse" *ngIf="!isSubmit && !request.isMerged">
+      <div class="form-group">
+        <label for="comment">Root cause / Potential cause:</label>
+        <small
+          class="form-text mb-2"
+          [ngStyle]="{
+            'font-size': '90%',
+            'margin-top': '-0.5rem'
+          }"
+        >
+          สาเหตุของปัญหา
+        </small>
+        <textarea
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': formContain.get('rootCause').invalid && submitContain
+          }"
+          rows="3"
+          id="rootCause"
+          formControlName="rootCause"
+          maxlength="500"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isSubmit && !request.isMerged">
+    <div class="col-md-6" [collapse]="collapse">
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          (change)="selectFileContain($event, 'rootCauseAttach')"
+          id="rootCauseAttach"
+        />
+        <label class="custom-file-label" for="rootCauseAttach">{{
+          formContain.get('rootCauseAttach').getRawValue().fileName || 'Choose file'
+        }}</label>
+      </div>
+    </div>
+  </div>
+  <div class="row" [ngClass]="{ 'mt-4': !collapse }" *ngIf="!isSubmit && !request.isMerged">
+    <div class="col-md-4" [collapse]="collapse">
+      <div class="form-group">
+        <label for="comment">Correction / Containment action:</label>
+        <small
+          class="form-text mb-2"
+          [ngStyle]="{
+            'font-size': '90%',
+            'margin-top': '-0.5rem'
+          }"
+        >
+          การแก้ปัญหาเบื้องต้น
+        </small>
+        <textarea
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': formContain.get('correction').invalid && submitContain
+          }"
+          rows="3"
+          id="correction"
+          formControlName="correction"
+          maxlength="500"
+        ></textarea>
+      </div>
+    </div>
+    <div class="col-md-4" [collapse]="collapse">
+      <div class="form-group">
+        <label for="comment">Additional note:</label>
+        <small
+          class="form-text mb-2"
+          [ngStyle]="{
+            'font-size': '90%',
+            'margin-top': '-0.5rem'
+          }"
+        >
+          บันทึกเพิ่มเติม (ถ้ามี)
+        </small>
+        <textarea
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': formContain.get('addonsNote').invalid && submitContain
+          }"
+          rows="3"
+          id="addonsNote"
+          formControlName="addonsNote"
+          maxlength="500"
+        ></textarea>
+      </div>
+    </div>
+    <div class="col-md-4" [collapse]="collapse">
+      <div class="form-group">
+        <label for="comment">Response person:</label>
+        <small
+          class="form-text mb-2"
+          [ngStyle]="{
+            'font-size': '90%',
+            'margin-top': '-0.5rem'
+          }"
+        >
+          ผู้ลงข้อมูล (รหัสพนักงาน)
+        </small>
+        <nxp-users
+          type="text"
+          typeInput="input"
+          [parentForm]="formContain"
+          control="responsePerson"
+          [submit]="submitContain"
+        ></nxp-users>
+        <div class="row">
+          <div class="col-12">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="actionDate"
+              value="{{
+                formContain.get('actionDate').disabled
+                  ? formContain.get('actionDate').value
+                  : (formContain.get('actionDate').value | date: dateConstant.format)
+              }}"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+              bsDatepicker
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isSubmit && !request.isMerged">
+    <div class="col-md-4" [collapse]="collapse">
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          (change)="selectFileContain($event, 'correctionAttach')"
+          id="correctionAttach"
+        />
+        <label class="custom-file-label" for="correctionAttach">{{
+          formContain.get('correctionAttach').getRawValue().fileName || 'Choose file'
+        }}</label>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isSubmit && !request.isMerged">
+    <div class="col-12 text-center pt-4" [collapse]="collapse">
+      <button id="d3Submit" *ngIf="!formContain.getRawValue().id" (click)="onSubmit()" class="btn btn-sm btn-primary">
+        <i class="fa fa-check-circle mr-1"></i> Submit
+      </button>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

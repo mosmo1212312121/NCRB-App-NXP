@@ -1,0 +1,1113 @@
+<div class="row">
+  <div class="col-12 mx-auto">
+    <div class="row" [formGroup]="formIn" *ngIf="formIn">
+      <!-- Problem Lot Add -->
+      <div class="col-12 mb-3" *ngIf="!isSubmit && !isWaferFAB">
+        <p class="h6">
+          Problem Lots
+        </p>
+        <div class="table-responsive table-responsive-xl">
+          <table class="table table-sm table-bordered" style="white-space: nowrap;">
+            <thead>
+              <tr class="text-center">
+                <td style="min-width: 120px;">Lot ID</td>
+                <td style="min-width: 120px;">Type</td>
+                <td style="min-width: 120px;">Sample Size</td>
+                <td style="min-width: 120px;">Reject QTY</td>
+                <!-- <td style="min-width: 120px;" *ngIf="(!(isMaterial || isWaferFAB) && (isFinal || isWafer)) || isPreviousProcess"> -->
+                <td style="min-width: 120px;">
+                  O/S reject
+                </td>
+                <!-- <td style="min-width: 120px;" *ngIf="(!(isMaterial || isWaferFAB) && (isFinal || isWafer)) || isPreviousProcess"> -->
+                <td style="min-width: 120px;">
+                  Para Qty
+                </td>
+                <td style="min-width: 120px;">Safe launch</td>
+                <td>#</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="formIn"
+                      control="lotId"
+                      [submit]="formInSubmit"
+                    >
+                    </nxp-input>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group m-0">
+                    <select
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': formInSubmit && formIn.controls.problemType?.invalid
+                      }"
+                      formControlName="problemType"
+                      id="problemTypeLot"
+                      [value]="0"
+                    >
+                      <option value="0">Problem</option>
+                      <option value="1">Scope Before</option>
+                      <option value="2">Scope After</option>
+                      <option value="3">Out of Scope</option>
+                    </select>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group m-0">
+                    <nxp-input
+                      type="number"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="formIn"
+                      control="sampleSize"
+                      [submit]="formInSubmit"
+                      min="0"
+                    >
+                    </nxp-input>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group m-0">
+                    <nxp-input
+                      type="number"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="formIn"
+                      control="rejectQty"
+                      [submit]="formInSubmit"
+                      min="0"
+                    >
+                    </nxp-input>
+                  </div>
+                </td>
+                <!-- <td *ngIf="(!(isMaterial || isWaferFAB) && (isFinal || isWafer)) || isPreviousProcess"> -->
+                <td>
+                  <div class="form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="formIn"
+                      control="osReject"
+                      [submit]="formInSubmit"
+                    >
+                    </nxp-input>
+                  </div>
+                </td>
+                <!-- <td *ngIf="(!(isMaterial || isWaferFAB) && (isFinal || isWafer)) || isPreviousProcess"> -->
+                <td>
+                  <div class="form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="formIn"
+                      control="paraQty"
+                      [submit]="formInSubmit"
+                    >
+                    </nxp-input>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group m-0">
+                    <select
+                      class="bg-warning text-white form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': formInSubmit && formIn.controls.safeLaunch?.invalid
+                      }"
+                      style="font-weight: 500"
+                      formControlName="safeLaunch"
+                      id="safeLaunch"
+                    >
+                      <option value="0">No</option>
+                      <option value="1">Yes</option>
+                    </select>
+                  </div>
+                </td>
+                <td *ngIf="!id || (isRequestor && isDraft)">
+                  <button
+                    [disabled]="
+                      (isDraft && !(isMember || isRequestor)) || (isRequest && !isOwner) || (id && !isEditingBy)
+                    "
+                    *ngIf="isMaterial || isWaferFAB"
+                    id="btnAddLot"
+                    (click)="addLot('material')"
+                    type="button"
+                    class="btn btn-sm btn-success"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </td>
+                <td *ngIf="id && !(isRequestor && isDraft)">
+                  <button
+                    [disabled]="
+                      (isDraft && !(isMember || isRequestor)) || (isRequest && !isOwner) || (id && !isEditingBy)
+                    "
+                    id="btnAddLot"
+                    (click)="addLot('material')"
+                    *ngIf="(isMaterial || isWaferFAB) && isOwner"
+                    type="button"
+                    class="btn btn-sm btn-success"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
+                  <button disabled *ngIf="!isOwner" type="button" class="btn btn-sm btn-success">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Problem Lot Add -->
+
+      <!-- Material Table -->
+      <div class="col-12 mb-3" *ngIf="materials && (isMaterial || isWaferFAB)">
+        <p class="h6">
+          Material problem lot table: Manual + Auto fill (excel file link)
+          <input
+            type="file"
+            id="mass"
+            formControlName="mass"
+            class="d-none"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            #mass
+            (change)="selectFile($event, 'formIn', 'mass')"
+          />
+          <button
+            [disabled]="(isDraft && !(isMember || isRequestor)) || (isRequest && !isOwner) || (id && !isEditingBy)"
+            type="button"
+            (click)="mass.click()"
+            *ngIf="!isSubmit"
+            class="btn btn-sm btn-light mx-2"
+          >
+            Mass upload lot
+          </button>
+          <button
+            [disabled]="(isDraft && !(isMember || isRequestor)) || (isRequest && !isOwner) || (id && !isEditingBy)"
+            type="button"
+            (click)="downloadFile('template-test.xlsx')"
+            *ngIf="!isSubmit"
+            class="btn btn-sm btn-light"
+          >
+            <i class="fa fa-file"></i>
+          </button>
+          <button
+            *ngIf="!isSubmit"
+            [disabled]="(isDraft && !(isMember || isRequestor)) || (isRequest && !isOwner) || (id && !isEditingBy)"
+            (click)="onAddMaterial()"
+            type="button"
+            class="btn btn-sm btn-success float-right"
+          >
+            <i class="fa fa-plus mr-1"></i>{{ isWaferFAB ? 'Add Wafer' : 'Add Material' }}
+          </button>
+        </p>
+        <div class="table-responsive table-responsive-xl">
+          <table class="table table-sm table-hover table-bordered" style="white-space: nowrap;">
+            <thead class="text-center">
+              <tr>
+                <td *ngIf="!isSubmit">#</td>
+                <td>
+                  <div class="custom-control custom-checkbox ml-1">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="selectedMat"
+                      name="selectedMat"
+                      formControlName="selectedMat"
+                      (change)="onToggleChkMat()"
+                    />
+                    <label class="custom-control-label" for="selectedMat"></label>
+                  </div>
+                </td>
+                <td>
+                  <span style="color: red">
+                    {{ isWaferFAB ? 'Wafer Batch*' : 'Material type*' }}
+                  </span>
+                </td>
+                <td>
+                  <span style="color: red">
+                    {{ isWaferFAB ? '12NC Wafer*' : '12NC Material*' }}
+                  </span>
+                </td>
+                <td>
+                  <span style="color: red">
+                    {{ isWaferFAB ? 'Product Description*' : 'Material Description*' }}
+                  </span>
+                </td>
+                <td>
+                  <span style="color: red">
+                    {{ isWaferFAB ? 'BL-Name*' : 'Supplier lot ID*' }}
+                  </span>
+                </td>
+                <td>
+                  <span [ngStyle]="{ color: isWaferFAB ? 'red' : 'black' }">
+                    {{ isWaferFAB ? 'Sample Size (EA)*' : 'Lot ID' }}
+                  </span>
+                </td>
+                <td>
+                  <span [ngStyle]="{ color: isWaferFAB ? 'red' : 'black' }">
+                    {{ isWaferFAB ? 'Reject Quantity*' : 'Production Description' }}
+                  </span>
+                </td>
+                <td>
+                  <span [ngStyle]="{ color: isWaferFAB ? 'red' : 'black' }">
+                    {{ isWaferFAB ? 'Wafer Slice Quantity*' : 'Reject QTY' }}
+                  </span>
+                </td>
+                <td>
+                  <span [ngStyle]="{ color: isWaferFAB ? 'red' : 'black' }">
+                    {{ isWaferFAB ? 'Machine' : 'On-hold Qty' }}
+                  </span>
+                </td>
+                <td *ngIf="!isSubmit">#</td>
+              </tr>
+            </thead>
+            <tbody formArrayName="materials" class="drag-list" cdkDropList (cdkDropListDropped)="dropMaterial($event)">
+              <tr
+                cdkDragLockAxis="y"
+                class="drag-block"
+                *ngFor="let material of formIn.get('materials').controls; let i = index"
+                [formGroupName]="i"
+                [cdkDragDisabled]="isSubmit || (!isOwner && (isAcknowledge || isRequest))"
+                cdkDrag
+              >
+                <td *cdkDragPreview [attr.colspan]="materials.controls.length" class="d-flex">
+                  <div class="text-center p-0" style="cursor: pointer">
+                    <i class="fa fa-align-justify mx-2" style="line-height: 2.64;"></i>
+                  </div>
+                  <div class="text-center">
+                    <div class="custom-control custom-checkbox ml-1">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="selectedMat{{ i }}"
+                        formControlName="selectedMat"
+                        name="selectedMat{{ i }}"
+                        (change)="onSelectedMatChange()"
+                      />
+                      <label class="custom-control-label" for="selectedMat{{ i }}"></label>
+                    </div>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': material.get('materialType').invalid
+                      }"
+                      formControlName="materialType"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': material.get('material12nc').invalid
+                      }"
+                      formControlName="material12nc"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': material.get('materialDescription').invalid
+                      }"
+                      formControlName="materialDescription"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': material.get('supplierLotId').invalid
+                      }"
+                      formControlName="supplierLotId"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      formControlName="lotId"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': material.get('productDesc').invalid
+                      }"
+                      formControlName="productDesc"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="number"
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': material.get('rejectQty').invalid
+                      }"
+                      formControlName="rejectQty"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div class="lot form-group m-0">
+                    <input
+                      type="number"
+                      class="form-control form-control-sm"
+                      [ngClass]="{
+                        'is-invalid': material.get('onHoldQty').invalid
+                      }"
+                      formControlName="onHoldQty"
+                      style="min-width: 110px;"
+                    />
+                  </div>
+                  <div>
+                    <!-- no button on drag -->
+                  </div>
+                </td>
+                <td *ngIf="!isSubmit" cdkDragHandle class="text-center p-0" style="cursor: pointer">
+                  <i class="fa fa-align-justify mx-2" style="line-height: 2.64;"></i>
+                </td>
+                <td class="text-center">
+                  <div class="custom-control custom-checkbox ml-1">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="selectedMat{{ i }}"
+                      formControlName="selectedMat"
+                      name="selectedMat{{ i }}"
+                      (change)="onSelectedMatChange()"
+                    />
+                    <label class="custom-control-label" for="selectedMat{{ i }}"></label>
+                  </div>
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': material.get('materialType').invalid
+                    }"
+                    (change)="onChange($event)"
+                    formControlName="materialType"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': material.get('material12nc').invalid
+                    }"
+                    (change)="onChange($event)"
+                    formControlName="material12nc"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': material.get('materialDescription').invalid
+                    }"
+                    (change)="onChange($event)"
+                    formControlName="materialDescription"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': material.get('supplierLotId').invalid
+                    }"
+                    (change)="onChange($event)"
+                    formControlName="supplierLotId"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    (change)="onChange($event)"
+                    formControlName="lotId"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': material.get('productDesc').invalid
+                    }"
+                    (change)="onChange($event)"
+                    formControlName="productDesc"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': material.get('rejectQty').invalid
+                    }"
+                    (change)="onChange($event)"
+                    formControlName="rejectQty"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td class="lot form-group m-0">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    [ngClass]="{
+                      'is-invalid': material.get('onHoldQty').invalid
+                    }"
+                    (change)="onChange($event)"
+                    formControlName="onHoldQty"
+                    style="min-width: 110px;"
+                  />
+                </td>
+                <td *ngIf="!isSubmit">
+                  <!-- owner group -->
+                  <button
+                    disabled
+                    *ngIf="!isOwner && !(isRequestor && isDraft) && !isShowDeleteMat(i)"
+                    type="button"
+                    class="btn btn-sm btn-light"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i> No Action
+                  </button>
+                  <!-- <button
+                    disabled
+                    *ngIf="(id && (isOwner || (isRequestor && isDraft))) || !id"
+                    type="button"
+                    class="btn btn-sm btn-light"
+                  >
+                    <i class="fa fa-refresh mr-1"></i> Get Lots
+                  </button> -->
+                  <button
+                    (click)="removeMaterial(i)"
+                    *ngIf="isShowDeleteMat(i)"
+                    type="button"
+                    class="btn btn-sm btn-danger"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="materials.length === 0">
+                <td [attr.colspan]="isWafer || isFinal ? 15 : 14" class="text-center">No data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Material Table -->
+
+      <!-- Material Button -->
+      <div class="col-12 text-center mb-3" *ngIf="materials.length > 0 && isOwner">
+        <button
+          type="button"
+          *ngIf="isMatChange && isAcknowledge && id"
+          (click)="onUpdateMats()"
+          class="btn btn-sm btn-primary"
+        >
+          <i class="fa fa-save mr-1"></i> Update Mats
+        </button>
+        <button type="button" [disabled]="!isSelectedMat" (click)="onDeleteMats()" class="btn btn-sm btn-danger">
+          <i class="fa fa-trash mr-1"></i> Remove Mats
+        </button>
+      </div>
+      <!-- Material Button -->
+
+      <!-- Problem Lot Table -->
+      <div class="col-12" *ngIf="lots && isMaterial" [ngClass]="{ 'mb-3': isLotChange || lots.length > 0 }">
+        <!-- problem lot table -->
+        <p class="h6">
+          Problem Lots Table
+          <!-- <input type="file" id="mass" class="d-none" (change)="selectFile($event, 'mass')" #mass /> -->
+          <!-- <button type="button" (click)="mass.click()" *ngIf="!isAcknowledge" class="btn btn-sm btn-light mx-2">
+            Mass upload lot
+          </button> -->
+          <!-- <button
+            type="button"
+            (click)="downloadFile('template-mat.xlsx')"
+            *ngIf="!isAcknowledge"
+            class="btn btn-sm btn-light"
+          >
+            <i class="fa fa-file"></i>
+          </button> -->
+        </p>
+        <div class="table-responsive table-responsive-xl">
+          <table class="table table-sm table-hover table-bordered" style="white-space: nowrap;">
+            <thead class="text-center">
+              <tr>
+                <td *ngIf="!isSubmit">#</td>
+                <td>
+                  <div class="custom-control custom-checkbox ml-1">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="selectedLot"
+                      name="selectedLot"
+                      formControlName="selectedLot"
+                      (change)="onToggleChk()"
+                    />
+                    <label class="custom-control-label" for="selectedLot"></label>
+                  </div>
+                </td>
+                <td>Types</td>
+                <td>Date code</td>
+                <td>Lot ID</td>
+                <td>Product 12 NC</td>
+                <td>Product Description</td>
+                <td>Assy CG / Pre Assy CG</td>
+                <td>Wafer batch</td>
+                <td>Wafer slice</td>
+                <td>BL name</td>
+                <td>Quantity</td>
+                <td>Reject QTY</td>
+                <td>O/S Reject</td>
+                <td>Para QTY</td>
+                <td>Current</td>
+                <td *ngIf="!isSubmit">#</td>
+              </tr>
+            </thead>
+            <tbody formArrayName="lots" class="drag-list" cdkDropList (cdkDropListDropped)="drop($event)">
+              <tr
+                cdkDragLockAxis="y"
+                class="drag-block"
+                *ngFor="let lot of formIn.get('lots').controls; let i = index"
+                [formGroupName]="i"
+                [cdkDragDisabled]="isSubmit || (!isOwner && (isAcknowledge || isRequest))"
+                cdkDrag
+              >
+                <!-- [cdkDragDisabled]="!owner" -->
+                <td *cdkDragPreview [attr.colspan]="lots.controls.length" class="d-flex">
+                  <div class="text-center p-0" style="cursor: pointer">
+                    <i class="fa fa-align-justify mx-2" style="line-height: 2.64;"></i>
+                  </div>
+                  <div class="text-center">
+                    <div class="custom-control custom-checkbox ml-1">
+                      <input type="checkbox" class="custom-control-input" formControlName="selectedLot" />
+                      <label class="custom-control-label" for="selectedLot{{ i }}"></label>
+                    </div>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <select
+                      class="form-control form-control-sm"
+                      style="font-weight: 500;min-width: 120px;"
+                      formControlName="problemType"
+                    >
+                      <option value="0">Problem</option>
+                      <option value="1">Scope Before</option>
+                      <option value="2">Scope After</option>
+                      <option value="3">Out of Scope</option>
+                    </select>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="dateCode"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="lotId"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="product12nc"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="productDesc"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="assyCg"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="waferBatch"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <button
+                      type="button"
+                      class="btn btn-link btn-sm"
+                      (click)="isCollapsedSlices[i] = !isCollapsedSlices[i]"
+                      [attr.aria-expanded]="!isCollapsedSlices[i]"
+                      attr.aria-controls="collapseSlices{{ i }}"
+                    >
+                      <i class="fa fa-{{ isCollapsedSlices[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                      >{{ isCollapsedSlices[i] ? 'Show' : 'Hide' }}
+                    </button>
+                    <div *ngIf="lot.controls.waferSlices" id="collapseSlices{{ i }}" [collapse]="isCollapsedSlices[i]">
+                      <div class="row" *ngFor="let waferSlice of lot.controls.waferSlices.controls; let j = index">
+                        <div class="col-12 text-left">
+                          <span class="badge badge-secondary">{{ waferSlice.controls.ocrId?.value }}</span>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="lot.controls.waferSlices.length === 0">
+                        No Wafer
+                      </div>
+                    </div>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="blName"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="number"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="quantity"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      min="0"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="number"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="rejectQty"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      min="0"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="osReject"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="paraQty"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="lot form-group m-0">
+                    <nxp-input
+                      type="text"
+                      class="mb-0"
+                      classInput="form-control-sm mb-0"
+                      typeInput="input"
+                      [parentForm]="lot"
+                      control="currentOpt"
+                      [submit]="true"
+                      [style]="{ 'min-width': '110px' }"
+                      [nonIdentify]="true"
+                    >
+                    </nxp-input>
+                  </div>
+                  <div class="text-center" *ngIf="!id"></div>
+                  <div *ngIf="id && !isSubmit">
+                    <!-- owner group -->
+                  </div>
+                </td>
+                <td *ngIf="!isSubmit" cdkDragHandle class="text-center p-0" style="cursor: pointer">
+                  <i class="fa fa-align-justify mx-2" style="line-height: 2.64;"></i>
+                </td>
+                <td class="text-center">
+                  <div class="custom-control custom-checkbox ml-1">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="selectedLot{{ i }}"
+                      formControlName="selectedLot"
+                      name="selectedLot{{ i }}"
+                    />
+                    <label class="custom-control-label" for="selectedLot{{ i }}"></label>
+                  </div>
+                </td>
+                <td class="lot form-group m-0">
+                  <select
+                    class="form-control form-control-sm"
+                    style="font-weight: 500;min-width: 120px;"
+                    formControlName="problemType"
+                  >
+                    <option value="0">Problem</option>
+                    <option value="1">Scope Before</option>
+                    <option value="2">Scope After</option>
+                    <option value="3">Out of Scope</option>
+                  </select>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="dateCode"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="lotId"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="product12nc"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="productDesc"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="assyCg"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="waferBatch"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <button
+                    type="button"
+                    class="btn btn-link btn-sm"
+                    (click)="isCollapsedSlices[i] = !isCollapsedSlices[i]"
+                    [attr.aria-expanded]="!isCollapsedSlices[i]"
+                    attr.aria-controls="collapseSlices{{ i }}"
+                  >
+                    <i class="fa fa-{{ isCollapsedSlices[i] ? 'eye' : 'eye-slash' }} mr-1"></i
+                    >{{ isCollapsedSlices[i] ? 'Show' : 'Hide' }}
+                  </button>
+                  <div *ngIf="lot.controls.waferSlices" id="collapseSlices{{ i }}" [collapse]="isCollapsedSlices[i]">
+                    <div class="row" *ngFor="let waferSlice of lot.controls.waferSlices.controls; let j = index">
+                      <div class="col-12 text-left">
+                        <span class="badge badge-secondary">{{ waferSlice.controls.ocrId?.value }}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="lot.controls.waferSlices.length === 0">
+                      No Wafer
+                    </div>
+                  </div>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="blName"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="quantity"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    min="0"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="rejectQty"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    min="0"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="osReject"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="paraQty"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="lot form-group m-0">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    control="currentOpt"
+                    [submit]="true"
+                    [style]="{ 'min-width': '110px' }"
+                    [group]="i"
+                  >
+                  </nxp-input>
+                </td>
+                <td class="text-center" *ngIf="!id">
+                  <button (click)="removeLot(i)" type="button" class="btn btn-sm btn-danger">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+                <td *ngIf="id && !isSubmit">
+                  <!-- owner group -->
+                  <button
+                    *ngIf="(isOwner && isRequest) || (isOwner && isAcknowledge)"
+                    (click)="onHoldClick(i)"
+                    type="button"
+                    class="btn btn-sm btn-warning mx-1"
+                  >
+                    <i class="fa fa-stop mr-1"></i>Hold
+                  </button>
+                  <button
+                    disabled
+                    *ngIf="!isOwner && !(isRequestor && isDraft)"
+                    type="button"
+                    class="btn btn-sm btn-light"
+                  >
+                    <i class="fa fa-check-circle mr-1"></i> No Action
+                  </button>
+                  <button (click)="removeLot(i)" *ngIf="isShowDelete(i)" type="button" class="btn btn-sm btn-danger">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="lots.length === 0">
+                <td [attr.colspan]="17" class="text-center">No data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Problem Lot Table -->
+
+      <!-- Problem Lot Button -->
+      <div class="col-12 text-center" *ngIf="lots.length > 0 && isOwner && isMaterial">
+        <button
+          type="button"
+          *ngIf="isLotChange && !isDraft && id"
+          (click)="onUpdateLots()"
+          class="btn btn-sm btn-primary"
+        >
+          <i class="fa fa-save mr-1"></i> Update Lots
+        </button>
+        <button type="button" [disabled]="!isSelectedLot" (click)="onDeleteLots()" class="btn btn-sm btn-danger">
+          <i class="fa fa-trash mr-1"></i> Remove Lots
+        </button>
+      </div>
+      <!-- Problem Lot Button -->
+    </div>
+  </div>
+</div>
+
+<nxp-loader *ngIf="loading"></nxp-loader>

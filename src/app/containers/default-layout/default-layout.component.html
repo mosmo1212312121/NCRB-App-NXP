@@ -1,0 +1,89 @@
+<app-header
+  [navbarBrandRouterLink]="['/dashboard']"
+  [fixed]="true"
+  [navbarBrandFull]="{
+    src: 'assets/img/brand/logo.png',
+    width: 89,
+    height: 25,
+    alt: 'NXP Logo'
+  }"
+  [navbarBrandMinimized]="{
+    src: 'assets/img/brand/logo.png',
+    width: 30,
+    height: 15,
+    alt: 'NXP Logo'
+  }"
+  [sidebarToggler]="false"
+  [mobileAsideMenuToggler]="false"
+  [asideMenuToggler]="false"
+  class="navbar navbar-dark bg-dark"
+  style="border: none"
+>
+  <ul class="nav navbar-nav d-md-down-none"></ul>
+  <ul class="nav navbar-nav ml-auto">
+    <!-- <div class="nav-item mr-2">
+      <a style="cursor: pointer;" (click)="submitNotification()" class="nav-link">
+        <i class="fa fa-bell"></i>
+      </a>
+    </div> -->
+    <!-- <div class="nav-item pr-2">
+      <a
+        title="This button use for update dropdown lists"
+        class="nav-link"
+        style="cursor: pointer;"
+        (click)="onUpdate()"
+      >
+        <i class="fa fa-refresh mr-1"></i
+      ></a>
+    </div> -->
+    <div class="nav-item pr-2 d-md-down-none" *ngIf="loggedIn">
+      <a>
+        <span class="badge badge-secondary mx-1" *ngFor="let rolename of user.rolenames; let j = index">
+          {{ rolename.label }}
+        </span>
+      </a>
+    </div>
+    <div class="nav-item pr-2" *ngIf="loggedIn">
+      <a class="nav-link"><i class="fa fa-desktop mr-2"></i>{{ user.username }}</a>
+    </div>
+    <div class="nav-item pr-2" *ngIf="!loggedIn">
+      <a id="login" class="nav-link" style="cursor: pointer;" (click)="onLogin()"
+        ><i class="fa fa-sign-in mr-1"></i>Login</a
+      >
+    </div>
+    <div class="nav-item pr-2" *ngIf="loggedIn">
+      <a id="logout" class="nav-link" style="cursor: pointer;" (click)="onLogout()"
+        ><i class="fa fa-sign-out mr-1"></i>Logout</a
+      >
+    </div>
+  </ul>
+</app-header>
+<div class="app-body" id="topView">
+  <app-sidebar [fixed]="true" [display]="'lg'">
+    <app-sidebar-nav #appSidebar [navItems]="navItems"></app-sidebar-nav>
+    <!-- <app-sidebar-minimizer></app-sidebar-minimizer> -->
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <!-- breaking change 'cui-breadcrumb' -->
+    <cui-breadcrumb>
+      <li class="breadcrumb-menu d-md-down-none"></li>
+    </cui-breadcrumb>
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div>
+    <!-- /.container-fluid -->
+  </main>
+</div>
+<app-footer id="bottomView">
+  <span><a href="javascript:void(0)">NCRB</a> &copy; 2019 NXP Semiconductors.</span>
+  <span class="ml-auto"
+    >NCRB<a href="javascript:void(0)" class="mx-1" title="{{ date }}">{{ version }}</a
+    >{{ loadInSec ? 'in' : ''
+    }}<a *ngIf="loadInSec" href="javascript:void(0)" class="mx-1">{{ loadInSec.toFixed(2) }} sec</a></span
+  >
+</app-footer>
+<nxp-loader *ngIf="loading"></nxp-loader>
+
+<a id="downloadNow" href="example.txt" download="example.txt" style="display: none;">Download</a>

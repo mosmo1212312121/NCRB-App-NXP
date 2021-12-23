@@ -1,0 +1,266 @@
+<div class="row" [formGroup]="form">
+  <div class="col-12 mx-auto">
+    <div class="row">
+      <div class="col-12 mb-4">
+        <a
+          class="h5 text-decoration-none"
+          (click)="collapse = !collapse"
+          [attr.aria-expanded]="!collapse"
+          attr.aria-controls="collapse"
+          href="javascript:void(0)"
+        >
+          <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>{{ title }}
+          <span
+            class="badge badge-info ml-2 text-white"
+            *ngIf="!(isAcknowledge || isSubmit)"
+            style="font-weight: 500;padding: 0.36rem .6rem;"
+            >Available</span
+          >
+          <span
+            class="badge badge-success ml-2 text-white"
+            *ngIf="isAcknowledge || isSubmit"
+            style="font-weight: 500;padding: 0.36rem .6rem;"
+            >Completed</span
+          >
+        </a>
+        <button type="button" *ngIf="id" (click)="onMemberClick()" class="btn btn-primary float-right mx-1">
+          <i class="fa fa-users mr-1"></i> Members
+        </button>
+        <button type="button" (click)="onOwnerClick()" class="btn btn-success float-right mx-1">
+          <i class="fa fa-users mr-1"></i> Owners
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6" [collapse]="collapse">
+        <!-- nc number -->
+        <nxp-input
+          title="NC number"
+          type="text"
+          [parentForm]="form"
+          color="{{ !request.id || isRequest || isDraft ? 'bg-success' : '' }}"
+          control="ncnumber"
+          [submit]="submit"
+        ></nxp-input>
+      </div>
+      <div class="col-lg-6" [collapse]="collapse">
+        <!-- date -->
+        <nxp-input
+          title="Date"
+          type="date"
+          [parentForm]="form"
+          color="{{ !request.id || isRequest || isDraft ? 'bg-success' : '' }}"
+          control="date"
+          [submit]="submit"
+        ></nxp-input>
+      </div>
+    </div>
+    <!-- .row -->
+    <div class="row">
+      <div class="col-lg-6" [collapse]="collapse">
+        <div class="card">
+          <div class="card-header">
+            Feedback information (รายละเอียดการร้องเรียน)
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+                <!-- type -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'Problem Type*' : 'Problem Type' }}"
+                  type="number"
+                  placeholder="Please select Type"
+                  typeInput="selection"
+                  [items]="problemTypes"
+                  [parentForm]="form"
+                  control="problemType"
+                  [submit]="submit"
+                  (change)="onTypeChange($event)"
+                  helpText="ชนิดของปัญหา"
+                ></nxp-input>
+                <!-- color="{{ !request.id || isRequest || isDraft ? 'bg-warning' : '' }}" -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <!-- mfg -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'MFG*' : 'MFG' }}"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select MFG"
+                  [items]="mfgs"
+                  [parentForm]="form"
+                  control="mfg"
+                  [submit]="submit"
+                  [helpText]="isMaterial ? 'ที่พบปัญหา' : 'ที่ทำให้เกิดปัญหา'"
+                  (change)="onMfgChange($event)"
+                ></nxp-input>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <!-- sub mfg -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'Sub-MFG*' : 'Sub-MFG' }}"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select sub MFG"
+                  [items]="subMfgs"
+                  [parentForm]="form"
+                  control="subMfg"
+                  [submit]="submit"
+                  (change)="onSubMfgChange($event)"
+                  [helpText]="isMaterial ? 'พื้นที่พบปัญหา' : 'พื้นที่ทำให้เกิดปัญหา'"
+                  helpText="พื้นที่ทำให้เกิดปัญหา"
+                ></nxp-input>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <!-- problem process -->
+                <nxp-input
+                  *ngIf="!isPreviousProcess"
+                  title="{{ !request.id || isRequest || isDraft ? 'Problem Process*' : 'Problem Process' }}"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select Problem Process"
+                  [items]="problemProcesses"
+                  [parentForm]="form"
+                  control="problemProcess"
+                  [submit]="submit"
+                  [helpText]="isMaterial ? 'กระบวนการที่พบปัญหา' : 'กระบวนการที่ทำให้เกิดปัญหา'"
+                  (change)="onProblemProcessChange($event)"
+                ></nxp-input>
+                <nxp-input
+                  *ngIf="isPreviousProcess"
+                  title="Problem Process"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select Problem Process"
+                  [items]="problemProcesses"
+                  [parentForm]="form"
+                  control="problemProcess"
+                  [submit]="submit"
+                  helpText="กระบวนการที่ทำให้เกิดปัญหา"
+                  (change)="onProblemProcessChange($event)"
+                ></nxp-input>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <!-- stop & fix -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'Stop & Fix*' : 'Stop & Fix' }}"
+                  type="number"
+                  placeholder="Not allow blank"
+                  typeInput="selection"
+                  [items]="stopAndFixes"
+                  [parentForm]="form"
+                  control="stopAndFix"
+                  [submit]="submit"
+                  (change)="onChange($event)"
+                ></nxp-input>
+                <!-- color="{{ !request.id || isRequest || isDraft ? 'bg-warning' : '' }}" -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6" [collapse]="collapse">
+        <div class="card">
+          <div class="card-header">
+            Issuer information (รายละเอียดผู้ร้องเรียน)
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+                <nxp-users
+                  title="{{ !request.id || isRequest || isDraft ? 'Issue by (Badge ID)*' : 'Issue by (Badge ID)' }}"
+                  type="text"
+                  [parentForm]="form"
+                  control="issueByName"
+                  [submit]="submit"
+                  helpText="ออกโดย (รหัสพนักงาน)"
+                  (change)="onChange($event)"
+                ></nxp-users>
+              </div>
+            </div>
+            <div class="row" [hidden]="isMaterial">
+              <div class="col-12">
+                <!-- sub mfg -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'MFG*' : 'MFG' }}"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select MFG"
+                  [items]="mfgs"
+                  [parentForm]="form"
+                  control="mfg2"
+                  [submit]="submit"
+                  (change)="onMfg2Change($event)"
+                  helpText="ที่พบปัญหา"
+                ></nxp-input>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <!-- issue by group -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'Issue by (Group)*' : 'Issue by (Group)' }}"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select group"
+                  [items]="issueByGroups"
+                  [parentForm]="form"
+                  control="issueByGroup"
+                  [submit]="submit"
+                  helpText="ออกโดย (กลุ่ม)"
+                  (change)="onChange($event)"
+                ></nxp-input>
+                <!-- color="{{ !request.id || isRequest || isDraft ? 'bg-warning' : '' }}" -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <!-- shift -->
+                <nxp-input
+                  title="{{ !request.id || isRequest || isDraft ? 'Shift*' : 'Shift' }}"
+                  type="number"
+                  typeInput="selection"
+                  placeholder="Please select Shift"
+                  [items]="shifts"
+                  [parentForm]="form"
+                  control="shift"
+                  [submit]="submit"
+                  helpText="กะ"
+                  (change)="onChange($event)"
+                ></nxp-input>
+                <!-- color="{{ !request.id || isRequest || isDraft ? 'bg-warning' : '' }}" -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <!-- special -->
+                <nxp-input
+                  title="Special (Optional)"
+                  type="number"
+                  typeInput="selection"
+                  [items]="specials"
+                  [parentForm]="form"
+                  control="special"
+                  [submit]="submit"
+                  helpText="กำหนดพิเศษ (ถ้ามี)"
+                  (change)="onChange($event)"
+                ></nxp-input>
+                <!-- color="{{ !request.id || isRequest || isDraft ? 'bg-warning' : '' }}" -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- .row -->
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

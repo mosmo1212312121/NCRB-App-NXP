@@ -1,0 +1,65 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-header">
+      <strong class="h5">Form Request</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-xl-11 col-12 mx-auto">
+          <div class="row">
+            <div class="col-12">
+              <app-d1></app-d1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+          <div class="row" *ngIf="isSelectProblemTypeAndMfg">
+            <div class="col-12">
+              <app-d2 (toggleCollapse)="onD2ToggleCollapse($event)"></app-d2>
+            </div>
+            <div class="col-12" [collapse]="d2Collapse" *ngIf="!isMaterial && !isWaferFAB">
+              <app-d2-lot></app-d2-lot>
+            </div>
+            <div class="col-12" [collapse]="d2Collapse" *ngIf="isMaterial || isWaferFAB">
+              <app-d2-material></app-d2-material>
+            </div>
+          </div>
+          <div class="row" *ngIf="isSelectProblemTypeAndMfg">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center p-2 mt-2">
+              <button
+                type="button"
+                id="btnSaveDraft"
+                *ngIf="isLoggedIn"
+                (click)="onSaveDraft()"
+                class="btn btn-sm btn-primary mx-1"
+              >
+                <i class="fa fa-save mr-1"></i>Save Draft
+              </button>
+              <button
+                *ngIf="isLoggedIn"
+                type="button"
+                id="btnSubmit"
+                (click)="onSubmit()"
+                class="btn btn-sm btn-success mx-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>
+                Submit
+              </button>
+            </div>
+          </div>
+          <!-- .row -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- .card -->
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

@@ -1,0 +1,139 @@
+<ng-container>
+  <div [ngStyle]="{ display: loading ? 'none' : 'flex' }" class="form-group row">
+    <div *ngIf="!_ignore.status" class="col-md-2 mt-3">
+      <label for="input_status">Status</label>
+    </div>
+    <div *ngIf="!_ignore.status" class="col-md-4 mt-3">
+      <select [(ngModel)]="filter.status" class="form-control" name="input_status" id="input_status">
+        <option value="">All</option>
+        <option *ngFor="let _st of _status" [value]="_st.value">{{ _st.label }}</option>
+      </select>
+    </div>
+    <div *ngIf="!_ignore.mfg" class="col-md-2 mt-3">
+      <label for="input_mfg">MFG</label>
+    </div>
+    <div *ngIf="!_ignore.mfg" class="col-md-4 mt-3">
+      <select [(ngModel)]="filter.mfg" class="form-control" name="input_submfg" id="input_submfg">
+        <option value="">All</option>
+        <option *ngFor="let _mfg of _mfgs" [value]="_mfg.value">{{ _mfg.label }}</option>
+      </select>
+    </div>
+    <div *ngIf="!_ignore.ncrbNumber" class="col-md-2 mt-3">
+      <label for="input_ncrbNumber">NCRB Number</label>
+    </div>
+    <div *ngIf="!_ignore.ncrbNumber" class="col-md-4 mt-3">
+      <input
+        type="text"
+        class="form-control"
+        id="input_ncrbNumber"
+        placeholder="NCRB Number"
+        name="input_ncrbNumber"
+        [(ngModel)]="filter.ncrbNumber"
+      />
+    </div>
+    <div *ngIf="!_ignore.subMfg" class="col-md-2 mt-3">
+      <label for="input_submfg">Sub MFG</label>
+    </div>
+    <div *ngIf="!_ignore.subMfg" class="col-md-4 mt-3">
+      <select [(ngModel)]="filter.subMfg" class="form-control" name="input_submfg" id="input_submfg">
+        <option value="">All</option>
+        <option *ngFor="let _sm of _subMFG" [value]="_sm.value">{{ _sm.label }}</option>
+      </select>
+    </div>
+    <div *ngIf="!_ignore.lotId" class="col-md-2 mt-3">
+      <label for="input_lotId">Lot ID</label>
+    </div>
+    <div *ngIf="!_ignore.lotId" class="col-md-4 mt-3">
+      <input
+        type="text"
+        class="form-control"
+        id="input_lotId"
+        placeholder="Lot ID"
+        name="input_lotId"
+        [(ngModel)]="filter.lotId"
+      />
+    </div>
+    <div *ngIf="!_ignore.assyCg" class="col-md-2 mt-3">
+      <label for="input_assyCg">Pre Assembly / Assembly CG</label>
+    </div>
+    <div *ngIf="!_ignore.assyCg" class="col-md-4 mt-3">
+      <input
+        type="text"
+        class="form-control"
+        id="input_assyCg"
+        placeholder="Pre Assembly / Assembly CG"
+        name="input_assyCg"
+        [(ngModel)]="filter.assyCg"
+      />
+    </div>
+    <div *ngIf="!_ignore.productDescription" class="col-md-2 mt-3">
+      <label for="input_productDescription">Product Description</label>
+    </div>
+    <div *ngIf="!_ignore.productDescription" class="col-md-4 mt-3">
+      <input
+        type="text"
+        class="form-control"
+        id="input_productDescription"
+        placeholder="Product Description"
+        name="input_productDescription"
+        [(ngModel)]="filter.productDescription"
+      />
+    </div>
+    <div *ngIf="!_ignore.failureCode" class="col-md-2 mt-3">
+      <label for="input_failureCode">Reject Name</label>
+    </div>
+    <div *ngIf="!_ignore.failureCode" class="col-md-4 mt-3">
+      <select [(ngModel)]="filter.failureCode" class="form-control" name="input_failureCode" id="input_failureCode">
+        <option value="">All</option>
+        <option *ngFor="let _rj of _rejectNames" [value]="_rj.value">{{ _rj.label }}</option>
+      </select>
+    </div>
+    <div *ngIf="!_ignore.faCode" class="col-md-2 mt-3">
+      <label for="input_faCode">FA Code</label>
+    </div>
+    <div *ngIf="!_ignore.faCode" class="col-md-4 mt-3">
+      <select [(ngModel)]="filter.faCode" class="form-control" name="input_faCode" id="input_faCode">
+        <option value="">All</option>
+        <option *ngFor="let _fa of _faCodes" [value]="_fa.value">{{ _fa.label }}</option>
+      </select>
+    </div>
+  </div>
+  <div [ngStyle]="{ display: loading ? 'none' : 'flex' }" class="form-group row mt-3">
+    <div *ngIf="!_ignore.startDate" class="col-md-2">
+      <label for="input_date_start">Created Date (From)</label>
+    </div>
+    <div *ngIf="!_ignore.startDate" class="col-md-4">
+      <input
+        type="date"
+        [(ngModel)]="filter.startDate"
+        name="input_date_start"
+        placeholder="start date"
+        id="input_date_start"
+        class="form-control"
+      />
+    </div>
+    <div *ngIf="!_ignore.endDate" class="col-md-2">
+      <label for="input_date_end">Created Date (To)</label>
+    </div>
+    <div *ngIf="!_ignore.endDate" class="col-md-4">
+      <input
+        type="date"
+        [(ngModel)]="filter.endDate"
+        name="input_date_end"
+        placeholder="end date"
+        id="input_date_end"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div [ngStyle]="{ display: loading ? 'none' : 'flex' }" class="form-group row mt-3">
+    <div class="col-md-12 text-center">
+      <button (click)="search.emit(filter)" class="btn btn-sm btn-primary">
+        <i class="fa fa-search mr-1"></i>Search
+      </button>
+    </div>
+  </div>
+  <div *ngIf="loading" class="py-4">
+    <nxp-loader-box></nxp-loader-box>
+  </div>
+</ng-container>

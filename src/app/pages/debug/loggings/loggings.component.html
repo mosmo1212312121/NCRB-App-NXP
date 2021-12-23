@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="mb-0">
+          Logs
+          <button (click)="onLoad()" class="btn btn-sm btn-info float-right"><i class="fa fa-refresh"></i></button>
+        </h4>
+      </div>
+      <div class="card-body">
+        <!-- <textarea disabled [value]="logText" class="form-control" name="loggings" id="loggings" rows="20"></textarea> -->
+        <table class="table table-sm table-bordered text-center">
+          <thead>
+            <tr>
+              <th>Log Type</th>
+              <th>Date Time</th>
+              <th>Creator</th>
+              <th>Logging</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let logging of loggings; let i = index">
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'badge-danger': logging.logType === 'ERROR',
+                    'badge-info': logging.logType === 'INFO',
+                    'badge-warning': logging.logType === 'DEBUG'
+                  }"
+                  >{{ logging.logType }}</span
+                >
+              </td>
+              <td>{{ logging.dateStr }}</td>
+              <td>{{ logging.username }}</td>
+              <td class="text-left" [innerHTML]="logging.logTxt"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

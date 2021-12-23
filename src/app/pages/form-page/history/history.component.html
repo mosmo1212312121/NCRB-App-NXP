@@ -1,0 +1,49 @@
+<button
+  type="button"
+  class="btn btn-light btn-sm"
+  (click)="isCollapsed = !isCollapsed"
+  [attr.aria-expanded]="!isCollapsed"
+  aria-controls="collapseBasic"
+>
+  <i class="fa fa-history mr-1"></i>
+  History Logs
+</button>
+<button *ngIf="auth" type="button" class="btn btn-light btn-sm float-right" (click)="onClickReport()">
+  <i class="fa fa-file mr-1"></i>
+  Reports
+</button>
+<div id="collapseBasic" [collapse]="isCollapsed">
+  <hr />
+  <div class="table-responsive">
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+        <tr class="text-center">
+          <th>#</th>
+          <th>Action Name</th>
+          <th>Action By</th>
+          <!-- <th>Comments</th> -->
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-center" *ngFor="let history of histories; let i = index">
+          <td *ngIf="i === 0" style="font-weight: bold;">{{ i + 1 }}</td>
+          <td *ngIf="i === 0" style="font-weight: bold;text-align: left;" [innerHTML]="history.action"></td>
+          <td *ngIf="i === 0" style="font-weight: bold;">{{ history.approverName }}</td>
+          <!-- <td *ngIf="i === 0" style="font-weight: bold;">{{ history.comments || '-' }}</td> -->
+          <td *ngIf="i === 0" style="font-weight: bold;">
+            {{ history.commentDate | date: dateConstant.formatWithTime }}
+          </td>
+          <td *ngIf="i > 0">{{ i + 1 }}</td>
+          <td *ngIf="i > 0" [innerHTML]="history.action" style="text-align: left;"></td>
+          <td *ngIf="i > 0">{{ history.approverName || 'unknown' }}</td>
+          <!-- <td *ngIf="i > 0">{{ history.comments || '-' }}</td> -->
+          <td *ngIf="i > 0">{{ history.commentDate | date: dateConstant.formatWithTime }}</td>
+        </tr>
+        <tr class="text-center" *ngIf="histories.length === 0">
+          <td colspan="4" class="text-center">No Data</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

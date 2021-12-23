@@ -1,0 +1,125 @@
+<div [formGroup]="formContain" class="animated fadeIn" [ngClass]="{ hidden: loading }">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>{{ title }}
+        <span
+          class="badge badge-info ml-2 text-white"
+          *ngIf="!formContain.get('id').value"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Available</span
+        >
+        <span
+          class="badge badge-success ml-2 text-white"
+          *ngIf="formContain.get('id').value"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        >
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6" [collapse]="collapse">
+      <div class="form-group">
+        <label for="rootCause">Root cause*:</label>
+        <small
+          class="form-text mb-2"
+          [ngStyle]="{
+            'font-size': '90%',
+            'margin-top': '-0.5rem'
+          }"
+        >
+          สาเหตุของปัญหา
+        </small>
+        <textarea
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': formContain.get('rootCause').invalid && submitContain
+          }"
+          rows="3"
+          id="rootCause"
+          formControlName="rootCause"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6" [collapse]="collapse">
+      <div class="form-group">
+        <label for="escapePoint">Escape point*:</label>
+        <small
+          class="form-text mb-2"
+          [ngStyle]="{
+            'font-size': '90%',
+            'margin-top': '-0.5rem'
+          }"
+        >
+          ...
+        </small>
+        <textarea
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': formContain.get('escapePoint').invalid && submitContain
+          }"
+          rows="3"
+          id="escapePoint"
+          formControlName="escapePoint"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!formContain.get('id').value">
+    <div class="col-md-6" [collapse]="collapse">
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          (change)="selectFileContain($event, 'attachFile')"
+          id="attachFile"
+        />
+        <label class="custom-file-label" for="attachFile">{{
+          formContain.get('attachFile').getRawValue().fileName || 'Choose file'
+        }}</label>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="formContain.get('id').value">
+    <div class="col-md-6" [collapse]="collapse">
+      <button (click)="downloadFile('attachFile')" class="btn btn-sm btn-link">
+        <i class="fa fa-file mr-1"></i>{{ formContain.get('attachFile').getRawValue().fileName || 'No attach file' }}
+      </button>
+    </div>
+  </div>
+  <div class="row" *ngIf="isD12D83x5Why && !formContain.get('id').value">
+    <div class="col-md-6 mt-3" [collapse]="collapse">
+      <label for="escapePoint">3x5WHY*: </label>
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          (change)="selectFileContain($event, 'attach3x5Why')"
+          id="attach3x5Why"
+        />
+        <label class="custom-file-label" for="attach3x5Why">{{
+          formContain.get('attach3x5Why').getRawValue().fileName || 'Choose file'
+        }}</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center pt-4" [collapse]="collapse">
+      <button (click)="onSubmit()" *ngIf="!formContain.get('id').value" class="btn btn-sm btn-primary">
+        <i class="fa fa-check-circle mr-1"></i> Submit
+      </button>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

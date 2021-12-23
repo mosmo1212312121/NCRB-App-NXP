@@ -1,0 +1,808 @@
+<div class="modal-header">
+  <h5 class="modal-title pull-left" style="width: 100%">
+    {{ title }}
+    <button (click)="onPaste()" class="float-right btn btn-sm btn-light">
+      <i class="fa fa-files-o mr-1"></i> Paste
+    </button>
+  </h5>
+</div>
+<div class="modal-body">
+  <div class="row" [formGroup]="form">
+    <div class="col-md-8 mx-auto">
+      <div class="row">
+        <div class="col-12">
+          <nxp-input title="MFG" type="text" [parentForm]="form" control="mfg" [submit]="submit"></nxp-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <nxp-input title="Sub-MFG" type="text" [parentForm]="form" control="subMfg" [submit]="submit"></nxp-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <nxp-input
+            title="ProblemProcess"
+            type="text"
+            [parentForm]="form"
+            control="problemProcess"
+            [submit]="submit"
+          ></nxp-input>
+        </div>
+      </div>
+      <!-- ....... -->
+      <!-- d3Owner -->
+      <!-- ....... -->
+      <div formArrayName="d3Owner" class="row" *ngFor="let formArr of form.get('d3Owner')['controls']; let i = index">
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="D3 Owners"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d3Owner{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d3Owner{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="D3 Owners"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d3Owner{{ i }}"
+            (change)="onChange('d3Owner', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d3Owner{{ i }}"
+            (change)="onChange('d3Owner', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === d3Owner.length - 1"
+            (click)="addOwnerD3()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < d3Owner.length - 1"
+            (click)="delOwnerD3(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === d3Owner.length - 1 && i !== 0"
+            (click)="delOwnerD3(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- d4d8Owner -->
+      <!-- ......... -->
+      <div
+        formArrayName="d4d8Owner"
+        class="row"
+        *ngFor="let formArr of form.get('d4d8Owner')['controls']; let i = index"
+      >
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="D4 Owners"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d4d8Owner{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d4d8Owner{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="D4 Owners"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d4d8Owner{{ i }}"
+            (change)="onChange('d4d8Owner', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="d4d8Owner{{ i }}"
+            (change)="onChange('d4d8Owner', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === d4d8Owner.length - 1"
+            (click)="addOwnerD4D8()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < d4d8Owner.length - 1"
+            (click)="delOwnerD4D8(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === d4d8Owner.length - 1 && i !== 0"
+            (click)="delOwnerD4D8(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- fuqa -->
+      <!-- ......... -->
+      <div formArrayName="fuqa" class="row" *ngFor="let formArr of form.get('fuqa')['controls']; let i = index">
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="FUQA"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fuqa{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fuqa{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="FUQA"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fuqa{{ i }}"
+            (change)="onChange('fuqa', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fuqa{{ i }}"
+            (change)="onChange('fuqa', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === fuqa.length - 1"
+            (click)="addFuqa()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < fuqa.length - 1"
+            (click)="delFuqa(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === fuqa.length - 1 && i !== 0"
+            (click)="delFuqa(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- pemqa -->
+      <!-- ......... -->
+      <div formArrayName="pemqa" class="row" *ngFor="let formArr of form.get('pemqa')['controls']; let i = index">
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="PEMQA"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="pemqa{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="pemqa{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="PEMQA"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="pemqa{{ i }}"
+            (change)="onChange('pemqa', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="pemqa{{ i }}"
+            (change)="onChange('pemqa', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === pemqa.length - 1"
+            (click)="addPemqa()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < pemqa.length - 1"
+            (click)="delPemqa(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === pemqa.length - 1 && i !== 0"
+            (click)="delPemqa(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- mteEngineers -->
+      <!-- ......... -->
+      <div
+        formArrayName="mteEngineers"
+        class="row"
+        *ngFor="let formArr of form.get('mteEngineers')['controls']; let i = index"
+      >
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="MTE Engineer"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteEngineers{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteEngineers{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="MTE Engineer"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteEngineers{{ i }}"
+            (change)="onChange('mteEngineers', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteEngineers{{ i }}"
+            (change)="onChange('mteEngineers', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === mteEngineers.length - 1"
+            (click)="addMteEngineers()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < mteEngineers.length - 1"
+            (click)="delMteEngineers(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === mteEngineers.length - 1 && i !== 0"
+            (click)="delMteEngineers(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- mteManagers -->
+      <!-- ......... -->
+      <div
+        formArrayName="mteManagers"
+        class="row"
+        *ngFor="let formArr of form.get('mteManagers')['controls']; let i = index"
+      >
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="MTE Manager"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteManagers{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteManagers{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="MTE Manager"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteManagers{{ i }}"
+            (change)="onChange('mteManagers', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="mteManagers{{ i }}"
+            (change)="onChange('mteManagers', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === mteManagers.length - 1"
+            (click)="addMteManagers()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < mteManagers.length - 1"
+            (click)="delMteManagers(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === mteManagers.length - 1 && i !== 0"
+            (click)="delMteManagers(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- directors -->
+      <!-- ......... -->
+      <div
+        formArrayName="directors"
+        class="row"
+        *ngFor="let formArr of form.get('directors')['controls']; let i = index"
+      >
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="Director"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="directors{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="directors{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="Director"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="directors{{ i }}"
+            (change)="onChange('directors', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="directors{{ i }}"
+            (change)="onChange('directors', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === directors.length - 1"
+            (click)="addDirectors()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < directors.length - 1"
+            (click)="delDirectors(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === directors.length - 1 && i !== 0"
+            (click)="delDirectors(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- finances -->
+      <!-- ......... -->
+      <div formArrayName="finances" class="row" *ngFor="let formArr of form.get('finances')['controls']; let i = index">
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="Finance"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="finances{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="finances{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="Finance"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="finances{{ i }}"
+            (change)="onChange('finances', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="finances{{ i }}"
+            (change)="onChange('finances', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === finances.length - 1"
+            (click)="addFinances()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < finances.length - 1"
+            (click)="delFinances(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === finances.length - 1 && i !== 0"
+            (click)="delFinances(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- materialOwners -->
+      <!-- ......... -->
+      <div
+        formArrayName="materialOwners"
+        class="row"
+        *ngFor="let formArr of form.get('materialOwners')['controls']; let i = index"
+      >
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="Material Owner"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="materialOwners{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="materialOwners{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="Material Owner"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="materialOwners{{ i }}"
+            (change)="onChange('materialOwners', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="materialOwners{{ i }}"
+            (change)="onChange('materialOwners', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === materialOwners.length - 1"
+            (click)="addMaterialOwners()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < materialOwners.length - 1"
+            (click)="delMaterialOwners(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === materialOwners.length - 1 && i !== 0"
+            (click)="delMaterialOwners(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ............ -->
+      <!-- teamMember -->
+      <!-- ............ -->
+      <div
+        formArrayName="teamMember"
+        class="row"
+        *ngFor="let formArr of form.get('teamMember')['controls']; let i = index"
+      >
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="Team Members"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="teamMember{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="teamMember{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="Team Members"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="teamMember{{ i }}"
+            (change)="onChange('teamMember', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="teamMember{{ i }}"
+            (change)="onChange('teamMember', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === teamMember.length - 1"
+            (click)="addTeamMember()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < teamMember.length - 1"
+            (click)="delTeamMember(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === teamMember.length - 1 && i !== 0"
+            (click)="delTeamMember(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <!-- ......... -->
+      <!-- fabMember -->
+      <!-- ......... -->
+      <div
+        formArrayName="fabMember"
+        class="row"
+        *ngFor="let formArr of form.get('fabMember')['controls']; let i = index"
+      >
+        <div [formGroupName]="i" [ngClass]="{ 'ml-auto': i > 0, 'col-md-8': i > 0, 'col-md-12': i === 0 }">
+          <nxp-input
+            *ngIf="i === 0 && formArr.get('id').value !== 0"
+            title="FAB Members"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fabMember{{ i }}"
+          ></nxp-input>
+          <nxp-input
+            *ngIf="i > 0 && formArr.get('id').value !== 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fabMember{{ i }}"
+          ></nxp-input>
+          <nxp-users
+            *ngIf="i === 0 && formArr.get('id').value === 0"
+            title="FAB Members"
+            type="text"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fabMember{{ i }}"
+            (change)="onChange('fabMember', $event, i)"
+          ></nxp-users>
+          <nxp-users
+            *ngIf="i > 0 && formArr.get('id').value === 0"
+            typeInput="input"
+            [parentForm]="formArr"
+            control="name"
+            [submit]="submit"
+            group="fabMember{{ i }}"
+            (change)="onChange('fabMember', $event, i)"
+          ></nxp-users>
+          <button
+            *ngIf="i === fabMember.length - 1"
+            (click)="addFabMember()"
+            style="top: 3px;position: absolute;right: 0;margin-right: -3.25rem;"
+            class="btn btn-sm btn-success"
+          >
+            <i class="fa fa-plus"></i>
+          </button>
+          <button
+            *ngIf="i < fabMember.length - 1"
+            (click)="delFabMember(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+          <button
+            *ngIf="i === fabMember.length - 1 && i !== 0"
+            (click)="delFabMember(i)"
+            style="top: 3px;position: absolute;right: 0;margin-right: -1.25rem;"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer" style="justify-content: center">
+    <button type="button" class="btn btn-sm btn-primary mr-2" (click)="onSubmit()">
+      <i class="fa fa-save mr-1"></i> Submit
+    </button>
+    <button type="button" class="btn btn-sm btn-light mr-2" (click)="onCancel()">
+      <i class="fa fa-times mr-1"></i> Cancel
+    </button>
+  </div>
+</div>

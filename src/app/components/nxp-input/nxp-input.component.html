@@ -1,0 +1,455 @@
+<!-- input inline -->
+<div class="form-group row {{ class }}" [ngStyle]="style" [formGroup]="parentForm" *ngIf="inline">
+  <div class="col-md-4">
+    <label class="col-form-label mb-0" [for]="control" i18n [ngStyle]="{ color: labelColor.en }"
+      >{{ titleText }}
+    </label>
+    <small
+      *ngIf="helpText"
+      id="{{ control }}-help"
+      class="form-text"
+      [ngStyle]="{
+        color: labelColor.th,
+        'font-size': '90%',
+        'margin-top': '-0.5rem'
+      }"
+    >
+      {{ helpText }}
+    </small>
+  </div>
+  <div class="col-md-8">
+    <input
+      *ngIf="!nonIdentify"
+      [value]="parentForm.getRawValue()[control]"
+      [type]="type"
+      [id]="control + group"
+      [name]="control + group"
+      class="{{ bgColor }} form-control {{ classInput }}"
+      [formControlName]="control"
+      [placeholder]="placeholder"
+      [ngClass]="{
+        'is-invalid':
+          !isDisabled &&
+          parentForm.get(control) &&
+          (submit || parentForm.get(control).touched) &&
+          parentForm.get(control).invalid,
+        'text-white': colored
+      }"
+      [maxlength]="maxlength"
+      [ngStyle]="{ 'font-weight': '500' }"
+      (change)="onChange($event)"
+      (blur)="onBlur($event)"
+      (focus)="onFocus($event)"
+      (keypress)="onPress($event)"
+    />
+    <input
+      *ngIf="nonIdentify"
+      [value]="parentForm.getRawValue()[control]"
+      [type]="type"
+      class="{{ bgColor }} form-control {{ classInput }}"
+      [formControlName]="control"
+      [placeholder]="placeholder"
+      [ngClass]="{
+        'is-invalid':
+          !isDisabled &&
+          parentForm.get(control) &&
+          (submit || parentForm.get(control).touched) &&
+          parentForm.get(control).invalid,
+        'text-white': colored
+      }"
+      [maxlength]="maxlength"
+      [ngStyle]="{ 'font-weight': '500' }"
+      (change)="onChange($event)"
+      (blur)="onBlur($event)"
+      (focus)="onFocus($event)"
+      (keypress)="onPress($event)"
+    />
+  </div>
+</div>
+
+<!-- input -->
+<div class="form-group {{ class }}" [ngStyle]="style" [formGroup]="parentForm" *ngIf="input">
+  <input
+    *ngIf="!nonIdentify"
+    [value]="parentForm.getRawValue()[control]"
+    [type]="type"
+    [id]="control + group"
+    [name]="control + group"
+    class="{{ bgColor }} form-control {{ classInput }}"
+    [formControlName]="control"
+    [placeholder]="placeholder"
+    [ngClass]="{
+      'is-invalid':
+        !isDisabled &&
+        parentForm.get(control) &&
+        (submit || parentForm.get(control).touched) &&
+        parentForm.get(control).invalid,
+      'text-white': colored
+    }"
+    [min]="min"
+    [ngStyle]="{ 'font-weight': '500' }"
+    [maxlength]="maxlength"
+    (change)="onChange($event)"
+    (blur)="onBlur($event)"
+    (focus)="onFocus($event)"
+    (keypress)="onPress($event)"
+  />
+  <input
+    *ngIf="nonIdentify"
+    [value]="parentForm.getRawValue()[control]"
+    [type]="type"
+    class="{{ bgColor }} form-control {{ classInput }}"
+    [formControlName]="control"
+    [placeholder]="placeholder"
+    [ngClass]="{
+      'is-invalid':
+        !isDisabled &&
+        parentForm.get(control) &&
+        (submit || parentForm.get(control).touched) &&
+        parentForm.get(control).invalid,
+      'text-white': colored
+    }"
+    [min]="min"
+    [ngStyle]="{ 'font-weight': '500' }"
+    [maxlength]="maxlength"
+    (change)="onChange($event)"
+    (blur)="onBlur($event)"
+    (focus)="onFocus($event)"
+    (keypress)="onPress($event)"
+  />
+</div>
+
+<!-- inlinetext -->
+<div class="form-group row {{ class }}" [ngStyle]="style" [formGroup]="parentForm" *ngIf="inlinetext">
+  <div class="col-md-4">
+    <label class="col-form-label mb-0" [for]="control" i18n [ngStyle]="{ color: labelColor.en }"
+      >{{ titleText }}
+    </label>
+    <small
+      *ngIf="helpText"
+      id="{{ control }}-help"
+      class="form-text"
+      [ngStyle]="{
+        color: labelColor.th,
+        'font-size': '90%',
+        'margin-top': '-0.5rem'
+      }"
+    >
+      {{ helpText }}
+    </small>
+  </div>
+  <div class="col-md-8">
+    <textarea
+      *ngIf="!nonIdentify"
+      [value]="parentForm.getRawValue()[control]"
+      [id]="control + group"
+      [name]="control + group"
+      class="{{ bgColor }} form-control {{ classInput }}"
+      [formControlName]="control"
+      [placeholder]="placeholder"
+      [ngClass]="{
+        'is-invalid':
+          !isDisabled &&
+          parentForm.get(control) &&
+          (submit || parentForm.get(control).touched) &&
+          parentForm.get(control).invalid,
+        'text-white': colored
+      }"
+      [rows]="rows"
+      [maxlength]="maxlength"
+      [ngStyle]="{ 'font-weight': '500', resize: 'none' }"
+      (change)="onChange($event)"
+      (blur)="onBlur($event)"
+      (focus)="onFocus($event)"
+      (keypress)="onPress($event)"
+    >
+    </textarea>
+    <textarea
+      *ngIf="nonIdentify"
+      [value]="parentForm.getRawValue()[control]"
+      class="{{ bgColor }} form-control {{ classInput }}"
+      [formControlName]="control"
+      [placeholder]="placeholder"
+      [ngClass]="{
+        'is-invalid':
+          !isDisabled &&
+          parentForm.get(control) &&
+          (submit || parentForm.get(control).touched) &&
+          parentForm.get(control).invalid,
+        'text-white': colored
+      }"
+      [rows]="rows"
+      [maxlength]="maxlength"
+      [ngStyle]="{ 'font-weight': '500', resize: 'none' }"
+      (change)="onChange($event)"
+      (blur)="onBlur($event)"
+      (focus)="onFocus($event)"
+      (keypress)="onPress($event)"
+    >
+    </textarea>
+  </div>
+</div>
+
+<!-- textarea -->
+<div class="form-group {{ class }}" [ngStyle]="style" [formGroup]="parentForm" *ngIf="textarea">
+  <textarea
+    *ngIf="!nonIdentify"
+    [value]="parentForm.getRawValue()[control]"
+    [id]="control + group"
+    [name]="control + group"
+    class="{{ bgColor }} form-control {{ classInput }}"
+    [formControlName]="control"
+    [placeholder]="placeholder"
+    [ngClass]="{
+      'is-invalid':
+        !isDisabled &&
+        parentForm.get(control) &&
+        (submit || parentForm.get(control).touched) &&
+        parentForm.get(control).invalid,
+      'text-white': colored
+    }"
+    [rows]="rows"
+    [maxlength]="maxlength"
+    [ngStyle]="{ 'font-weight': '500', resize: 'none' }"
+    (change)="onChange($event)"
+    (keypress)="onPress($event)"
+  >
+  </textarea>
+  <textarea
+    *ngIf="nonIdentify"
+    [value]="parentForm.getRawValue()[control]"
+    class="{{ bgColor }} form-control {{ classInput }}"
+    [formControlName]="control"
+    [placeholder]="placeholder"
+    [ngClass]="{
+      'is-invalid':
+        !isDisabled &&
+        parentForm.get(control) &&
+        (submit || parentForm.get(control).touched) &&
+        parentForm.get(control).invalid,
+      'text-white': colored
+    }"
+    [rows]="rows"
+    [maxlength]="maxlength"
+    [ngStyle]="{ 'font-weight': '500', resize: 'none' }"
+    (change)="onChange($event)"
+    (keypress)="onPress($event)"
+  >
+  </textarea>
+</div>
+
+<!-- selection with text -->
+<div
+  class="form-group row {{ class }}"
+  [ngStyle]="style"
+  [formGroup]="parentForm"
+  *ngIf="selection && titleText !== 'Text'"
+>
+  <div class="col-md-4">
+    <label class="col-form-label mb-0" [for]="control" i18n [ngStyle]="{ color: labelColor.en }"
+      >{{ titleText }}
+    </label>
+    <small
+      *ngIf="helpText"
+      id="{{ control }}-help"
+      class="form-text"
+      [ngStyle]="{
+        color: labelColor.th,
+        'font-size': '90%',
+        'margin-top': '-0.5rem'
+      }"
+    >
+      {{ helpText }}
+    </small>
+  </div>
+  <div class="col-md-8">
+    <select
+      *ngIf="!nonIdentify"
+      [value]="parentForm.getRawValue()[control]"
+      [id]="control + group"
+      [name]="control + group"
+      class="{{ bgColor }} form-control {{ classInput }}"
+      [ngClass]="{
+        'is-invalid':
+          !isDisabled &&
+          parentForm.get(control) &&
+          (submit || parentForm.get(control).touched) &&
+          parentForm.get(control).invalid,
+        'text-white': colored,
+        'text-muted': !parentForm.getRawValue()[control]
+      }"
+      [ngStyle]="{ 'font-weight': '500' }"
+      (change)="onChange($event)"
+      [disabled]="isDisabled"
+    >
+      <option [ngStyle]="{ 'font-weight': '300' }" class="text-muted " value="" *ngIf="placeholder">{{
+        placeholder
+      }}</option>
+      <option [ngStyle]="{ 'font-weight': '500' }" [value]="item.value" *ngFor="let item of items; let i = index">{{
+        item.label
+      }}</option>
+    </select>
+    <select
+      *ngIf="nonIdentify"
+      [value]="parentForm.getRawValue()[control]"
+      class="{{ bgColor }} form-control {{ classInput }}"
+      [ngClass]="{
+        'is-invalid':
+          !isDisabled &&
+          parentForm.get(control) &&
+          (submit || parentForm.get(control).touched) &&
+          parentForm.get(control).invalid,
+        'text-white': colored,
+        'text-muted': !parentForm.getRawValue()[control]
+      }"
+      [ngStyle]="{ 'font-weight': '500' }"
+      (change)="onChange($event)"
+      [disabled]="isDisabled"
+    >
+      <option [ngStyle]="{ 'font-weight': '300' }" class="text-muted " value="" *ngIf="placeholder">{{
+        placeholder
+      }}</option>
+      <option [ngStyle]="{ 'font-weight': '500' }" [value]="item.value" *ngFor="let item of items; let i = index">{{
+        item.label
+      }}</option>
+    </select>
+  </div>
+</div>
+
+<!-- selection -->
+<div
+  class="form-group {{ class }}"
+  [ngStyle]="style"
+  [formGroup]="parentForm"
+  *ngIf="selection && titleText === 'Text'"
+>
+  <select
+    *ngIf="!nonIdentify"
+    [value]="parentForm.getRawValue()[control]"
+    [id]="control + group"
+    [name]="control + group"
+    class="{{ bgColor }} form-control {{ classInput }}"
+    [ngClass]="{
+      'is-invalid':
+        !isDisabled &&
+        parentForm.get(control) &&
+        (submit || parentForm.get(control).touched) &&
+        parentForm.get(control).invalid,
+      'text-white': colored,
+      'text-muted': !parentForm.getRawValue()[control]
+    }"
+    [ngStyle]="{ 'font-weight': '500' }"
+    (change)="onChange($event)"
+    [disabled]="isDisabled"
+  >
+    <option [ngStyle]="{ 'font-weight': '300' }" class="text-muted" value="" *ngIf="placeholder">{{
+      placeholder
+    }}</option>
+    <option [ngStyle]="{ 'font-weight': '500' }" [value]="item.value" *ngFor="let item of items; let i = index">{{
+      item.label
+    }}</option>
+  </select>
+  <select
+    *ngIf="nonIdentify"
+    [value]="parentForm.getRawValue()[control]"
+    class="{{ bgColor }} form-control {{ classInput }}"
+    [ngClass]="{
+      'is-invalid':
+        !isDisabled &&
+        parentForm.get(control) &&
+        (submit || parentForm.get(control).touched) &&
+        parentForm.get(control).invalid,
+      'text-white': colored,
+      'text-muted': !parentForm.getRawValue()[control]
+    }"
+    [ngStyle]="{ 'font-weight': '500' }"
+    (change)="onChange($event)"
+    [disabled]="isDisabled"
+  >
+    <option [ngStyle]="{ 'font-weight': '300' }" class="text-muted" value="" *ngIf="placeholder">{{
+      placeholder
+    }}</option>
+    <option [ngStyle]="{ 'font-weight': '500' }" [value]="item.value" *ngFor="let item of items; let i = index">{{
+      item.label
+    }}</option>
+  </select>
+</div>
+
+<!-- date -->
+<div class="form-group row {{ class }}" [ngStyle]="style" [formGroup]="parentForm" *ngIf="inlineDate">
+  <div class="col-md-4">
+    <label class="col-form-label mb-0" [for]="control" i18n [ngStyle]="{ color: labelColor.en }"
+      >{{ titleText }}
+    </label>
+    <small
+      *ngIf="helpText"
+      id="{{ control }}-help"
+      class="form-text"
+      [ngStyle]="{
+        color: labelColor.th,
+        'font-size': '90%',
+        'margin-top': '-0.5rem'
+      }"
+    >
+      {{ helpText }}
+    </small>
+  </div>
+  <div class="col-md-8">
+    <div class="input-group">
+      <input
+        *ngIf="!nonIdentify"
+        type="text"
+        [id]="control + group"
+        [name]="control + group"
+        class="{{ bgColor }} form-control {{ classInput }}"
+        [formControlName]="control"
+        value="{{ parentForm.get(control).value | date: dateConstant.format }}"
+        [placeholder]="placeholder"
+        [ngClass]="{
+          'is-invalid':
+            !isDisabled &&
+            parentForm.get(control) &&
+            (submit || parentForm.get(control).touched) &&
+            parentForm.get(control).invalid,
+          'text-white': colored,
+          'bg-white': !isDisabled
+        }"
+        [ngStyle]="{ 'font-weight': '500' }"
+        (change)="onChange($event)"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
+        [bsConfig]="{
+          dateInputFormat: dateConstant.format.toUpperCase()
+        }"
+        bsDatepicker
+        readonly
+      />
+      <input
+        *ngIf="nonIdentify"
+        type="text"
+        class="{{ bgColor }} form-control {{ classInput }}"
+        [formControlName]="control"
+        value="{{ parentForm.get(control).value | date: dateConstant.format }}"
+        [placeholder]="placeholder"
+        [ngClass]="{
+          'is-invalid':
+            !isDisabled &&
+            parentForm.get(control) &&
+            (submit || parentForm.get(control).touched) &&
+            parentForm.get(control).invalid,
+          'text-white': colored,
+          'bg-white': !isDisabled
+        }"
+        [ngStyle]="{ 'font-weight': '500' }"
+        (change)="onChange($event)"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
+        [bsConfig]="{
+          dateInputFormat: dateConstant.format.toUpperCase()
+        }"
+        bsDatepicker
+        readonly
+      />
+    </div>
+  </div>
+</div>

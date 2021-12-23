@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-12">
+    <app-d1></app-d1>
+  </div>
+</div>
+<div id="chart_container" #chart_container>
+  <!-- <pan-zoom [config]="panzoomConfig"> -->
+  <div class="flowchart-example-container" id="flow" #flow></div>
+  <!-- </pan-zoom> -->
+</div>
+
+<input type="button" value="add Output" (click)="addOutput()" />
+<input type="button" value="add Input" (click)="addInput()" />
+<input type="button" value="add InputAndOutput" (click)="addInputAndOutput()" />
+<input type="button" value="delete" (click)="deleteOperationOrLink()" />
+<input type="button" value="load" (click)="load()" />
+<input type="button" value="get" (click)="get()" />
+<br />
+<textarea
+  nbInput
+  fullWidth
+  shape="round"
+  name="diagModel"
+  [(ngModel)]="diagModel"
+  placeholder="model"
+  style="height: 300px; width: 500px"
+></textarea>

@@ -1,0 +1,925 @@
+<div class="animated fadeIn" [ngClass]="{ hidden: loading }">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>{{ title }}
+        <span
+          class="badge badge-info ml-2 text-white"
+          *ngIf="!request.isInstruction && !isWaferFAB"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Available</span
+        >
+        <span
+          class="badge badge-success ml-2 text-white"
+          *ngIf="request.isInstruction || isWaferFAB"
+          style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        >
+      </a>
+    </div>
+  </div>
+  <div class="row" [collapse]="collapse" *ngIf="isHaveLotsUnInstruction">
+    <div class="col-md-4 mx-auto mt-3 mb-3">
+      <div class="input-group">
+        <select
+          [(ngModel)]="autoDispose"
+          name="autodispose"
+          id="autodispose"
+          (change)="onAutoDisposeChange($event)"
+          class="form-control form-control-sm"
+          [attr.aria-label]=""
+          [attr.aria-describedby]="'basic-addon1'"
+        >
+          <option value="manual" selected>Wait for engineer</option>
+          <option value="auto">Auto-Disposition</option>
+        </select>
+        <div class="input-group-prepend">
+          <button *ngIf="isAutoDisposeChange" (click)="onSelectDisposition()" class="btn btn-sm btn-primary">
+            <i class="fa fa-save mr-1"></i>Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" [formGroup]="formIn">
+    <div class="col-12 mt-2" [collapse]="collapse" *ngIf="lots">
+      <div class="table-responsive table-responsive-xl">
+        <table class="table table-sm table-hover table-bordered" style="white-space: nowrap;">
+          <thead class="text-center">
+            <tr>
+              <th width="48px">
+                <div class="custom-control custom-checkbox ml-1">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectedCheck"
+                    name="selectedCheck"
+                    formControlName="selectedCheck"
+                    (change)="onToggleChk()"
+                  />
+                  <label class="custom-control-label" for="selectedCheck"></label>
+                </div>
+              </th>
+              <th>Lot ID</th>
+              <th>Disposition</th>
+              <th>1st Rescreening</th>
+              <th>2nd Rescreening</th>
+              <th>3rd Rescreening</th>
+              <th>Product Description</th>
+              <th>Assy CG</th>
+              <th>Machine</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="lots">
+            <tr *ngFor="let lot of formIn.get('lots').controls; let i = index" [formGroupName]="i">
+              <td class="text-center">
+                <div class="custom-control custom-checkbox ml-1">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="selectedCheck{{ i }}"
+                    formControlName="selected"
+                    name="selectedCheck{{ i }}"
+                    (change)="onChk()"
+                  />
+                  <label class="custom-control-label" for="selectedCheck{{ i }}"></label>
+                </div>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  control="lotId"
+                  type="text"
+                  typeInput="input"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  [style]="{ 'min-width': '110px' }"
+                ></nxp-input>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  type="number"
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  typeInput="selection"
+                  placeholder="None"
+                  [items]="dispositionTypes"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  control="dispositionType"
+                  [submit]="submit"
+                  [style]="{ 'min-width': '110px' }"
+                ></nxp-input>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  type="number"
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  typeInput="selection"
+                  placeholder="None"
+                  [items]="reScreens"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  control="rescreen1"
+                  [submit]="submit"
+                ></nxp-input>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  type="number"
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  typeInput="selection"
+                  placeholder="None"
+                  [items]="reScreens"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  control="rescreen2"
+                  [submit]="submit"
+                ></nxp-input>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  type="number"
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  typeInput="selection"
+                  placeholder="None"
+                  [items]="reScreens"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  control="rescreen3"
+                  [submit]="submit"
+                ></nxp-input>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  type="text"
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  placeholder="None"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  typeInput="input"
+                  control="productDesc"
+                  [submit]="submit"
+                  [style]="{ 'min-width': '110px' }"
+                ></nxp-input>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  type="text"
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  placeholder="None"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  typeInput="input"
+                  control="assyCg"
+                  [submit]="submit"
+                  [style]="{ 'min-width': '110px' }"
+                ></nxp-input>
+              </td>
+              <td class="text-center">
+                <nxp-input
+                  type="text"
+                  class="mb-0"
+                  classInput="form-control-sm mb-0"
+                  placeholder="None"
+                  [parentForm]="lot"
+                  [group]="'i' + i"
+                  typeInput="input"
+                  control="machine"
+                  [submit]="submit"
+                  [style]="{ 'min-width': '110px' }"
+                ></nxp-input>
+              </td>
+            </tr>
+            <tr *ngIf="lots.length === 0">
+              <td colspan="9" class="text-center">No data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button
+        *ngIf="!request.isMerged"
+        (click)="onAddInstruction()"
+        type="button"
+        class="btn btn-sm btn-light mt-2"
+        [disabled]="countSelected === 0"
+      >
+        <i class="fa fa-check-circle mr-1"></i>Add Instruction
+      </button>
+    </div>
+    <div class="col-12" [collapse]="collapse">
+      <!-- *ngIf="lotsBoard.length > 0" -->
+      <h6 class="mt-3">
+        <a
+          href="javascript:void(0)"
+          (click)="watBoard = !watBoard"
+          [attr.aria-expanded]="!watBoard"
+          attr.aria-controls="watBoard"
+          >Waiting for board approval
+          <span class="badge badge-pill badge-primary ml-1" *ngIf="countWaitBoard > 0" style="padding: 5px 6px;">{{
+            countWaitBoard
+          }}</span>
+          <i *ngIf="!watBoard" class="fa fa-chevron-down ml-1"></i>
+          <i *ngIf="watBoard" class="fa fa-chevron-left ml-1"></i>
+        </a>
+      </h6>
+      <div [collapse]="watBoard" class="table-responsive table-responsive-xl" style="background-color: #f1f1f1;">
+        <table class="table table-sm table-bordered" style="white-space: nowrap; background-color: white;">
+          <tbody formArrayName="lotsBoard">
+            <ng-container *ngFor="let lot of formIn.get('lotsBoard')['controls']; let i = index" [formGroupName]="i">
+              <tr *ngIf="lot.get('id').value === -1">
+                <td colspan="6" class="text-left p-2" style="position: relative;">
+                  <h5>
+                    Group {{ lot.get('groupName').value }}
+                    <span class="mx-3 rescreen" *ngIf="lot.getRawValue().rescreen1"
+                      >1: {{ rescreen(lot.getRawValue().rescreen1) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen2"
+                      >2: {{ rescreen(lot.getRawValue().rescreen2) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen3"
+                      >3: {{ rescreen(lot.getRawValue().rescreen3) }}</span
+                    >
+                  </h5>
+                  <p class="mt-3">
+                    attach file:
+                    <a href="javascript:void(0)" (click)="downloadFile(i)">{{
+                      lot.getRawValue().attach.fileName || '-'
+                    }}</a>
+                  </p>
+                  <nxp-input
+                    type="text"
+                    typeInput="textarea"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    [parentForm]="lot"
+                    [submit]="submit"
+                    control="otherDetail"
+                    [group]="'Board' + i"
+                    maxlength="250"
+                  ></nxp-input>
+                  <div class="p-2" style="position: absolute; right: 0; top: 0;"></div>
+                </td>
+              </tr>
+              <tr class="text-center" *ngIf="lot.get('id').value === -1">
+                <th>Lot ID</th>
+                <th>Disposition</th>
+                <th>1st Rescreening</th>
+                <th>2nd Rescreening</th>
+                <th>3rd Rescreening</th>
+                <th>Board Approval</th>
+              </tr>
+              <tr *ngIf="lot.get('id').value > -1">
+                <td class="text-center">
+                  <nxp-input
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    control="lotId"
+                    type="text"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    [group]="'Board' + i"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="dispositionTypes"
+                    [parentForm]="lot"
+                    [group]="'Board' + i"
+                    control="dispositionType"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Board' + i"
+                    control="rescreen1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Board' + i"
+                    control="rescreen2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Board' + i"
+                    control="rescreen3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td>
+                  <table
+                    *ngIf="request.boardGroupReqs"
+                    class="table table-sm table-bordered text-center mb-0"
+                    style="margin-top: 0 !important; background-color: white; white-space: nowrap;"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Group Name</th>
+                        <th>Approval</th>
+                        <th>Approved By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let boardGroupReq of getBoardGroupReqs(lot.get('lotId').value)">
+                        <td>{{ boardGroupReq.groupName }}</td>
+                        <td>
+                          <i *ngIf="boardGroupReq.flag === 'Y'" style="color: green" class="fa fa-check-circle"></i>
+                          <i
+                            *ngIf="
+                              boardGroupReq.flag === 'N' &&
+                              !approvable(boardGroupReq.groupReqId, lot.get('lotId').value)
+                            "
+                            style="color: grey"
+                            class="fa fa-times-circle"
+                          ></i>
+                          <button
+                            (click)="onBoardApprove(lot.get('lotId').value, boardGroupReq.groupId)"
+                            type="button"
+                            *ngIf="
+                              boardGroupReq.flag === 'N' && approvable(boardGroupReq.groupReqId, lot.get('lotId').value)
+                            "
+                            class="btn btn-sm btn-primary"
+                          >
+                            <i class="fa fa-check"></i>
+                          </button>
+                          <button
+                            (click)="onBoardReject(lot.get('lotId').value)"
+                            type="button"
+                            *ngIf="
+                              boardGroupReq.flag === 'N' && approvable(boardGroupReq.groupReqId, lot.get('lotId').value)
+                            "
+                            class="btn btn-sm btn-danger"
+                          >
+                            <i class="fa fa-times"></i>
+                          </button>
+                        </td>
+                        <td>{{ boardGroupReq.approver || '-' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="lotsBoard.length === 0">
+              <td colspan="5" class="text-center">No data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12" [collapse]="collapse" *ngIf="lotsWait.length > 0">
+      <h6 class="mt-3">
+        <a
+          href="javascript:void(0)"
+          (click)="watInstruction = !watInstruction"
+          [attr.aria-expanded]="!watInstruction"
+          attr.aria-controls="watInstruction"
+          >Waiting for finance calculate scrap cost (กำลังรอ Finance คำนวณ Scrap cost)
+          <span
+            class="badge badge-pill badge-primary ml-1"
+            *ngIf="countWaitInstruction > 0"
+            style="padding: 5px 6px;"
+            >{{ countWaitInstruction }}</span
+          >
+          <i *ngIf="!watInstruction" class="fa fa-chevron-down ml-1"></i>
+          <i *ngIf="watInstruction" class="fa fa-chevron-left ml-1"></i>
+        </a>
+      </h6>
+      <div [collapse]="watInstruction" class="table-responsive table-responsive-xl">
+        <table class="table table-sm table-bordered" style="white-space: nowrap;">
+          <tbody formArrayName="lotsWait">
+            <ng-container *ngFor="let lot of formIn.get('lotsWait').controls; let i = index" [formGroupName]="i">
+              <tr *ngIf="lot.get('id').value === -1">
+                <td colspan="6" class="text-left p-2" style="position: relative;">
+                  <h5>
+                    Group {{ lot.get('groupName').value }}
+                    <span class="mx-3 rescreen" *ngIf="lot.getRawValue().rescreen1"
+                      >1: {{ rescreen(lot.getRawValue().rescreen1) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen2"
+                      >2: {{ rescreen(lot.getRawValue().rescreen2) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen3"
+                      >3: {{ rescreen(lot.getRawValue().rescreen3) }}</span
+                    >
+                  </h5>
+                  <p class="mt-3">
+                    attach file:
+                    <a href="javascript:void(0)" (click)="downloadFile(i)">{{
+                      lot.getRawValue().attach.fileName || '-'
+                    }}</a>
+                    <strong class="float-right"
+                      >Total Costs:
+                      {{
+                        lot.getRawValue().cost ? (costs[lot.getRawValue().groupName] | currency: 'USD':'$':'1.4') : '-'
+                      }}</strong
+                    >
+                  </p>
+                  <nxp-input
+                    type="text"
+                    typeInput="textarea"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    [parentForm]="lot"
+                    [submit]="submit"
+                    control="otherDetail"
+                    [group]="'Added' + i"
+                    maxlength="250"
+                  ></nxp-input>
+                  <div class="p-2" style="position: absolute; right: 0; top: 0;">
+                    <a
+                      *ngIf="!lot.getRawValue().cost"
+                      class="badge badge-success ml-2 text-white"
+                      style="font-weight: 500;padding: 0.36rem .6rem;cursor: pointer;"
+                      routerLink="/finance/costs/{{ ncrbno }}/{{ lot.getRawValue().groupName }}"
+                      target="_blank"
+                      ><i class="fa fa-money mr-1"></i>For finance</a
+                    >
+                    <span
+                      *ngIf="!lot.getRawValue().cost"
+                      class="badge badge-info ml-2 text-white"
+                      style="font-weight: 500;padding: 0.36rem .6rem;"
+                      >Waiting for finance</span
+                    >
+                  </div>
+                </td>
+              </tr>
+              <tr class="text-center" *ngIf="lot.get('id').value === -1">
+                <th>Lot ID</th>
+                <th>Disposition</th>
+                <th>1st Rescreening</th>
+                <th>2nd Rescreening</th>
+                <th>3rd Rescreening</th>
+                <th>Cost</th>
+              </tr>
+              <tr *ngIf="lot.get('id').value > -1">
+                <td class="text-center">
+                  <nxp-input
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    control="lotId"
+                    type="text"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    [group]="'Wait' + i"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="dispositionTypes"
+                    [parentForm]="lot"
+                    [group]="'Wait' + i"
+                    control="dispositionType"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Wait' + i"
+                    control="rescreen1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Wait' + i"
+                    control="rescreen2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Wait' + i"
+                    control="rescreen3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0 text-right"
+                    typeInput="input"
+                    placeholder=""
+                    [parentForm]="lot"
+                    [group]="'Wait' + i"
+                    control="cost"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="lotsWait.length === 0">
+              <td colspan="6" class="text-center">No data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12" [collapse]="collapse" *ngIf="lotsWaitDRI.length > 0">
+      <h6 class="mt-3">
+        <a
+          href="javascript:void(0)"
+          (click)="watDRIInstruction = !watDRIInstruction"
+          [attr.aria-expanded]="!watDRIInstruction"
+          attr.aria-controls="watDRIInstruction"
+          >Waiting for approval from Director (กำลังรอการอนุมัติจาก Director)
+          <span
+            class="badge badge-pill badge-primary ml-1"
+            *ngIf="countWaitDRIInstruction > 0"
+            style="padding: 5px 6px;"
+            >{{ countWaitInstruction }}</span
+          >
+          <i *ngIf="!watDRIInstruction" class="fa fa-chevron-down ml-1"></i>
+          <i *ngIf="watDRIInstruction" class="fa fa-chevron-left ml-1"></i>
+        </a>
+      </h6>
+      <div [collapse]="watDRIInstruction" class="table-responsive table-responsive-xl">
+        <table class="table table-sm table-bordered" style="white-space: nowrap;">
+          <tbody formArrayName="lotsWaitDRI">
+            <ng-container *ngFor="let lot of formIn.get('lotsWaitDRI').controls; let i = index" [formGroupName]="i">
+              <tr *ngIf="lot.get('id').value === -1">
+                <td colspan="6" class="text-left p-2" style="position: relative;">
+                  <h5>
+                    Group {{ lot.get('groupName').value }}
+                    <span class="mx-3 rescreen" *ngIf="lot.getRawValue().rescreen1"
+                      >1: {{ rescreen(lot.getRawValue().rescreen1) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen2"
+                      >2: {{ rescreen(lot.getRawValue().rescreen2) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen3"
+                      >3: {{ rescreen(lot.getRawValue().rescreen3) }}</span
+                    >
+                  </h5>
+                  <p class="mt-3">
+                    attach file:
+                    <a href="javascript:void(0)" (click)="downloadFile(i)">{{
+                      lot.getRawValue().attach.fileName || '-'
+                    }}</a>
+                    <strong class="float-right"
+                      >Total Costs:
+                      {{
+                        lot.getRawValue().cost ? (costs[lot.getRawValue().groupName] | currency: 'USD':'$':'1.4') : '-'
+                      }}</strong
+                    >
+                  </p>
+                  <nxp-input
+                    type="text"
+                    typeInput="textarea"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    [parentForm]="lot"
+                    [submit]="submit"
+                    control="otherDetail"
+                    [group]="'Added' + i"
+                    maxlength="250"
+                  ></nxp-input>
+                  <div class="p-2" style="position: absolute; right: 0; top: 0;">
+                    <a
+                      *ngIf="lot.getRawValue().cost && !request.isMerged"
+                      class="badge badge-success ml-2 text-white"
+                      style="font-weight: 500;padding: 0.36rem .6rem;cursor: pointer;"
+                      routerLink="/finance/approval/{{ ncrbno }}/{{ lot.getRawValue().groupName }}"
+                      target="_blank"
+                      ><i class="fa fa-money mr-1"></i>For Director</a
+                    >
+                    <span
+                      *ngIf="lot.getRawValue().cost && !request.isMerged"
+                      class="badge badge-info ml-2 text-white"
+                      style="font-weight: 500;padding: 0.36rem .6rem;"
+                      >Waiting for Director</span
+                    >
+                  </div>
+                </td>
+              </tr>
+              <tr class="text-center" *ngIf="lot.get('id').value === -1">
+                <th>Lot ID</th>
+                <th>Disposition</th>
+                <th>1st Rescreening</th>
+                <th>2nd Rescreening</th>
+                <th>3rd Rescreening</th>
+                <th>Cost</th>
+              </tr>
+              <tr *ngIf="lot.get('id').value > -1">
+                <td class="text-center">
+                  <nxp-input
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    control="lotId"
+                    type="text"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    [group]="'WaitDRI' + i"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="dispositionTypes"
+                    [parentForm]="lot"
+                    [group]="'WaitDRI' + i"
+                    control="dispositionType"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'WaitDRI' + i"
+                    control="rescreen1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'WaitDRI' + i"
+                    control="rescreen2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'WaitDRI' + i"
+                    control="rescreen3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="text"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0 text-right"
+                    typeInput="input"
+                    placeholder=""
+                    [parentForm]="lot"
+                    [group]="'WaitDRI' + i"
+                    control="cost"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="lotsWaitDRI.length === 0">
+              <td colspan="6" class="text-center">No data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12" [collapse]="collapse" *ngIf="lotsAppr.length > 0">
+      <h6 class="mt-3">
+        <a
+          href="javascript:void(0)"
+          (click)="aprInstruction = !aprInstruction"
+          [attr.aria-expanded]="!aprInstruction"
+          attr.aria-controls="aprInstruction"
+          >Waiting for approval instruction groups<span
+            class="badge badge-pill badge-primary ml-1"
+            *ngIf="countApprInstruction > 0"
+            style="padding: 5px 6px;"
+            >{{ countApprInstruction }}</span
+          >
+          <i *ngIf="!aprInstruction" class="fa fa-chevron-down ml-1"></i>
+          <i *ngIf="aprInstruction" class="fa fa-chevron-left ml-1"></i>
+        </a>
+      </h6>
+      <div [collapse]="aprInstruction" class="table-responsive table-responsive-xl">
+        <table class="table table-sm table-bordered" style="white-space: nowrap;">
+          <tbody formArrayName="lotsAppr">
+            <ng-container *ngFor="let lot of formIn.get('lotsAppr').controls; let i = index" [formGroupName]="i">
+              <tr *ngIf="lot.get('id').value === -1">
+                <td colspan="5" class="text-left p-2" style="position: relative;">
+                  <h5>
+                    Group {{ lot.get('groupName').value }}
+                    <span class="mx-3 rescreen" *ngIf="lot.getRawValue().rescreen1"
+                      >1: {{ rescreen(lot.getRawValue().rescreen1) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen2"
+                      >2: {{ rescreen(lot.getRawValue().rescreen2) }}</span
+                    >
+                    <span class="mr-3 rescreen" *ngIf="lot.getRawValue().rescreen3"
+                      >3: {{ rescreen(lot.getRawValue().rescreen3) }}</span
+                    >
+                  </h5>
+                  <p class="mt-3">
+                    attach file:
+                    <a href="javascript:void(0)" (click)="downloadFile(i)">{{
+                      lot.getRawValue().attach.fileName || '-'
+                    }}</a>
+                  </p>
+                  <nxp-input
+                    type="text"
+                    typeInput="textarea"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    [parentForm]="lot"
+                    [submit]="submit"
+                    control="otherDetail"
+                    [group]="'Added' + i"
+                    maxlength="250"
+                  ></nxp-input>
+                  <div class="p-2" style="position: absolute; right: 0; top: 0;" *ngIf="!request.isMerged">
+                    <button
+                      type="button"
+                      *ngIf="isMte"
+                      title="Approve By {{ isMte ? 'MTE' : 'What ??' }}"
+                      (click)="onApprove(lot.getRawValue().groupName)"
+                      class="btn btn-sm btn-success mr-1"
+                    >
+                      <i class="fa fa-check"></i> Approve
+                    </button>
+                    <button
+                      type="button"
+                      *ngIf="isMte"
+                      title="Reject By {{ isMte ? 'MTE' : 'What ??' }}"
+                      (click)="onReject(lot.getRawValue().groupName)"
+                      class="btn btn-sm btn-danger"
+                    >
+                      <i class="fa fa-times"></i> Reject
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="text-center" *ngIf="lot.get('id').value === -1">
+                <th>Lot ID</th>
+                <th>Disposition</th>
+                <th>1st Rescreening</th>
+                <th>2nd Rescreening</th>
+                <th>3rd Rescreening</th>
+              </tr>
+              <tr *ngIf="lot.get('id').value > -1">
+                <td class="text-center">
+                  <nxp-input
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    control="lotId"
+                    type="text"
+                    typeInput="input"
+                    [parentForm]="lot"
+                    [group]="'Appr' + i"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="dispositionTypes"
+                    [parentForm]="lot"
+                    [group]="'Appr' + i"
+                    control="dispositionType"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Appr' + i"
+                    control="rescreen1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Appr' + i"
+                    control="rescreen2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+                <td class="text-center">
+                  <nxp-input
+                    type="number"
+                    class="mb-0"
+                    classInput="form-control-sm mb-0"
+                    typeInput="selection"
+                    placeholder="None"
+                    [items]="reScreens"
+                    [parentForm]="lot"
+                    [group]="'Appr' + i"
+                    control="rescreen3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="lotsAppr.length === 0">
+              <td colspan="5" class="text-center">No data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

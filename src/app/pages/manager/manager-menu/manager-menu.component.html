@@ -1,0 +1,209 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          Menus Management
+        </div>
+        <div class="card-body" [formGroup]="form">
+          <div class="row">
+            <div class="col-12 mx-auto mb-4" formArrayName="menusAll">
+              <div class="row pb-3">
+                <div class="col-1"></div>
+                <div class="col-5">
+                  <h5 style="text-decoration: underline;">For all users</h5>
+                </div>
+              </div>
+              <div class="row" *ngFor="let menu of menusAll.controls; let i = index" [formGroupName]="i">
+                <ng-container *ngIf="!menu.get('title').value">
+                  <div class="col-2"></div>
+                  <div class="col-1 pt-2 pr-0 text-right">
+                    <i class="nav-icon {{ menu.get('icon').value }}"></i>
+                  </div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'all'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="menu.get('title').value">
+                  <div class="col-1"></div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'all'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="col-12 mx-auto mb-4" formArrayName="menusUser">
+              <div class="row pb-3">
+                <div class="col-1"></div>
+                <div class="col-5">
+                  <h5 style="text-decoration: underline;">For authenticated users</h5>
+                </div>
+              </div>
+              <div class="row" *ngFor="let menu of menusUser.controls; let i = index" [formGroupName]="i">
+                <ng-container *ngIf="!menu.get('title').value && !menu.get('parentId').value">
+                  <div class="col-2"></div>
+                  <div class="col-1 pt-2 pr-0 text-right">
+                    <i class="nav-icon {{ menu.get('icon').value }}"></i>
+                  </div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'user'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="menu.get('title').value">
+                  <div class="col-1"></div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'user'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!menu.get('title').value && menu.get('parentId').value">
+                  <div class="col-3"></div>
+                  <div class="col-1 pt-2 pr-0 text-right">
+                    <i class="nav-icon {{ menu.get('icon').value }}"></i>
+                  </div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'user'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="col-12 mx-auto mb-4" formArrayName="menusAdmin">
+              <div class="row pb-3">
+                <div class="col-1"></div>
+                <div class="col-5">
+                  <h5 style="text-decoration: underline;">For administrators</h5>
+                </div>
+              </div>
+              <div class="row" *ngFor="let menu of menusAdmin.controls; let i = index" [formGroupName]="i">
+                <ng-container *ngIf="!menu.get('title').value">
+                  <div class="col-2"></div>
+                  <div class="col-1 pt-2 pr-0 text-right">
+                    <i class="nav-icon {{ menu.get('icon').value }}"></i>
+                  </div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'admin'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="menu.get('title').value">
+                  <div class="col-1"></div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'admin'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="col-12 mx-auto mb-4" formArrayName="menusDev">
+              <div class="row pb-3">
+                <div class="col-1"></div>
+                <div class="col-5">
+                  <h5 style="text-decoration: underline;">For developers</h5>
+                </div>
+              </div>
+              <div class="row" *ngFor="let menu of menusDev.controls; let i = index" [formGroupName]="i">
+                <ng-container *ngIf="!menu.get('title').value">
+                  <div class="col-2"></div>
+                  <div class="col-1 pt-2 pr-0 text-right">
+                    <i class="nav-icon {{ menu.get('icon').value }}"></i>
+                  </div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'dev'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="menu.get('title').value">
+                  <div class="col-1"></div>
+                  <div class="col-1"></div>
+                  <div class="col-4">
+                    <nxp-input
+                      [group]="i + 'dev'"
+                      title="Name"
+                      type="text"
+                      typeInput="input"
+                      [parentForm]="menu"
+                      control="name"
+                      [submit]="submit"
+                    ></nxp-input>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <hr />
+            </div>
+
+            <div class="col-12 text-center">
+              <button (click)="onSave()" class="btn btn-sm btn-primary"><i class="fa fa-save mr-1"></i>Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

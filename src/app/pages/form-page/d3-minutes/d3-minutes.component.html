@@ -1,0 +1,97 @@
+<div class="animated fadeIn" [ngClass]="{ hidden: loading }">
+  <div class="row">
+    <div class="col-12">
+      <a
+        class="h5 text-decoration-none"
+        (click)="collapse = !collapse"
+        [attr.aria-expanded]="!collapse"
+        attr.aria-controls="collapse"
+        href="javascript:void(0)"
+      >
+        <i class="fa fa-chevron-{{ !collapse ? 'down' : 'right' }} mr-2"></i>
+        {{ title }}
+        <!-- <span class="badge badge-success ml-2 text-white" style="font-weight: 500;padding: 0.36rem .6rem;"
+          >Completed</span
+        > -->
+      </a>
+      <p class="text-muted m-0" style="color: rgba(255, 0, 0, 0.8) !important">
+        {{ subTitle }}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mt-2" [collapse]="collapse">
+      <button
+        id="btnMinutes"
+        type="button"
+        (click)="onAddMinute()"
+        *ngIf="!isSw1 && !request.isMerged"
+        class="btn btn-sm btn-light"
+      >
+        <i class="fa fa-plus-circle mr-1"></i> Add Minute
+      </button>
+      <div class="table-responsive table-responsive-xl mt-2 mb-0">
+        <table class="table table-sm table-hover table-bordered">
+          <thead>
+            <tr class="text-center">
+              <th>#</th>
+              <th>Date</th>
+              <th>Note</th>
+              <th>File</th>
+              <th>Create By</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" *ngFor="let Minute of Minutes; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ Minute.meetingDate }}</td>
+              <td>
+                <a href="javascript:void(0)">{{ Minute.minuteNote || 'Please review 3D report in attached' }}</a>
+              </td>
+              <td>
+                <a *ngIf="Minute.minuteFile" (click)="downloadFile(i)" href="javascript:void(0)">{{
+                  Minute.minuteFile?.fileName
+                }}</a>
+                <a href="javascript:void(0)" *ngIf="!(Minute.minuteFile && Minute.minuteFile.fileName)"> - </a>
+              </td>
+              <td>
+                {{ Minute.name ? Minute.name : 'unknown' }}
+              </td>
+              <td>
+                <button
+                  class="btn btn-sm btn-warning mr-2"
+                  *ngIf="isSelf(Minute) && !isSw1"
+                  (click)="onEdit(Minute.id)"
+                >
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-danger mr-2"
+                  *ngIf="isSelf(Minute) && !isSw1"
+                  (click)="onRemove(Minute.id)"
+                >
+                  <i class="fa fa-times"></i>
+                </button>
+                <button class="btn btn-sm btn-warning mr-2" *ngIf="!isSelf(Minute) || isSw1" disabled>
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-danger mr-2" *ngIf="!isSelf(Minute) || isSw1" disabled>
+                  <i class="fa fa-times"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="Minutes.length === 0">
+              <td colspan="6" class="text-center">
+                No data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nxp-loader-box *ngIf="loading"></nxp-loader-box>
+<nxp-loader *ngIf="processing"></nxp-loader>

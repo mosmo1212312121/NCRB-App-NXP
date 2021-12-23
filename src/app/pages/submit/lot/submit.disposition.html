@@ -1,0 +1,238 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-header">
+      Submit Disposition (Approval)
+      <!-- <span
+        *ngIf="isEsTime"
+        class="badge badge-danger float-right ml-2 text-white"
+        style="font-weight: 500;padding: 0.36rem .6rem;"
+      >
+        Escalated
+      </span> -->
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-9 col-md-11 mx-auto">
+          <div class="row">
+            <div class="col-12">
+              <p class="lead">Approval</p>
+              <hr />
+            </div>
+            <div class="col-12" [formGroup]="form">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <div class="col-md-4">
+                      <label class="col-form-label mb-0" for="problemType" style="color: black;">Problem Type </label>
+                    </div>
+                    <div class="col-md-8">
+                      <select
+                        id="problemType"
+                        class="form-control"
+                        style="font-weight: 500;min-width: 120px;"
+                        formControlName="problemType"
+                      >
+                        <option value="0">Problem</option>
+                        <option value="1">Scope Before</option>
+                        <option value="2">Scope After</option>
+                        <option value="3">Out of Scope</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12" style="margin-top: -1rem">
+                  <hr />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="1st Recreen"
+                    type="number"
+                    typeInput="selection"
+                    [items]="reScreens"
+                    [parentForm]="form"
+                    control="rescreen1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="1st Result"
+                    type="text"
+                    [parentForm]="form"
+                    control="result1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="1st FU By QA"
+                    type="text"
+                    [parentForm]="form"
+                    control="fuByQa1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="1st Result By"
+                    type="text"
+                    [parentForm]="form"
+                    control="resultBy1"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12" style="margin-top: -1rem">
+                  <hr />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="2nd Recreen"
+                    type="number"
+                    typeInput="selection"
+                    [items]="reScreens"
+                    [parentForm]="form"
+                    control="rescreen2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="2nd Result"
+                    type="text"
+                    [parentForm]="form"
+                    control="result2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="2nd FU By QA"
+                    type="text"
+                    [parentForm]="form"
+                    control="fuByQa2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="2nd Result By"
+                    type="text"
+                    [parentForm]="form"
+                    control="resultBy2"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12" style="margin-top: -1rem">
+                  <hr />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="3rd Recreen"
+                    type="number"
+                    typeInput="selection"
+                    [items]="reScreens"
+                    [parentForm]="form"
+                    control="rescreen3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="3rd Result"
+                    type="text"
+                    [parentForm]="form"
+                    control="result3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <nxp-input
+                    title="3rd FU By QA"
+                    type="text"
+                    [parentForm]="form"
+                    control="fuByQa3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+                <div class="col-md-6">
+                  <nxp-input
+                    title="3rd Result By"
+                    type="text"
+                    [parentForm]="form"
+                    control="resultBy3"
+                    [submit]="submit"
+                  ></nxp-input>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 text-center">
+              <hr />
+              <button (click)="onNcrbDetail(form.getRawValue().ncrbid)" class="btn btn-sm btn-light mr-1">
+                <i class="fa fa-eye mr-1"></i>NCRB Detail
+              </button>
+              <button
+                *ngIf="user && user.empId !== 'empId' && form.getRawValue().disposition !== 'Y' && form.getRawValue().disposition !=='E'"
+                type="button"
+                (click)="onSubmit()"
+                class="btn btn-sm btn-primary"
+              >
+                <i class="fa fa-save mr-1"></i>Submit
+              </button>
+              <button
+                type="button"
+                *ngIf="form.getRawValue().disposition === 'P' && isEngineer"
+                (click)="onApprove()"
+                class="btn btn-sm btn-success mr-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>Approve
+              </button>
+              <button
+                type="button"
+                *ngIf="form.getRawValue().disposition === 'P' && isEngineer"
+                (click)="onReject()"
+                class="btn btn-sm btn-danger mr-1"
+              >
+                <i class="fa fa-check-circle mr-1"></i>Reject
+              </button>
+              <button
+                type="button"
+                *ngIf="form.getRawValue().disposition === 'Y'"
+                class="btn btn-sm btn-success mr-1"
+                disabled
+              >
+                <i class="fa fa-check-circle mr-1"></i>Approved
+              </button>
+              <button
+                type="button"
+                *ngIf="form.getRawValue().disposition === 'R'"
+                class="btn btn-sm btn-danger mr-1"
+                disabled
+              >
+                <i class="fa fa-check-circle mr-1"></i>Rejected
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

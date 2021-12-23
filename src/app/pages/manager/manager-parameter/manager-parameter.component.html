@@ -1,0 +1,36 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          Parameters Management
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-hover table-striped table-align-middle mb-0">
+            <thead>
+              <tr class="text-center">
+                <th style="width: 60px">#</th>
+                <th>Label</th>
+                <th>Value</th>
+                <th style="width: 75px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center" *ngFor="let otherParam of otherParams; let i = index">
+                <td style="width: 60px">{{ i + 1 }}</td>
+                <td class="text-left">{{ otherParam.label }}</td>
+                <td class="text-left">{{ otherParam.value }}</td>
+                <td style="width: 75px">
+                  <button type="button" (click)="onEdit(otherParam.id)" class="btn btn-sm btn-warning mx-1">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nxp-loader *ngIf="loading"></nxp-loader>

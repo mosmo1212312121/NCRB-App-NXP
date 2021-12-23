@@ -1,0 +1,132 @@
+<div class="modal-header">
+  <h5 class="modal-title pull-left">Lot disposition instruction (คำสั่งสำหรับการ disposition lot)</h5>
+</div>
+<div class="modal-body" [formGroup]="form">
+  <div class="row">
+    <div class="col-xl-7 col-lg-9 col-12 mx-auto">
+      <div class="row">
+        <div class="col-md-12">
+          <nxp-input
+            title="Disposition"
+            type="number"
+            typeInput="selection"
+            placeholder="Select from list"
+            [items]="dispositions"
+            [parentForm]="form"
+            control="disposition"
+            [submit]="submit"
+            helpText="การจัดการกับงาน"
+            (change)="onDispositionChange($event)"
+          ></nxp-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <nxp-input
+            title="1st Rescreening"
+            type="number"
+            typeInput="selection"
+            placeholder="1st Rescreening (Select from list)"
+            [items]="rescreens"
+            [parentForm]="form"
+            control="rescreen1"
+            [submit]="submit"
+            (change)="onChangeRescreen1($event)"
+          ></nxp-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <nxp-input
+            title="2nd Rescreening"
+            type="number"
+            typeInput="selection"
+            placeholder="2nd Rescreening (Select from list)"
+            [items]="rescreens"
+            [parentForm]="form"
+            control="rescreen2"
+            [submit]="submit"
+            (change)="onChangeRescreen2($event)"
+          ></nxp-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <nxp-input
+            title="3rd Rescreening"
+            type="number"
+            typeInput="selection"
+            placeholder="3rd Rescreening (Select from list)"
+            [items]="rescreens"
+            [parentForm]="form"
+            control="rescreen3"
+            [submit]="submit"
+            (change)="onChangeRescreen3($event)"
+          ></nxp-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group row">
+            <label class="col-md-4 col-label">Attach file</label>
+            <div class="col-md-8">
+              <div class="custom-file">
+                <input
+                  type="file"
+                  class="custom-file-input"
+                  [ngClass]="{'is-invalid': form.get('attach').get('id').invalid && submit}"
+                  (change)="selectFile($event, 'form', 'attach')"
+                  id="attach"
+                />
+                <label class="custom-file-label" for="attach"
+                  >{{ form.get('attach').get('fileName').value || 'Choose file' }}</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <nxp-input
+            title="Additional comment"
+            type="text"
+            typeInput="inlinetext"
+            [parentForm]="form"
+            [submit]="submit"
+            control="otherDetail"
+            maxlength="250"
+            helpText="รายละเอียดเพิ่มเติม"
+          ></nxp-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <hr />
+        </div>
+      </div>
+      <div class="row" formArrayName="lots">
+        <div class="col-md-12" *ngFor="let lot of form.get('lots')['controls']; let i = index" [formGroupName]="i">
+          <nxp-input
+            title="{{ i === 0 ? 'Lot ID' : ''}}"
+            type="text"
+            [parentForm]="lot"
+            [submit]="true"
+            control="lotId"
+            [group]="i"
+          ></nxp-input>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer" style="justify-content: center">
+  <button id="btnIaActionSubmit" type="button" class="btn btn-sm btn-primary mr-2" (click)="onSave()">
+    <i class="fa fa-save mr-1"></i> Save
+  </button>
+  <button id="btnIaActionCancel" type="button" class="btn btn-sm btn-light" (click)="onCancel()">
+    <i class="fa fa-times mr-1"></i> Cancel
+  </button>
+</div>
+
+<nxp-loader *ngIf="loading"></nxp-loader>

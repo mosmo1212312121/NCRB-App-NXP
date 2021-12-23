@@ -1,0 +1,10 @@
+#flow {
+  height: calc(100vh - 55px - 50px - 46px - 3rem + 100vh - 55px - 50px - 46px - 3rem);
+  width: calc(100vw - 260px);
+}
+
+#chart_container {
+  height: calc(100vh - 55px - 50px - 46px - 3rem);
+  width: calc(100vw - 260px);
+  margin-bottom: 1.5rem;
+}

@@ -1,0 +1,12 @@
+// export * from './load.reducer';
+export * from './follow-up.reducer';
+export * from './histories.reducer';
+export * from './menu.reducer';
+export * from './parameters.reducer';
+export * from './props.reducer';
+export * from './report.reducer';
+export * from './request.reducer';
+export * from './score-old.reducer';
+export * from './score.reducer';
+export * from './status.reducer';
+export * from './user.reducer';
