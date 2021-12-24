@@ -7,7 +7,7 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { NxpLoaderModule } from 'nxp-loader';
+import { NxpLoaderModule } from '../../components/nxp-loader/nxp-loader.module';
 import { NxpAutocompleteModule, NxpInputModule, NxpScoreModule } from '../../components';
 import { FormPageModule } from '../form-page/form-page.module';
 import { SubmitLotDispositionComponent } from './lot/submit.disposition';

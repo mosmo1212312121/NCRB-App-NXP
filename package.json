@@ -1,7 +1,7 @@
 {
   "name": "ncrb",
   "version": "0.0.34-beta",
-  "date": "12 Oct 2021 16:47",
+  "date": "24 Dec 2021 00:32",
   "description": "NCRB 2020",
   "author": {
     "name": "ryngek",
@@ -81,7 +81,6 @@
     "ngx-perfect-scrollbar": "^8.0.0",
     "ngx-toastr": "^13.0.0",
     "ngx-xml2json": "^1.0.2",
-    "nxp-loader": "^1.0.3",
     "protractor-beautiful-reporter": "^1.3.6",
     "protractor-html-reporter-2": "^1.0.4",
     "protractor-jasmine2-screenshot-reporter": "^0.5.0",

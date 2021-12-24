@@ -11,7 +11,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { DragScrollModule } from 'ngx-drag-scroll';
-import { NxpLoaderModule } from 'nxp-loader';
+import { NxpLoaderModule } from '../../components/nxp-loader/nxp-loader.module';
 import {
   NxpAutocompleteModule,
   NxpInputModule,
